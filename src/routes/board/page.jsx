@@ -4,9 +4,10 @@
 // import { Container } from 'react-bootstrap';
 // import Container  from 'react-bootstrap/Container';
 
-import { Table } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 import { fetchBoardList } from '~/lib/apis/board';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function BoardListPage() {
   const [boardList, setboardList] = useState([]);
@@ -18,18 +19,14 @@ export default function BoardListPage() {
   }, []);
   return (
     <div>
-      <Table bordered>
-        <tbody>
-          {boardList.map((ele, idx) => (
-            <tr key={idx}>
-              <td key={idx}>
-                <h2>{ele.title}</h2>
-                <p>{ele.body}</p>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <h1>Board List</h1>
+      <ListGroup>
+        {boardList.map((ele) => (
+          <Link key={ele._id} to={`/board/${ele._id}`}>
+            <ListGroup.Item>{ele.title}</ListGroup.Item>
+          </Link>
+        ))}
+      </ListGroup>
       {/* <MyNavbar brandTitle="My-React-Board" />
       <Container className="min-vh-100">
         <h1>My board</h1>

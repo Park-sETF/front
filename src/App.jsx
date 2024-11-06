@@ -1,6 +1,7 @@
 import mainRouter from '~/routers/main-router';
 import { RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AuthProvider from './components/contexts/authContext';
 
 // import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import { mainRoutes } from './routers/main-router';
@@ -32,7 +33,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <RouterProvider router={mainRouter} />
+    <AuthProvider>
+      <RouterProvider router={mainRouter} />
+    </AuthProvider>
     // <BrowserRouter>
     //   <Routes>{renderRoutes(mainRoutes)}</Routes>
     // </BrowserRouter>
