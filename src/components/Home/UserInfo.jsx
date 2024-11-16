@@ -24,7 +24,7 @@ export default function UserInfo() {
           style={{ width: '60px', height: '60px', objectFit: 'cover' }}
         />
       </div>
-      <div className="mt-3" style={{margin: '24px'}}>
+      <div className="mt-3" style={{margin: '24px', marginBottom:0}}>
         <div className="text-secondary mb-1" style={{ fontSize: '14px' }}>총 투자금액</div>
         <div className="d-flex align-items-baseline gap-2">
           <span className="fs-4 fw-bold" style={{ color: '#333' }}>778,000원</span>
