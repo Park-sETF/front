@@ -1,5 +1,9 @@
+import UserInfo from "~/components/Home/UserInfo"
+
 export default function User() {
   return (
-    <div>user</div>
+    <div>
+      <UserInfo></UserInfo>
+    </div>
   )
 }
