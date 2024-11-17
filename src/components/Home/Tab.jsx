@@ -1,9 +1,26 @@
 import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ETFList from './ETFList';
+import List from './List';
 
 export default function Tab() {
   const [activeTab, setActiveTab] = useState('구독 목록');
+
+  const ETFList = [
+    { name: '우량주가 좋아', rate: 35, isPositive: true },
+    { name: '스타트업', rate: 20, isPositive: true },
+    { name: '개미게미', rate: 4, isPositive: false },
+    { name: '개미게미', rate: 4, isPositive: false },
+    { name: '스타트업', rate: 20, isPositive: true },
+    { name: '우량주가 좋아', rate: 35, isPositive: true },
+    { name: '우량주가 좋아', rate: 35, isPositive: true },
+    { name: '우량주가 좋아', rate: 35, isPositive: true },
+  ];
+
+  const SubscriberList = [
+    { name: '장우진', rate: 2, isPositive: true },
+    { name: '조인후', rate: 10, isPositive: true },
+    { name: '이하늘', rate: 4, isPositive: false },
+  ]
 
   return (
     <div style={{ minWidth: '375px', maxWidth: '430px', margin: '0 auto' }}>
@@ -88,8 +105,8 @@ export default function Tab() {
       {/* 조건부 렌더링 */}
       <div>
         {activeTab === '내 거래' && <div></div>}
-        {activeTab === '나의 ETF' && <ETFList />} {/* 나의 ETF 탭 선택 시 ETFList 컴포넌트 렌더링 */}
-        {activeTab === '구독 목록' && <div></div>}
+        {activeTab === '나의 ETF' && <List items={ETFList}/>} {/* 나의 ETF 탭 선택 시 ETFList 컴포넌트 렌더링 */}
+        {activeTab === '구독 목록' && <List items={SubscriberList}/>}
       </div>
 
       <style>{`

@@ -1,35 +1,33 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ChevronRight } from 'react-bootstrap-icons';
 
-export default function ETFList() {
-  const items = [
-    { name: '우량주가 좋아', rate: 35, isPositive: true },
-    { name: '스타트업', rate: 20, isPositive: true },
-    { name: '개미게미', rate: 4, isPositive: false },
-    { name: '우량주가 좋아', rate: 35, isPositive: true },
-    { name: '스타트업', rate: 20, isPositive: true },
-    { name: '개미게미', rate: 4, isPositive: false },
-    // Add more items to test scrolling
-    { name: '우량주가 좋아', rate: 35, isPositive: true },
-    { name: '스타트업', rate: 20, isPositive: true },
-    { name: '개미게미', rate: 4, isPositive: false },
-  ];
-
+// props로 리스트 전달
+export default function List({ items }) {
   return (
-    <div style={{ minWidth: '375px', maxWidth: '430px', margin: '0 auto' }}>
+    <div 
+      style={{ 
+        minWidth: '375px', 
+        maxWidth: '430px', 
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column', // 수직 레이아웃
+        height: '100%', // 부모 높이에 맞추기
+      }}
+    >
       <div 
         className="px-3"
         style={{ 
-          height: '400px', // Adjust this height as needed
-          overflowY: 'auto',
+          height: '400px', // 고정 높이로 내부 스크롤 가능
+          overflowY: 'auto', // 세로 스크롤 활성화
           margin: '20px',
-          marginTop: '3px'
+          marginTop: '3px',
         }}
       >
         {items.map((item, index) => (
           <div 
             key={index}
-            className="d-flex justify-content-between align-items-center py-3 border-bottom"
+            className="d-flex justify-content-between align-items-center "
+            style={{paddingTop: '1.1rem', paddingBottom: '1.1rem'}}
           >
             <span className="fw-medium" style={{ fontSize: '16px' }}>
               {item.name}
@@ -38,7 +36,7 @@ export default function ETFList() {
               <span 
                 style={{ 
                   color: item.isPositive ? '#ff3b3b' : '#0051c7',
-                  fontSize: '16px'
+                  fontSize: '16px',
                 }}
               >
                 수익률 {item.isPositive ? '+' : '-'}{item.rate}%
