@@ -1,6 +1,7 @@
-export default function BigButton() {
+export default function BigButton({text, onClick}) {
     return (
       <button
+        onClick={onClick}
         className="btn btn-primary w-100 position-absolute start-50 translate-middle-x"
         style={{
           bottom: "5.5rem", // Footer의 높이 + 간격
@@ -13,7 +14,7 @@ export default function BigButton() {
           paddingBottom: "0.9rem",
         }}
       >
-        나만의 ETF 만들기
+        {text}
       </button>
     );
   }
