@@ -1,34 +1,69 @@
-import { Container } from 'react-bootstrap';
-import { Facebook, Instagram } from 'react-bootstrap-icons';
-import { Link } from 'react-router-dom';
-export default function MyFooter({ brandTitle }) {
+import { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { House, Clipboard, Bell } from 'react-bootstrap-icons';
+
+export default function Footer() {
+  const [activeTab, setActiveTab] = useState('홈');
+
   return (
-    <Container fluid className="py-4 bg-light">
-      <Container className="d-flex justify-content-between" as="footer">
-        <div className="col-md-4 d-flex align-items-center">
-          <Link
-            to="/"
-            className="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1"
-          >
-            {brandTitle}
-          </Link>
-          <span className="mb-3 mb-md-0 text-body-secondary">
-            © 2023 Company, Inc
-          </span>
-        </div>
-        <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li className="ms-3">
-            <Link className="text-body-secondary" to="#">
-              <Instagram size={24} />
-            </Link>
-          </li>
-          <li className="ms-3">
-            <Link className="text-body-secondary" href="#">
-              <Facebook size={24} />
-            </Link>
-          </li>
-        </ul>
-      </Container>
-    </Container>
+    <div 
+      className="fixed-bottom bg-white border-top" 
+      style={{ 
+        minWidth: '375px', 
+        maxWidth: '430px', 
+        margin: '0 auto'
+      }}
+    >
+      <div className="d-flex justify-content-around py-2" style={{marginLeft:'10px',marginRight:'10px'}}>
+        <button 
+          onClick={() => setActiveTab('홈')}
+          className="btn btn-link text-decoration-none d-flex flex-column align-items-center"
+          style={{
+            color: activeTab === '홈' ? '#000' : '#999',
+            transition: 'color 0.2s ease'
+          }}
+        >
+          <House size={24} />
+          <span style={{ fontSize: '12px', marginTop: '4px' }}>홈</span>
+        </button>
+
+        <button 
+          onClick={() => setActiveTab('포트폴리오')}
+          className="btn btn-link text-decoration-none d-flex flex-column align-items-center"
+          style={{
+            color: activeTab === '포트폴리오' ? '#000' : '#999',
+            transition: 'color 0.2s ease'
+          }}
+        >
+          <Clipboard size={24} />
+          <span style={{ fontSize: '12px', marginTop: '4px' }}>포트폴리오</span>
+        </button>
+
+        <button 
+          onClick={() => setActiveTab('알림')}
+          className="btn btn-link text-decoration-none d-flex flex-column align-items-center"
+          style={{
+            color: activeTab === '알림' ? '#000' : '#999',
+            transition: 'color 0.2s ease'
+          }}
+        >
+          <Bell size={24} />
+          <span style={{ fontSize: '12px', marginTop: '4px' }}>알림</span>
+        </button>
+      </div>
+
+      <style>{`
+        .btn-link:focus {
+          box-shadow: none;
+        }
+        @media (min-width: 375px) and (max-width: 430px) {
+          .btn-link {
+            padding: 8px 16px;
+          }
+        }
+      `}</style>
+    </div>
   );
 }
+
+
