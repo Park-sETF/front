@@ -1,0 +1,127 @@
+.donut-chart-container {
+  position: relative;
+  height: 300px;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.form-control {
+  display: inline;
+}
+
+.investment-amount-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 100%;
+}
+
+.investment-input {
+  padding: 0.25rem; /* 기본 padding 추가 */
+  font-size: 1.2rem;
+  font-weight: bold;
+  min-width: 120px; /* 기본 너비를 조금 더 늘림 */
+  max-width: 200px; /* 최대 너비 유지 */
+  text-align: center;
+  border: none; /* 테두리를 없애서 깔끔하게 */
+  box-sizing: border-box; /* padding 포함하여 크기 계산 */
+}
+
+/* Previous .investment-amount-container rule is removed */
+
+.investment-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.stock-list {
+  margin-top: 2rem;
+}
+
+.stock-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.stock-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  margin-right: 1rem;
+}
+
+.stock-name {
+  flex: 1;
+  font-size: 1rem;
+}
+
+.stock-percentage {
+  display: flex;
+  align-items: center;
+  margin-right: 2rem;
+}
+
+.percentage-input {
+  width: 70px;
+  text-align: right;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.percentage-symbol {
+  color: #6c757d;
+}
+
+.delete-button {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  padding: 0;
+  color: black;
+  font-size: 1.2rem;
+  position: absolute;
+  right: 0;
+  text-decoration: none;
+}
+
+.stock-item:hover .delete-button {
+  opacity: 1;
+}
+
+.add-button {
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+  color: black;
+  padding: 0;
+}
+
+.add-button:hover {
+  opacity: 1;
+}
+
+.custom-tooltip {
+  font-size: 1rem; /* 글씨 크기 조정 */
+  font-weight: bold; /* 글씨 강조 */
+  background-color: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
+  color: white; /* 글씨 색상 변경 */
+  padding: 0.5rem 1rem; /* 패딩 추가 */
+  border-radius: 8px; /* 둥근 모서리 */
+  margin-top: 1rem; /* 도넛 차트와 간격 추가 */
+  text-align: center;
+  width: fit-content; /* 내용에 맞게 너비 조정 */
+  max-width: 80%; /* 모바일 화면에서 최대 너비 제한 */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .custom-tooltip {
+    font-size: 0.9rem; /* 모바일에서 글씨 크기 약간 줄임 */
+    padding: 0.4rem 0.8rem; /* 패딩도 줄임 */
+  }
+}
