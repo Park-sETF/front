@@ -31,7 +31,7 @@ export default function UserInfo() {
   return (
     <div className="px-3 py-4" style={{ minWidth: '375px', maxWidth: '430px', margin: '0 auto' }}>
       <div className="d-flex justify-content-between align-items-start mb-2" 
-        style={{ margin: '24px', marginBottom: 0 }}>
+        style={{ margin: '0 24px'}}>
         <div>
           <div className="d-flex align-items-center gap-2 mb-1">
             <span className="fw-bold" style={{ fontSize: '26px' }}>{userData.nickname}</span>
