@@ -127,10 +127,7 @@ export default function Component({ stocks, addStock, setStocks }) {
   };
 
   return (
-    <Container
-      className="mt-4 flex-grow-1 overflow-auto"
-      style={{ maxWidth: '430px', margin: 'auto' }}
-    >
+    <Container>
       <div>
         <h1 className="text-center mb-4">나만의 ETF 만들기</h1>
         <Row className="justify-content-center">

@@ -7,13 +7,14 @@ export default function Footer() {
 
   return (
     <div
-      className="position-sticky bg-white border-top"
+      className="fixed-bottom bg-white border-top"
       style={{
         maxWidth: '430px',
         margin: '0 auto',
+        height: '60px', // Footer 높이 설정
       }}
     >
-      <div className="d-flex justify-content-around py-2">
+      <div className="d-flex justify-content-between px-4">
         <button
           onClick={() => setActiveTab('홈')}
           className="btn btn-link text-decoration-none d-flex flex-column align-items-center"
