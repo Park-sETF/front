@@ -2,6 +2,7 @@ import UserInfo from "~/components/Home/UserInfo"
 import Tab from "~/components/Home/Tab"
 import Footer from "~/components/MyFooter"
 import BigButton from "~/components/buttons/BigButton"
+import HomeHeader from "~/components/Home/HomeHeader"
 import { useNavigate } from 'react-router-dom';
 
 
@@ -16,10 +17,11 @@ export default function User() {
   
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
-      <UserInfo></UserInfo>
-      <Tab></Tab>
+      <HomeHeader Quantity={"4"}/>
+      <UserInfo/>
+      <Tab/>
       <BigButton text={"나만의 ETF 만들기"} onClick={handleButtonClick} />
-      <Footer></Footer>
+      <Footer/>
 
     </div>
   )
