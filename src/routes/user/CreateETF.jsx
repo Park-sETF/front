@@ -1,6 +1,4 @@
 import BigButton from '~/components/buttons/BigButton';
-// import Footer from '~/components/MyFooter';
-// import MobileHeader from '~/components/Header/MobileHeader';
 import Chart from '~/components/MyPocket/Chart';
 import { useState } from 'react';
 
@@ -43,12 +41,9 @@ export default function ETFPocket() {
     setStocks([...stocks, newStock]);
   };
   return (
-    // <div className="position-relative 100vh">
     <div>
-      {/* <MobileHeader text={'나만의 ETF 만들기'}></MobileHeader> */}
       <Chart stocks={stocks} addStock={addStock} setStocks={setStocks} />
       <BigButton text={'투자하기'} />
-      {/* <Footer /> */}
     </div>
   );
 }
