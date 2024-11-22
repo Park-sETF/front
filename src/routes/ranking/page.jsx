@@ -1,5 +1,7 @@
-export default function ranking() {
-  return (
-    <div>ranking</div>
-  )
-}
+import RankingPage from '~/components/Ranking/RankingPage';
+
+const RankingRoute = () => {
+  return <RankingPage />;
+};
+
+export default RankingRoute;
