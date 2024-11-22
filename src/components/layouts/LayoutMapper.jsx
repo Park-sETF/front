@@ -1,5 +1,6 @@
 import MobileHeader from '~/components/layouts/MobileHeader';
 import HomeHeader from '~/components/layouts/HomeHeader';
+import RankingHeader from '~/components/layouts/RankingHeader';
 
 // 헤더 매퍼 로직
 const layoutMapper = (pathname) => {
@@ -22,7 +23,8 @@ const layoutMapper = (pathname) => {
       break;
 
     case '/ranking': // 개발 예정
-      headerComponent = null;
+      headerComponent = RankingHeader;
+      headerProps = { text: '오늘의 랭킹', notifications: 5 };
       break;
 
     case '/mypocket': // 개발 예정
