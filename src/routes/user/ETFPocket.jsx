@@ -1,6 +1,4 @@
 import BigButton from '~/components/buttons/BigButton';
-// import Footer from '~/components/MyFooter';
-// import MobileHeader from '~/components/Header/MobileHeader';
 import Chart from '~/components/Stock/Chart';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -9,25 +7,29 @@ export default function ETFPocket() {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate('/create-etf');
+    navigate('/create-etf'); // ETF 만들기 페이지로 이동
   };
 
-  const [storedStocks, setStoredStocks] = useState([]);
+  const [storedStocks, setStoredStocks] = useState([]); // 로컬스토리지에서 가져온 stocks
+  const [selectedStocks, setSelectedStocks] = useState([]); // 선택된 주식 상태
 
   // 로컬 스토리지에서 데이터 복구
   useEffect(() => {
-    const storedStocks = JSON.parse(localStorage.getItem('savedStocks'));
-    console.log(storedStocks);
-    setStoredStocks(storedStocks);
+    const savedStocks = JSON.parse(localStorage.getItem('savedStocks')) || [];
+    setStoredStocks(savedStocks); // 로컬스토리지 데이터로 stocks 설정
+    setSelectedStocks(savedStocks); // selectedStocks 초기화
   }, []);
+
+
 
   return (
     <div>
-      {/* <MobileHeader text={"ETF 포켓"} /> */}
-      {/* 저장된 종목 데이터를 Chart로 전달 */}
-      <Chart stocks={storedStocks} />
+      <Chart 
+        stocks={storedStocks} 
+        selectedStocks={selectedStocks} 
+        setSelectedStocks={setSelectedStocks} 
+      />
       <BigButton text={'ETF 만들기'} onClick={handleButtonClick} />
-      {/* <Footer/> */}
     </div>
   );
 }

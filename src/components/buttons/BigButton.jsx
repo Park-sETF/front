@@ -2,7 +2,7 @@ export default function BigButton({ text, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="btn btn-primary w-100 d-flex flex-row justify-content-center"
+      className="btn btn-primary d-flex flex-row justify-content-center"
       style={{
         position: 'fixed', // 화면 하단에 고정
         bottom: '80px', // Footer 높이 + 추가 간격
@@ -17,6 +17,7 @@ export default function BigButton({ text, onClick }) {
         color: '#fff',
         border: 'none',
         boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+        width: '90%',
       }}
     >
       {text}
