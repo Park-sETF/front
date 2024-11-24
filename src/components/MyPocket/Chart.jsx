@@ -73,6 +73,15 @@ export default function Component({ stocks, addStock, setStocks }) {
   }, [investmentAmount]);
 
   const handleInvestmentChange = (value) => {
+    // trim을 사용해 공백 제거 후 숫자인지 확인
+    // value = value.trim();
+
+    // 숫자 형태의 문자열이고, 실제 숫자값인지 확인
+    // if (isNaN(value) && value !== '' && !isNaN(parseFloat(value))) {
+    //   setInvestmentAmount(initialInvestmentAmount);
+    //   return;
+    // }
+
     const sanitizedValue = Number(value);
     const newValue = Math.min(totalBalance, Math.max(0, sanitizedValue));
     setInvestmentAmount(newValue);
@@ -188,7 +197,7 @@ export default function Component({ stocks, addStock, setStocks }) {
               </div>
             </div>
 
-            <div className="stock-list">
+            <div className="stock-list px-3">
               {stocks.map((stock, index) => (
                 <div key={index} className="stock-item">
                   <div
@@ -201,7 +210,7 @@ export default function Component({ stocks, addStock, setStocks }) {
                   <span className="stock-name">{stock.name}</span>
                   <div className="stock-percentage">
                     <FormControl
-                      type="number"
+                      type="text"
                       value={stock.percentage}
                       onChange={(e) =>
                         handlePercentageChange(index, Number(e.target.value))
@@ -221,7 +230,7 @@ export default function Component({ stocks, addStock, setStocks }) {
               ))}
             </div>
 
-            <div className="stock-item">
+            <div className="stock-item px-3">
               <div
                 style={{
                   width: '20px',

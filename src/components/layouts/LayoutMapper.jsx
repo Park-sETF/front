@@ -41,6 +41,16 @@ const layoutMapper = (pathname) => {
       headerProps = { text: '나만의 ETF 만들기' }; // MobileHeader에 전달할 props
       break;
 
+    case '/login':
+      headerComponent = MobileHeader;
+      headerProps = { text: '로그인하기' }; // MobileHeader에 전달할 props
+      break;
+
+    case '/signup':
+      headerComponent = MobileHeader;
+      headerProps = { text: '간편회원가입 하기' }; // MobileHeader에 전달할 props
+      break;
+
     default:
       headerComponent = null;
       break;

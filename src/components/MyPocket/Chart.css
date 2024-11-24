@@ -62,7 +62,7 @@
 .stock-percentage {
   display: flex;
   align-items: center;
-  margin-right: 2rem;
+  margin-right: 1rem;
 }
 
 .percentage-input {
@@ -72,17 +72,19 @@
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
   margin-right: 0.5rem;
+  font-weight: 600;
 }
 
 .percentage-symbol {
   color: #6c757d;
+  margin-right: 0.2rem;
 }
 
 .delete-button {
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
   padding: 0;
-  color: black;
+  color: grey;
   font-size: 1.2rem;
   position: absolute;
   right: 0;
