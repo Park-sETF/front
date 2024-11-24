@@ -26,10 +26,12 @@ function Login() {
 
     // 로그인 성공 여부 확인 및 메인 화면 이동
     if (login.fulfilled.match(resultAction)) {
-      const { accessToken, refreshToken, userId } = resultAction.payload;
-      if (accessToken && refreshToken && userId) {
+      // const { accessToken, refreshToken, userId } = resultAction.payload;
+      const { userId } = resultAction.payload;
+
+      if (userId) {
         setIsSubmitting(false);
-        navigate('/'); // 메인 화면으로 이동
+        navigate('/user'); // 메인 화면으로 이동
       } else {
         setIsSubmitting(false);
         console.error('Invalid response data:', resultAction.payload);
@@ -42,10 +44,10 @@ function Login() {
   return (
     <Container
       className="d-flex align-items-center justify-content-center"
-      style={{ height: '100vh' }} // 화면 중앙 정렬
+      style={{ height: '75vh' }}
     >
       <Row className="w-100">
-        <Col lg={12} className="mx-auto">
+        <Col sm={12} md={12} lg={12}>
           <div className="p-4 border rounded shadow">
             <h1 className="text-center mb-4">환영합니다</h1>
             <Form onSubmit={handleSubmit}>

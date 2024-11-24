@@ -16,7 +16,15 @@ export const login = createAsyncThunk(
     try {
       const response = await api.post('/auth/login', credentials); // 쿠키에 accessToken 저장
 
-      Cookies.set('accessToken', response.data.accessToken);
+      // Cookies.set('accessToken', response.data.accessToken, {
+      //   secure: true,
+      //   sameSite: 'Strict',
+      // });
+
+      // Cookies.set('refreshToken', response.data.refreshToken, {
+      //   secure: true,
+      //   sameSite: 'Strict',
+      // });
 
       return response.data;
     } catch (error) {
@@ -28,9 +36,14 @@ export const login = createAsyncThunk(
 // 로그아웃 Thunk
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
+    // 서버에 로그아웃 요청 (Refresh Token 무효화)
+    await api.post('/auth/logout', {}, { withCredentials: true });
+
+    // 클라이언트에서 접근 못하므로 주석처리
     // 클라이언트 쪽 상태 초기화 (API 호출 없음)
-    Cookies.remove('accessToken'); // 쿠키에서 액세스 토큰 제거
-    Cookies.remove('refreshToken'); // 쿠키에서 리프레시 토큰 제거
+    // Cookies.remove('accessToken'); // 쿠키에서 액세스 토큰 제거
+    // Cookies.remove('refreshToken'); // 쿠키에서 리프레시 토큰 제거
+
     return null; // 서버와 통신하지 않으므로 null 반환
   } catch (error) {
     console.error('로그아웃 처리 중 에러 발생:', error);
@@ -76,8 +89,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = {
           userId: action.payload.userId,
-          accessToken: action.payload.accessToken,
-          refreshToken: action.payload.refreshToken,
+          // accessToken: action.payload.accessToken,
+          // refreshToken: action.payload.refreshToken,
         };
       })
 

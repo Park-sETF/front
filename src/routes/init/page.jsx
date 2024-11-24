@@ -10,7 +10,7 @@ export default function Init() {
 
   const handleLogout = () => {
     dispatch(logout()); // 로그아웃 Thunk 호출
-    navigate('/login'); // 로그아웃 후 로그인 페이지로 리디렉션
+    navigate('/'); // 로그아웃 후 /로 리디렉션
   };
 
   return (
@@ -46,7 +46,7 @@ export default function Init() {
         // 로그인된 상태일 때 로그아웃 버튼 표시
         <div>
           <p>안녕하세요, {user.userId}님!</p>
-          <Button className="mt-3" variant="danger" onClick={handleLogout}>
+          <Button className="mt-3" onClick={handleLogout}>
             로그아웃
           </Button>
         </div>
