@@ -4,42 +4,67 @@ import axios from 'axios';
 const RankingContent = () => {
   const [rankingData, setRankingData] = useState([]);
 
+  const subscriberId = 1; // 현재 로그인한 사용자의 ID 임시로둠
+
   const fetchRankingData = async () => {
     try {
-      const response = await axios.get('/user/ranking'); 
-      const data = response.data.map((item, index) => ({
+      // 구독 목록 가져오기
+      const subscriptionsResponse = await axios.get(`/api/subscribe/list/${subscriberId}`);
+
+      const subscriptions = Array.isArray(subscriptionsResponse)
+        ? subscriptionsResponse.data.map((sub) => sub.publisher_id)
+        : []; // 데이터가 배열이 아니면 빈 배열로 처리
+  
+      // 랭킹 데이터 가져오기
+      const rankingsResponse = await axios.get('/api/etf/user/ranking');
+      const data = rankingsResponse.data.map((item, index) => ({
+        userId: item.userId,
         name: item.nickname,
-        image: item.image, 
-        amount: `+${item.totalRevenue.toLocaleString()}원`, 
-        percentage: `${item.revenuePercentage.toFixed(1)}%`, 
-        subscribed: false, 
-        color: getColorByIndex(index), 
+        image: item.image,
+        amount: `+${item.totalRevenue.toLocaleString()}원`,
+        percentage: `${item.revenuePercentage.toFixed(1)}%`,
+        subscribed: subscriptions.includes(item.userId), // 구독 목록에 포함 여부로 초기 상태 설정
+        color: getColorByIndex(index),
       }));
+  
       setRankingData(data);
     } catch (error) {
       console.error('데이터 불러오기 오류', error);
     }
   };
+  
 
-  //유저 이미지가 없을 경우 기본 배경 색상
+  // 유저 이미지가 없을 경우 기본 배경 색상
   const getColorByIndex = (index) => {
     const colors = ['#4285F4', '#EA4335', '#FBBC05', '#34A853'];
     return colors[index % colors.length];
   };
 
+  // 구독 상태 변경 함수
+  const toggleSubscription = async (index, userId, isSubscribed) => {
+    try {
+      if (isSubscribed) {
+        // 구독취소 
+        await axios.delete(`/api/subscribe/${subscriberId}/${userId}`);
+      } else {
+        // 구독 
+        await axios.post(`/api/subscribe/${subscriberId}/${userId}`);
+      }
+
+  
+      setRankingData((prevData) =>
+        prevData.map((item, i) =>
+          i === index ? { ...item, subscribed: !item.subscribed } : item
+        )
+      );
+    } catch (error) {
+      console.error(isSubscribed ? '구독 취소 오류' : '구독 오류', error);
+    }
+  };
 
   useEffect(() => {
     fetchRankingData();
   }, []);
-
-  // 구독 상태 변경 함수
-  const toggleSubscription = (index) => {
-    setRankingData((prevData) =>
-      prevData.map((item, i) =>
-        i === index ? { ...item, subscribed: !item.subscribed } : item
-      )
-    );
-  };
 
   return (
     <div style={{ padding: '0 23px' }}>
@@ -58,11 +83,11 @@ const RankingContent = () => {
                 width: '40px',
                 height: '40px',
                 borderRadius: '50%',
-                backgroundColor: item.image ? 'transparent' : item.color, // 이미지가 없을 경우 색상 적용
+                backgroundColor: item.image ? 'transparent' : item.color,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                overflow: 'hidden', 
+                overflow: 'hidden',
                 marginRight: '12px',
               }}
             >
@@ -84,7 +109,7 @@ const RankingContent = () => {
               <div style={{ fontSize: '12px', color: '#666666' }}>({item.percentage})</div>
             </div>
             <button
-              onClick={() => toggleSubscription(index)}
+              onClick={() => toggleSubscription(index, item.userId, item.subscribed)}
               style={{
                 backgroundColor: item.subscribed ? '#F2F2F7' : '#007AFF',
                 color: item.subscribed ? '#3A3A3C' : 'white',
@@ -98,11 +123,9 @@ const RankingContent = () => {
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = item.subscribed ? '#E0E0E0' : '#0056b3';
-                e.target.style.color = item.subscribed ? '#3A3A3C' : 'white';
               }}
               onMouseLeave={(e) => {
                 e.target.style.backgroundColor = item.subscribed ? '#F2F2F7' : '#007AFF';
-                e.target.style.color = item.subscribed ? '#3A3A3C' : 'white';
               }}
             >
               {item.subscribed ? '구독취소' : '구독'}
