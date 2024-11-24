@@ -8,12 +8,15 @@ const RankingContent = () => {
 
   const fetchRankingData = async () => {
     try {
-      // 1. 구독 목록 가져오기
-      const subscriptionsResponse = await axios.get(`/list/${subscriberId}`);
-      const subscriptions = subscriptionsResponse.data.map((sub) => sub.publisher_id);
+      // 구독 목록 가져오기
+      const subscriptionsResponse = await axios.get(`/api/subscribe/list/${subscriberId}`);
 
-      // 2. 랭킹 데이터 가져오기
-      const rankingsResponse = await axios.get('/user/ranking');
+      const subscriptions = Array.isArray(subscriptionsResponse)
+        ? subscriptionsResponse.data.map((sub) => sub.publisher_id)
+        : []; // 데이터가 배열이 아니면 빈 배열로 처리
+  
+      // 랭킹 데이터 가져오기
+      const rankingsResponse = await axios.get('/api/etf/user/ranking');
       const data = rankingsResponse.data.map((item, index) => ({
         userId: item.userId,
         name: item.nickname,
@@ -23,12 +26,13 @@ const RankingContent = () => {
         subscribed: subscriptions.includes(item.userId), // 구독 목록에 포함 여부로 초기 상태 설정
         color: getColorByIndex(index),
       }));
-
+  
       setRankingData(data);
     } catch (error) {
       console.error('데이터 불러오기 오류', error);
     }
   };
+  
 
   // 유저 이미지가 없을 경우 기본 배경 색상
   const getColorByIndex = (index) => {
@@ -41,10 +45,10 @@ const RankingContent = () => {
     try {
       if (isSubscribed) {
         // 구독취소 
-        await axios.delete(`/subscribe/${subscriberId}/${userId}`);
+        await axios.delete(`/api/subscribe/${subscriberId}/${userId}`);
       } else {
         // 구독 
-        await axios.post(`/subscribe/${subscriberId}/${userId}`);
+        await axios.post(`/api/subscribe/${subscriberId}/${userId}`);
       }
 
   
