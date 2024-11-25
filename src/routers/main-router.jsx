@@ -7,11 +7,14 @@ const Init = lazy(() => import('~/routes/init/page'));
 const User = lazy(() => import('~/routes/user/page'));
 const Membership = lazy(() => import('~/routes/membership/page'));
 const Ranking = lazy(() => import('~/routes/ranking/page'));
+const RankingDetail = lazy(() => import('~/routes/rankingDetail/page'));
 const MyPocket = lazy(() => import('~/routes/myPocket/page'));
 const SelectStock = lazy(() => import('~/routes/user/SelectStock'));
 const ETFPocket = lazy(() => import('~/routes/user/ETFPocket'));
 const CreateETF = lazy(() => import('~/routes/user/CreateETF'));
 const Grade = lazy(() => import('~/routes/grade/page'));
+const Login = lazy(() => import('~/routes/login/page'));
+const SignUp = lazy(() => import('~/routes/signup/page'));
 
 // 로딩 스피너 컴포넌트
 function MySpinner() {
@@ -34,20 +37,24 @@ function SuspenseLayout() {
 export const mainRoutes = [
   {
     path: '/',
-    element: <Layout />, // Layout을 최상위 컴포넌트로 설정
+    element: <Layout />,
     children: [
       {
-        element: <SuspenseLayout />, // SuspenseLayout 내부에서 Outlet 렌더링
+        element: <SuspenseLayout />,
         children: [
           { element: <Init />, index: true },
           { element: <User />, path: 'user' },
           { element: <Membership />, path: 'membership' },
           { element: <Ranking />, path: 'ranking' },
+          { element: <RankingDetail />, path: 'ranking-detail' }, 
           { element: <MyPocket />, path: 'mypocket' },
           { element: <SelectStock />, path: 'select-stock' },
           { element: <ETFPocket />, path: 'etf-pocket' },
           { element: <CreateETF />, path: 'create-etf' },
           { element: <Grade />, path: 'grade' },
+          { element: <Login />, path: 'login' },
+          { element: <SignUp />, path: 'signup' },
+
         ],
       },
     ],
