@@ -55,8 +55,13 @@ export default function UserInfo() {
       <div className="mt-3" style={{ margin: '24px', marginBottom: 0 }}>
         <div className="text-secondary mb-1" style={{ fontSize: '14px' }}>총 투자금액</div>
         <div className="d-flex align-items-baseline gap-2">
-          <span className="fs-4 fw-bold" style={{ color: '#333' }}>{userData.asset.toLocaleString()}원</span>
-          <span className="fw-medium" style={{ color: '#ff3b3b', fontSize: '14px', marginLeft: '10px' }}>
+          <span className="fs-4 fw-bold" style={{ color: '#333' }}>
+            {(userData.asset ?? 0).toLocaleString()}원
+          </span>
+          <span
+            className="fw-medium"
+            style={{ color: '#ff3b3b', fontSize: '14px', marginLeft: '10px' }}
+          >
             수익률 10%
           </span>
         </div>

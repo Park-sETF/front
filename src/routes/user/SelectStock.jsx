@@ -14,10 +14,16 @@ export default function SelectStock() {
   const {selectedStocks} = useStockContext();
   
 
-  const handleButtonClick = (e) => {
+  //버튼 클릭 시 이동
+  const handleButtonClick = () => {
 
     navigate('/etf-pocket'); // 클릭 시 경로 이동
   };
+
+  //장바구니 아이콘 클릭 시 이동 
+  const handlePocketClick = () =>{
+    navigate('/etf-pocket'); // 클릭 시 경로 이동
+  }
 
   // 주식 데이터
   const stocks = [
@@ -58,7 +64,7 @@ export default function SelectStock() {
   return (
     <div>
       {/* 실시간으로 선택된 주식 수 전달 */}
-      <StockHeader Quantity={selectedStocks.length.toString()} />
+      <StockHeader Quantity={selectedStocks.length.toString()} handlePocketClick={handlePocketClick} />
       <StockTab />
       {/* Chart에 stocks와 상태 관리 함수 전달 */}
       <Chart stocks={stocks}/>
