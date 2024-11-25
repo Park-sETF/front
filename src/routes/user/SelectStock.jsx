@@ -1,17 +1,21 @@
-import { useState } from 'react';
-import BigButton from '~/components/buttons/BigButton';
 import StockHeader from '~/components/layouts/StockHeader';
 import StockTab from '~/components/Stock/StockTab';
 import Chart from '~/components/Stock/Chart';
 import { useNavigate } from 'react-router-dom';
+import { useStockContext } from '~/components/context/StockProvider';
+import BigButton from '~/components/buttons/BigButton';
+
+
 
 export default function SelectStock() {
   const navigate = useNavigate();
 
   // selectedStocks 상태 추가
-  const [selectedStocks, setSelectedStocks] = useState([]);
+  const {selectedStocks} = useStockContext();
+  
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e) => {
+
     navigate('/etf-pocket'); // 클릭 시 경로 이동
   };
 
@@ -57,8 +61,9 @@ export default function SelectStock() {
       <StockHeader Quantity={selectedStocks.length.toString()} />
       <StockTab />
       {/* Chart에 stocks와 상태 관리 함수 전달 */}
-      <Chart stocks={stocks} selectedStocks={selectedStocks} setSelectedStocks={setSelectedStocks} />
-      <BigButton text={'ETF 포켓'} onClick={handleButtonClick} />
+      <Chart stocks={stocks}/>
+      {/* <button onClick={handleButtonClick}>ETF pocket</button> */}
+      <BigButton text='ETF 포켓'  onClick={handleButtonClick} />
     </div>
   );
 }

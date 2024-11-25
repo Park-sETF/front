@@ -9,7 +9,7 @@ export default function User() {
   const navigate = useNavigate();
   const [ETFList, setETFList] = useState([]); // ETF 상태 추가
   const [SubscriberList,setSubscriberList] = useState([]); //구독 리스트 추가 
-  const userId = 2; // 고정된 userId
+  const userId = 1; // 고정된 userId
 
   const handleButtonClick = () => {
     navigate('/select-stock'); // 클릭 시 경로 이동
@@ -52,7 +52,7 @@ export default function User() {
     <div>
       <UserInfo />
       <Tab ETFList={ETFList} SubscriberList={SubscriberList} />
-      <BigButton text={'나만의 ETF 만들기'} onClick={handleButtonClick} />
+      <BigButton  text={'나만의 ETF 만들기'} onClick={handleButtonClick} />
     </div>
   );
 }
