@@ -22,9 +22,14 @@ const layoutMapper = (pathname) => {
       headerComponent = null;
       break;
 
-    case '/ranking': // 개발 예정
+    case '/ranking': 
       headerComponent = RankingHeader;
       headerProps = { text: '오늘의 랭킹', notifications: 5 };
+      break;
+
+    case '/ranking-detail': 
+      headerComponent = RankingHeader;
+      headerProps = { notifications: 5 };
       break;
 
     case '/mypocket': // 개발 예정

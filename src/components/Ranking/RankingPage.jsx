@@ -4,7 +4,7 @@ import axios from 'axios';
 const RankingContent = () => {
   const [rankingData, setRankingData] = useState([]);
 
-  const subscriberId = 1; // 현재 로그인한 사용자의 ID 임시로둠
+  const subscriberId = 4; // 현재 로그인한 사용자의 ID 임시로둠
 
   const fetchRankingData = async () => {
     try {
