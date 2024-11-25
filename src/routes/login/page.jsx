@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '~/stores/auth/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,9 +10,18 @@ function Login() {
     password: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [localError, setLocalError] = useState(null); // 에러 메시지 상태
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {loading,  error } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (error) {
+      setLocalError(error);
+      const timer = setTimeout(() => setLocalError(null), 3000); // 3초 후 에러 메시지 제거
+      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
+    }
+  }, [error]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,15 +70,11 @@ function Login() {
             required
             className="input-field"
           />
-          <button 
-            type="submit" 
-            className="primary-btn" 
-            disabled={isSubmitting}
-          >
+          <button type="submit" className="primary-btn" disabled={isSubmitting}>
             {isSubmitting ? '로그인 중...' : '로그인'}
           </button>
         </form>
-        {error && <p className="error-message">{error}</p>}
+        {localError && <p className="error-message">{localError}</p>}
         <p className="secondary-text">
           계정이 없으세요? <Link to="/signup">회원가입</Link>
         </p>
@@ -79,4 +84,3 @@ function Login() {
 }
 
 export default Login;
-
