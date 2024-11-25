@@ -4,7 +4,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Layout from '~/components/layouts/Layout'; // Layout 컴포넌트 가져오기
 
 const Init = lazy(() => import('~/routes/init/page'));
-const User = lazy(() => import('~/routes/user/page'));
+const User = lazy(() => import('~/routes/user/User'));
 const Membership = lazy(() => import('~/routes/membership/page'));
 const Ranking = lazy(() => import('~/routes/ranking/page'));
 const MyPocket = lazy(() => import('~/routes/myPocket/page'));
@@ -40,10 +40,11 @@ export const mainRoutes = [
         children: [
           { element: <Init />, index: true },
           { element: <User />, path: 'user' },
+          { element: <SelectStock />, path: 'select-stock' },
+          
           { element: <Membership />, path: 'membership' },
           { element: <Ranking />, path: 'ranking' },
           { element: <MyPocket />, path: 'mypocket' },
-          { element: <SelectStock />, path: 'select-stock' },
           { element: <ETFPocket />, path: 'etf-pocket' },
           { element: <CreateETF />, path: 'create-etf' },
         ],
