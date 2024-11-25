@@ -18,7 +18,7 @@ const RankingContent = () => {
       // 랭킹 데이터 가져오기
       const rankingsResponse = await axios.get('/api/etf/user/ranking');
       const data = rankingsResponse.data.map((item, index) => ({
-        userId: item.userId,
+        userId: item.usdeverId,
         name: item.nickname,
         image: item.image,
         amount: `+${item.totalRevenue.toLocaleString()}원`,

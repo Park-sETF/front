@@ -1,8 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ChevronRight } from 'react-bootstrap-icons';
 
-// props로 리스트 전달
-export default function List({ items }) {
+export default function List({ items, onItemClick }) {
   return (
     <div
       style={{
@@ -24,8 +23,13 @@ export default function List({ items }) {
         {items.map((item, index) => (
           <div
             key={index}
-            className="d-flex justify-content-between align-items-center "
-            style={{ paddingTop: '1.1rem', paddingBottom: '1.1rem' }}
+            className="d-flex justify-content-between align-items-center"
+            style={{
+              paddingTop: '1.1rem',
+              paddingBottom: '1.1rem',
+              cursor: 'pointer', // 클릭 가능한 UI로 변경
+            }}
+            onClick={() => onItemClick(item)} // 클릭 이벤트 핸들러
           >
             <span className="fw-medium" style={{ fontSize: '16px' }}>
               {item.name}
