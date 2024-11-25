@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { House, Clipboard, Bell } from 'react-bootstrap-icons';
 
 export default function Footer() {
   const [activeTab, setActiveTab] = useState('홈');
+  const navigate = useNavigate(); 
 
   return (
     <div
@@ -11,12 +13,15 @@ export default function Footer() {
       style={{
         maxWidth: '430px',
         margin: '0 auto',
-        height: '60px', // Footer 높이 설정
+        height: '60px', 
       }}
     >
       <div className="d-flex justify-content-between px-4">
         <button
-          onClick={() => setActiveTab('홈')}
+          onClick={() => {
+            setActiveTab('홈');
+            navigate('/user'); 
+          }}
           className="btn btn-link text-decoration-none d-flex flex-column align-items-center"
           style={{
             color: activeTab === '홈' ? '#000' : '#999',
@@ -28,7 +33,10 @@ export default function Footer() {
         </button>
 
         <button
-          onClick={() => setActiveTab('포트폴리오')}
+          onClick={() => {
+            setActiveTab('포트폴리오');
+            navigate('/ranking'); 
+          }}
           className="btn btn-link text-decoration-none d-flex flex-column align-items-center"
           style={{
             color: activeTab === '포트폴리오' ? '#000' : '#999',
@@ -40,7 +48,10 @@ export default function Footer() {
         </button>
 
         <button
-          onClick={() => setActiveTab('알림')}
+          onClick={() => {
+            setActiveTab('알림');
+            navigate('/notifications'); 
+          }}
           className="btn btn-link text-decoration-none d-flex flex-column align-items-center"
           style={{
             color: activeTab === '알림' ? '#000' : '#999',
@@ -57,17 +68,6 @@ export default function Footer() {
           box-shadow: none;
         }
       `}</style>
-
-      {/* <style>{`
-        .btn-link:focus {
-          box-shadow: none;
-        }
-        @media (min-width: 375px) and (max-width: 430px) {
-          .btn-link {
-            padding: 8px 16px;
-          }
-        }
-      `}</style> */}
     </div>
   );
 }
