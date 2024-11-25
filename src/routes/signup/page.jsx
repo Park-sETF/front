@@ -190,7 +190,6 @@ function Signup() {
                       {errors.password}
                     </Form.Control.Feedback>
                     <Button
-                      variant="success"
                       type="submit"
                       className="w-100 mt-3"
                       disabled={
