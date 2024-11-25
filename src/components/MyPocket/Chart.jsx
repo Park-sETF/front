@@ -17,6 +17,33 @@ import './Chart.css';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Component({ stocks, addStock, setStocks }) {
+  const colorPalette = ['#62B2FD', '#9BDFC4', '#B4A4FF', '#F99BAB', '#FFB44F'];
+
+  const generatePastelColor = () => {
+    const r = Math.floor(Math.random() * 127 + 128); // 128~255 범위로 제한
+    const g = Math.floor(Math.random() * 127 + 128);
+    const b = Math.floor(Math.random() * 127 + 128);
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
+  const [colors, setColors] = useState(
+    stocks.map((_, index) =>
+      index < colorPalette.length ? colorPalette[index] : generatePastelColor()
+    )
+  );
+
+  const [percentages, setPercentages] = useState(
+    stocks.map(() => 0) // 초기 모든 비율은 0
+  );
+
+  // 데이터 보낼 땐 이 양식을 따르면 됨.
+
+  // const portfolio = stocks.map((stock, index) => ({
+  //   name: stock.name,
+  //   price: stock.price,
+  //   percentage: percentages[index],
+  // }));
+
   const [totalBalance, setTotalBalance] = useState(100000000);
   const [investmentAmount, setInvestmentAmount] = useState(50000000);
   const [activeTooltipIndex, setActiveTooltipIndex] = useState(null);
@@ -53,10 +80,10 @@ export default function Component({ stocks, addStock, setStocks }) {
   }, [totalBalance, investmentAmount]);
 
   useEffect(() => {
-    const total = stocks.reduce((sum, stock) => sum + stock.percentage, 0);
+    const total = percentages.reduce((sum, percentage) => sum + percentage, 0);
     setError(total > 100);
     setWarning(total < 100);
-  }, [stocks]);
+  }, [percentages]);
 
   useEffect(() => {
     if (activeTooltipIndex !== null) {
@@ -73,40 +100,49 @@ export default function Component({ stocks, addStock, setStocks }) {
   }, [investmentAmount]);
 
   const handleInvestmentChange = (value) => {
-    // trim을 사용해 공백 제거 후 숫자인지 확인
-    // value = value.trim();
-
-    // 숫자 형태의 문자열이고, 실제 숫자값인지 확인
-    // if (isNaN(value) && value !== '' && !isNaN(parseFloat(value))) {
-    //   setInvestmentAmount(initialInvestmentAmount);
-    //   return;
-    // }
-
     const sanitizedValue = Number(value);
     const newValue = Math.min(totalBalance, Math.max(0, sanitizedValue));
     setInvestmentAmount(newValue);
   };
 
   const handlePercentageChange = (index, newValue) => {
-    const newStocks = [...stocks];
+    const newPercentages = [...percentages];
     newValue = Math.min(100, Math.max(0, newValue));
-    newStocks[index].percentage = Number(newValue);
-    setStocks(newStocks);
+    newPercentages[index] = newValue;
+    setPercentages(newPercentages);
+  };
+
+  const handleColorChange = (index, newColor) => {
+    const newColors = [...colors];
+    newColors[index] = newColor;
+    setColors(newColors);
+  };
+
+  const addStockWithColor = () => {
+    addStock();
+    const newColor =
+      colors.length < colorPalette.length
+        ? colorPalette[colors.length]
+        : generatePastelColor();
+    setColors([...colors, newColor]);
+    setPercentages([...percentages, 0]); // 새 항목에 대해 비율 0 추가
+  };
+
+  const deleteStock = (index) => {
+    setStocks(stocks.filter((_, i) => i !== index));
+    setColors(colors.filter((_, i) => i !== index));
+    setPercentages(percentages.filter((_, i) => i !== index));
   };
 
   const chartData = {
     labels: stocks.map((stock) => stock.name),
     datasets: [
       {
-        data: stocks.map((stock) => stock.percentage),
-        backgroundColor: stocks.map((stock) => stock.color),
+        data: percentages, // percentages를 데이터로 사용
+        backgroundColor: colors,
         borderWidth: 0,
       },
     ],
-  };
-
-  const deleteStock = (index) => {
-    setStocks(stocks.filter((_, i) => i !== index));
   };
 
   const chartOptions = {
@@ -171,15 +207,12 @@ export default function Component({ stocks, addStock, setStocks }) {
                   <span
                     style={{
                       display: 'block',
-                      color: stocks[activeTooltipIndex].color,
+                      color: colors[activeTooltipIndex],
                     }}
                   >
                     ● {stocks[activeTooltipIndex].name}
                   </span>
-                  <span>
-                    비율: {stocks[activeTooltipIndex].percentage}%, 가격:{' '}
-                    {Number(stocks[activeTooltipIndex].price).toLocaleString()}
-                  </span>
+                  <span>비율: {percentages[activeTooltipIndex]}%</span>
                 </div>
               )}
               <div className="investment-amount-container">
@@ -203,7 +236,7 @@ export default function Component({ stocks, addStock, setStocks }) {
                   <div
                     className="stock-color"
                     style={{
-                      backgroundColor: stock.color,
+                      backgroundColor: colors[index],
                       borderRadius: '1rem',
                     }}
                   ></div>
@@ -211,7 +244,7 @@ export default function Component({ stocks, addStock, setStocks }) {
                   <div className="stock-percentage">
                     <FormControl
                       type="text"
-                      value={stock.percentage}
+                      value={percentages[index]}
                       onChange={(e) =>
                         handlePercentageChange(index, Number(e.target.value))
                       }
@@ -246,7 +279,11 @@ export default function Component({ stocks, addStock, setStocks }) {
               >
                 <Plus />
               </div>
-              <Button variant="link" className="add-button" onClick={addStock}>
+              <Button
+                variant="link"
+                className="add-button"
+                onClick={addStockWithColor}
+              >
                 추가하기
               </Button>
             </div>

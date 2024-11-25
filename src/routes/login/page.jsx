@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '~/stores/auth/authSlice';
-import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import './Login.css';
 
 function Login() {
   const [credentials, setCredentials] = useState({
@@ -30,23 +30,20 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // 버튼 클릭 상태 설정
+    setIsSubmitting(true);
     const resultAction = await dispatch(login(credentials));
 
-    // 로그인 성공 여부 확인 및 메인 화면 이동
     if (login.fulfilled.match(resultAction)) {
-      // const { accessToken, refreshToken, userId } = resultAction.payload;
       const { userId } = resultAction.payload;
-
       if (userId) {
         setIsSubmitting(false);
-        navigate('/user'); // 메인 화면으로 이동
+        navigate('/user');
       } else {
         setIsSubmitting(false);
         console.error('Invalid response data:', resultAction.payload);
       }
     } else if (login.rejected.match(resultAction)) {
-      setIsSubmitting(false); // 로그인 실패 시 초기화
+      setIsSubmitting(false);
     }
   };
 

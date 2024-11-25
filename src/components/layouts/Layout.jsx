@@ -1,10 +1,12 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useMatch  } from 'react-router-dom';
 import LayoutMapper from './LayoutMapper';
 import Footer from '~/components/layouts/MyFooter';
+
 
 export default function Layout() {
   const location = useLocation();
   const { pathname } = location;
+
 
   // 매퍼로 헤더 컴포넌트와 텍스트 가져오기
   const { headerComponent: HeaderComponent, headerProps } =

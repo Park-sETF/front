@@ -1,24 +1,42 @@
-import RankingUserInfo from '~/components/Ranking/RankingUserInfo';
-import List from '~/components/Home/List';
-
+import { useEffect, useState } from "react";
+import { useParams ,useNavigate} from "react-router-dom";
+import RankingUserInfo from "~/components/Ranking/RankingUserInfo";
+import List from "~/components/Home/List";
 
 export default function RankingDetail() {
-  // ETF 데이터 (하드코딩)
-  const etfItems = [
-    { name: "우량주가 좋아", rate: 35, isPositive: true },
-    { name: "스타트업", rate: 20, isPositive: true },
-    { name: "개미개미", rate: -4, isPositive: false },
-    { name: "개미개미", rate: -4, isPositive: false },
-    { name: "개미개미", rate: -4, isPositive: false },
-  ];
+  const { userId } = useParams(); // URL에서 userId 추출
+  const [etfItems, setEtfItems] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch(`/api/userinfo/etf/list/${userId}`) // userId를 사용
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch ETF data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const transformedData = data.portfolios.map((portfolio) => ({
+          portfolioId: portfolio.portfolioId,
+          name: portfolio.title,
+          rate: portfolio.revenue,
+          isPositive: portfolio.revenue > 0,
+        }));
+        setEtfItems(transformedData);
+      })
+      .catch((error) => console.error("Error fetching ETF data:", error));
+  }, [userId]);
+
+  const handleItemClick = (etfItem) => {
+    navigate(`/etf/detail/${etfItem.portfolioId}`, { state: etfItem });
+  };
 
   return (
     <div style={{ minWidth: "375px", maxWidth: "430px", margin: "0 auto" }}>
-      {/* 유저 정보 컴포넌트 */}
       <RankingUserInfo />
-      {/* ETF 목록 */}
-      <h3 style={{ margin: "20px", color: "#333" }}>준기님의 ETF 목록</h3>
-      <List items={etfItems} />
+      <h3 style={{ margin: "20px", color: "#333" }}>ETF 목록</h3>
+      <List items={etfItems} onItemClick={handleItemClick} />
     </div>
   );
 }
