@@ -1,4 +1,4 @@
-export default function StockHeader({Quantity}) {
+export default function StockHeader({Quantity, handlePocketClick}) {
     return (
       <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
         <div className="container-fluid d-flex justify-content-end px-3" style={{ marginRight: '23px' }}>
@@ -8,7 +8,7 @@ export default function StockHeader({Quantity}) {
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
           </button>
-          <button className="btn border-0 position-relative">
+          <button className="btn border-0 position-relative" onClick={handlePocketClick}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="9" cy="21" r="1" />
               <circle cx="20" cy="21" r="1" />
