@@ -4,7 +4,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Layout from '~/components/layouts/Layout'; 
 
 const Init = lazy(() => import('~/routes/init/page'));
-const User = lazy(() => import('~/routes/user/page'));
+const User = lazy(() => import('~/routes/user/User'));
 const Membership = lazy(() => import('~/routes/membership/page'));
 const Ranking = lazy(() => import('~/routes/ranking/page'));
 const RankingDetail = lazy(() => import('~/routes/rankingDetail/page'));
@@ -44,6 +44,7 @@ export const mainRoutes = [
         children: [
           { element: <Init />, index: true },
           { element: <User />, path: 'user' },
+
           { element: <Membership />, path: 'membership' },
           { element: <Ranking />, path: 'ranking' },
           { element: <RankingDetail />, path: 'ranking-detail' }, 
@@ -54,6 +55,7 @@ export const mainRoutes = [
           { element: <Grade />, path: 'grade' },
           { element: <Login />, path: 'login' },
           { element: <SignUp />, path: 'signup' },
+
 
         ],
       },

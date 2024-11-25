@@ -1,6 +1,11 @@
 import StockLogo from './StockLogo';
+import { useStockContext } from '~/components/context/StockProvider';
 
-export default function Chart({ stocks, selectedStocks, setSelectedStocks }) {
+export default function Chart({stocks}) {
+
+  //주식 종목 저장 변수 context에서 가져오기 
+  const {selectedStocks, setSelectedStocks} = useStockContext();
+
   // 주식 선택/해제 처리
   const handleButtonClick = (stock) => {
     const isSelected = selectedStocks.some((s) => s.id === stock.id);
@@ -9,7 +14,6 @@ export default function Chart({ stocks, selectedStocks, setSelectedStocks }) {
       : [...selectedStocks, stock]; // 담기
 
     setSelectedStocks(updatedSelection); // 상태 업데이트
-    localStorage.setItem('savedStocks', JSON.stringify(updatedSelection)); // 로컬스토리지 업데이트
   };
 
   // stocks와 StockLogo를 매핑
