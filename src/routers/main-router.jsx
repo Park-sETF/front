@@ -4,7 +4,7 @@ import GuestRoute from '~/routes/auth/GuestRoute';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
-import Layout from '~/components/layouts/Layout'; // Layout 컴포넌트 가져오기
+import Layout from '~/components/layouts/Layout'; 
 
 const Init = lazy(() => import('~/routes/init/page'));
 const User = lazy(() => import('~/routes/user/page'));
@@ -45,16 +45,6 @@ export const mainRoutes = [
         element: <SuspenseLayout />,
         children: [
           { element: <Init />, index: true },
-<<<<<<< HEAD
-          { element: <User />, path: 'user' },
-          { element: <Membership />, path: 'membership' },
-          { element: <Ranking />, path: 'ranking' },
-          { element: <RankingDetail />, path: 'ranking-detail' }, 
-          { element: <MyPocket />, path: 'mypocket' },
-          { element: <SelectStock />, path: 'select-stock' },
-          { element: <ETFPocket />, path: 'etf-pocket' },
-          { element: <CreateETF />, path: 'create-etf' },
-=======
           {
             path: 'user',
             element: (
@@ -76,6 +66,14 @@ export const mainRoutes = [
             element: (
               <ProtectedRoute>
                 <Ranking />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'ranking-detail', 
+            element: (
+              <ProtectedRoute>
+                <RankingDetail />
               </ProtectedRoute>
             ),
           },
@@ -127,7 +125,6 @@ export const mainRoutes = [
               </GuestRoute>
             ),
           },
->>>>>>> 19d01c5c7a056227b7e9b135cabe0d9dc6cf2f2c
         ],
       },
     ],
