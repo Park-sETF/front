@@ -4,11 +4,11 @@ import { useState } from 'react';
 
 export default function ETFPocket() {
   const [stocks, setStocks] = useState([
-    { name: '삼성전자', percentage: 40, price: 60000 },
-    { name: '현대자동차', percentage: 35, price: 230000 },
-    { name: '하이닉스', percentage: 12, price: 230000 },
-    { name: 'LG전자', percentage: 3, price: 80000 },
-    { name: '한화에어로스페이스', percentage: 10, price: 300000 },
+    { name: '삼성전자', price: 60000 },
+    { name: '현대자동차', price: 230000 },
+    { name: '하이닉스', price: 230000 },
+    { name: 'LG전자', price: 80000 },
+    { name: '한화에어로스페이스', price: 300000 },
   ]);
 
   const addStock = () => {
