@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 import PropTypes from 'prop-types';
 
-export default function RankingHeader({ text, notifications }) {
-=======
 export default function RankingHeader({ text, notifications = 0 }) {
->>>>>>> main
   return (
     <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
       <div
@@ -83,7 +79,6 @@ export default function RankingHeader({ text, notifications = 0 }) {
     </div>
   );
 }
-<<<<<<< HEAD
 
 // PropTypes 추가
 RankingHeader.propTypes = {
@@ -95,5 +90,3 @@ RankingHeader.propTypes = {
 RankingHeader.defaultProps = {
   notifications: 0, // 기본적으로 알림 개수는 0
 };
-=======
->>>>>>> main
