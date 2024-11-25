@@ -8,7 +8,7 @@ export default function UserInfo() {
 
   useEffect(() => {
     // API 호출
-    axios.get('http://localhost:8080/api/userinfo/2')
+    axios.get('http://localhost:8080/api/userinfo/1')
       .then(response => {
         setUserData(response.data); // API 응답 데이터를 상태에 저장
         setLoading(false);

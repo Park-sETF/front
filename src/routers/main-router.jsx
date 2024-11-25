@@ -7,6 +7,7 @@ const Init = lazy(() => import('~/routes/init/page'));
 const User = lazy(() => import('~/routes/user/page'));
 const Membership = lazy(() => import('~/routes/membership/page'));
 const Ranking = lazy(() => import('~/routes/ranking/page'));
+const RankingDetail = lazy(() => import('~/routes/rankingDetail/page'));
 const MyPocket = lazy(() => import('~/routes/myPocket/page'));
 const SelectStock = lazy(() => import('~/routes/user/SelectStock'));
 const ETFPocket = lazy(() => import('~/routes/user/ETFPocket'));
@@ -42,6 +43,7 @@ export const mainRoutes = [
           { element: <User />, path: 'user' },
           { element: <Membership />, path: 'membership' },
           { element: <Ranking />, path: 'ranking' },
+          { element: <RankingDetail />, path: 'ranking-detail' }, 
           { element: <MyPocket />, path: 'mypocket' },
           { element: <SelectStock />, path: 'select-stock' },
           { element: <ETFPocket />, path: 'etf-pocket' },
