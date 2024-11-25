@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '~/stores/auth/authSlice';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
@@ -9,10 +9,19 @@ function Login() {
     userId: '',
     password: '',
   });
-  const [isSubmitting, setIsSubmitting] = useState(false); // 버튼 클릭 여부 상태 추가
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [localError, setLocalError] = useState(null); // 에러 메시지 상태
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (error) {
+      setLocalError(error);
+      const timer = setTimeout(() => setLocalError(null), 3000); // 3초 후 에러 메시지 제거
+      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
+    }
+  }, [error]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,53 +51,38 @@ function Login() {
   };
 
   return (
-    <Container
-      className="d-flex align-items-center justify-content-center"
-      style={{ height: '75vh' }}
-    >
-      <Row className="w-100">
-        <Col sm={12} md={12} lg={12}>
-          <div className="p-4 border rounded shadow">
-            <h1 className="text-center mb-4">환영합니다</h1>
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3" controlId="userId">
-                <Form.Label>아이디</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="userId"
-                  placeholder="아이디"
-                  value={credentials.userId}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="password">
-                <Form.Label>비밀번호</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  placeholder="비밀번호"
-                  value={credentials.password}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Button variant="primary" type="submit" className="w-100">
-                {isSubmitting ? '로그인 중...' : '로그인'}
-              </Button>
-            </Form>
-            {error && (
-              <Alert variant="danger" className="mt-3">
-                {error}
-              </Alert>
-            )}
-            <p className="text-center mt-3">
-              계정이 없으세요? <Link to="/signup">회원가입</Link>
-            </p>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+    <div className="auth-container">
+      <div className="auth-box">
+        <h1>로그인</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="userId"
+            placeholder="아이디"
+            value={credentials.userId}
+            onChange={handleChange}
+            required
+            className="input-field"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="비밀번호"
+            value={credentials.password}
+            onChange={handleChange}
+            required
+            className="input-field"
+          />
+          <button type="submit" className="primary-btn" disabled={isSubmitting}>
+            {isSubmitting ? '로그인 중...' : '로그인'}
+          </button>
+        </form>
+        {localError && <p className="error-message">{localError}</p>}
+        <p className="secondary-text">
+          계정이 없으세요? <Link to="/signup">회원가입</Link>
+        </p>
+      </div>
+    </div>
   );
 }
 

@@ -14,6 +14,7 @@ function Signup() {
   });
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false); // 성공 상태 추가
+  const [localError, setLocalError] = useState(null); // 로컬 에러 상태 추가
   const dispatch = useDispatch();
   const navigate = useNavigate(); // useNavigate 훅 사용
   const { loading, error } = useSelector((state) => state.auth);
@@ -98,6 +99,15 @@ function Signup() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // 에러 메시지 상태 처리
+  useEffect(() => {
+    if (error) {
+      setLocalError(error); // 로컬 에러 상태 업데이트
+      const timer = setTimeout(() => setLocalError(null), 10000); // 3초 후 에러 제거
+      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
+    }
+  }, [error]);
+
   return (
     <Container
       className="d-flex align-items-center justify-content-center"
@@ -115,15 +125,15 @@ function Signup() {
           <div className="p-4 border rounded shadow">
             <h1 className="text-center mb-3">회원가입</h1>
             <p className="text-center text-muted mb-4">
-              {step === 0 && '아이디를 입력해주세요.'}
-              {step === 1 && '닉네임을 입력해주세요.'}
-              {step === 2 && '비밀번호를 입력해주세요.'}
+              {!success && step === 0 && '아이디를 입력해주세요.'}
+              {!success && step === 1 && '닉네임을 입력해주세요.'}
+              {!success && step === 2 && '비밀번호를 입력해주세요.'}
             </p>
 
             {success ? (
               <div className="text-center">
-                <div className="display-3 text-success">🎉</div>
-                <p className="fs-4 text-success">회원가입이 완료되었습니다!</p>
+                <div className="display-3 mb-2">🎉</div>
+                <p>회원가입이 완료되었습니다.</p>
               </div>
             ) : (
               <Form onSubmit={handleSubmit}>
@@ -203,9 +213,9 @@ function Signup() {
                 )}
               </Form>
             )}
-            {error && (
+            {localError && (
               <Alert variant="danger" className="mt-3">
-                {error}
+                {localError}
               </Alert>
             )}
           </div>
