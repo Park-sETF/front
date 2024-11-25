@@ -31,7 +31,7 @@ export default function MyGrade() {
   return (
     <div style={{ minWidth: '375px', maxWidth: '430px', margin: '0 auto' }}>
       <div className="px-4 py-3">
-        <h2 className="mb-4" style={{ fontSize: '20px', fontWeight: '600' }}>나의 등급</h2>
+        {/* <h2 className="mb-4" style={{ fontSize: '20px', fontWeight: '600' }}>나의 등급</h2> */}
         
         <div className="d-flex align-items-center mb-4">
           <img 
