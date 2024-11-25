@@ -15,7 +15,7 @@ const CreateETF = lazy(() => import('~/routes/user/CreateETF'));
 const Grade = lazy(() => import('~/routes/grade/page'));
 const Login = lazy(() => import('~/routes/login/page'));
 const SignUp = lazy(() => import('~/routes/signup/page'));
-const ETFDetail = lazy(() => import('~/routes/etfDetail/page'));
+const ETFDetail = lazy(() => import('~/routes/ETFDetail/page'));
 
 // 로딩 스피너 컴포넌트
 function MySpinner() {
@@ -48,7 +48,7 @@ export const mainRoutes = [
           { element: <Membership />, path: 'membership' },
           { element: <Ranking />, path: 'ranking' },
           { element: <RankingDetail />, path: 'ranking-detail' },
-          { element: <ETFDetail />, path: 'etf/detail/:portfolioId' }, 
+          { element: <ETFDetail />, path: 'etf/detail/:portfolioId' },
           { element: <MyPocket />, path: 'mypocket' },
           { element: <SelectStock />, path: 'select-stock' },
           { element: <ETFPocket />, path: 'etf-pocket' },
