@@ -38,6 +38,7 @@ export default function Init() {
             width: '100%',
             height: 'auto',
             objectFit: 'contain',
+            marginRight: '28px'
           }}
         />
       </div>
@@ -53,15 +54,23 @@ export default function Init() {
       ) : (
         // 비로그인 상태일 때 로그인/회원가입 버튼 표시
         <div
-          className="d-flex flex-row margin-auto mx-3"
+          className="d-flex flex-column margin-auto mx-3"
           style={{ gap: '10px' }}
         >
-          <Button className="mt-3" onClick={() => navigate('/login')}>
+          <Button className="mt-3" onClick={() => navigate('/login')} style={{backgroundColor: '#3182F6'}}>
             로그인
           </Button>
-          <Button className="mt-3" onClick={() => navigate('/signup')}>
-            회원가입
+          <Button 
+            variant="link" 
+            className="text-primary text-decoration-none"
+            style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)', color: '#3182F6'}}
+            onClick={() => navigate('/signup')}
+          >
+            회원 가입 바로가기
           </Button>
+          {/* <Button className="" onClick={() => navigate('/signup')}>
+            회원가입
+          </Button> */}
         </div>
       )}
     </div>
