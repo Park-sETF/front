@@ -103,7 +103,7 @@ function Signup() {
   useEffect(() => {
     if (error) {
       setLocalError(error); // 로컬 에러 상태 업데이트
-      const timer = setTimeout(() => setLocalError(null), 10000); // 3초 후 에러 제거
+      const timer = setTimeout(() => setLocalError(null), 3000); // 3초 후 에러 제거
       return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
     }
   }, [error]);
