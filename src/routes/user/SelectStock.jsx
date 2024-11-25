@@ -1,4 +1,3 @@
-// import BigButton from '~/components/buttons/BigButton';
 import StockHeader from '~/components/layouts/StockHeader';
 import StockTab from '~/components/Stock/StockTab';
 import Chart from '~/components/Stock/Chart';
@@ -12,13 +11,11 @@ export default function SelectStock() {
   const navigate = useNavigate();
 
   // selectedStocks 상태 추가
-  // const [selectedStocks] = useStockContext();
   const {selectedStocks} = useStockContext();
   
 
   const handleButtonClick = (e) => {
-    console.log(e)
-    console.log("A")
+
     navigate('/etf-pocket'); // 클릭 시 경로 이동
   };
 

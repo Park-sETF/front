@@ -1,0 +1,79 @@
+/* Auth Container */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.auth-box {
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.auth-box h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+/* Input Field */
+.input-field {
+  width: calc(100% - 20px);
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Primary Button */
+.primary-btn {
+  background: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.primary-btn:hover {
+  background: #0056b3;
+}
+
+.primary-btn:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Error Message */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Secondary Text */
+.secondary-text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888;
+}
+
+.secondary-text a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.secondary-text a:hover {
+  text-decoration: underline;
+}

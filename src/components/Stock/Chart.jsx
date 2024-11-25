@@ -1,7 +1,7 @@
 import StockLogo from './StockLogo';
 import { useStockContext } from '~/components/context/StockProvider';
 
-export default function Chart({ stocks}) {
+export default function Chart({stocks}) {
 
   //주식 종목 저장 변수 context에서 가져오기 
   const {selectedStocks, setSelectedStocks} = useStockContext();

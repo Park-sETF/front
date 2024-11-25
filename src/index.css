@@ -1,0 +1,16 @@
+h1,
+h2,
+h3,
+h4,
+body {
+  font-family: 'Kantumruy Pro';
+  font-weight: 600; /* 기본 가중치 */
+  font-style: normal;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit; /* 부모의 폰트 설정을 상속 */
+}

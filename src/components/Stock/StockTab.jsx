@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 export default function StockTab() {
   const [activeTab, setActiveTab] = useState('실시간 차트');
 
   return (
-    <div style={{ width:'100%', maxWidth: '430px', margin: '0 auto' }}>
+    <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
       {/* 탭 버튼 */}
       <div
         className="d-flex justify-content-between border-bottom"
-        style={{ margin: '23px', marginTop: 0, marginBottom:0}}
+        style={{ margin: '23px', marginTop: 0, marginBottom: 0 }}
       >
         {/* 거래대금 버튼 */}
         <button
@@ -109,7 +108,7 @@ export default function StockTab() {
         </button>
       </div>
 
-{/* 
+      {/* 
       <div>
         {activeTab === '거래대금' && <div></div>}
         {activeTab === '거래량' && <div></div>} 
