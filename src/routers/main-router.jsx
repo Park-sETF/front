@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
-import Layout from '~/components/layouts/Layout'; // Layout 컴포넌트 가져오기
+import Layout from '~/components/layouts/Layout'; 
 
 const Init = lazy(() => import('~/routes/init/page'));
 const User = lazy(() => import('~/routes/user/page'));
