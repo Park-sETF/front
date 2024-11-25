@@ -11,6 +11,7 @@ const MyPocket = lazy(() => import('~/routes/myPocket/page'));
 const SelectStock = lazy(() => import('~/routes/user/SelectStock'));
 const ETFPocket = lazy(() => import('~/routes/user/ETFPocket'));
 const CreateETF = lazy(() => import('~/routes/user/CreateETF'));
+const Grade = lazy(() => import('~/routes/grade/page'));
 
 // 로딩 스피너 컴포넌트
 function MySpinner() {
@@ -46,6 +47,7 @@ export const mainRoutes = [
           { element: <SelectStock />, path: 'select-stock' },
           { element: <ETFPocket />, path: 'etf-pocket' },
           { element: <CreateETF />, path: 'create-etf' },
+          { element: <Grade />, path: 'grade' },
         ],
       },
     ],
