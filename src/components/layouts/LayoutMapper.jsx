@@ -51,6 +51,12 @@ const layoutMapper = (pathname) => {
       headerProps = { text: '간편회원가입 하기' }; // MobileHeader에 전달할 props
       break;
 
+    case '/grade':
+      headerComponent = MobileHeader;
+      headerProps = { text: '등급' }; // MobileHeader에 전달할 props
+      break;
+      
+
     default:
       headerComponent = null;
       break;

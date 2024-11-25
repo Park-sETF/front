@@ -1,6 +1,3 @@
-import ProtectedRoute from '~/routes/auth/ProtectedRoute';
-import GuestRoute from '~/routes/auth/GuestRoute';
-
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
@@ -15,6 +12,7 @@ const MyPocket = lazy(() => import('~/routes/myPocket/page'));
 const SelectStock = lazy(() => import('~/routes/user/SelectStock'));
 const ETFPocket = lazy(() => import('~/routes/user/ETFPocket'));
 const CreateETF = lazy(() => import('~/routes/user/CreateETF'));
+const Grade = lazy(() => import('~/routes/grade/page'));
 const Login = lazy(() => import('~/routes/login/page'));
 const SignUp = lazy(() => import('~/routes/signup/page'));
 
@@ -46,12 +44,19 @@ export const mainRoutes = [
         children: [
           { element: <Init />, index: true },
           { element: <User />, path: 'user' },
-          { element: <SelectStock />, path: 'select-stock' },
+
           { element: <Membership />, path: 'membership' },
           { element: <Ranking />, path: 'ranking' },
+          { element: <RankingDetail />, path: 'ranking-detail' }, 
           { element: <MyPocket />, path: 'mypocket' },
+          { element: <SelectStock />, path: 'select-stock' },
           { element: <ETFPocket />, path: 'etf-pocket' },
           { element: <CreateETF />, path: 'create-etf' },
+          { element: <Grade />, path: 'grade' },
+          { element: <Login />, path: 'login' },
+          { element: <SignUp />, path: 'signup' },
+
+
         ],
       },
     ],
