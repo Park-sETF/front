@@ -1,6 +1,3 @@
-import ProtectedRoute from '~/routes/auth/ProtectedRoute';
-import GuestRoute from '~/routes/auth/GuestRoute';
-
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
@@ -15,6 +12,7 @@ const MyPocket = lazy(() => import('~/routes/myPocket/page'));
 const SelectStock = lazy(() => import('~/routes/user/SelectStock'));
 const ETFPocket = lazy(() => import('~/routes/user/ETFPocket'));
 const CreateETF = lazy(() => import('~/routes/user/CreateETF'));
+const Grade = lazy(() => import('~/routes/grade/page'));
 const Login = lazy(() => import('~/routes/login/page'));
 const SignUp = lazy(() => import('~/routes/signup/page'));
 
@@ -45,86 +43,18 @@ export const mainRoutes = [
         element: <SuspenseLayout />,
         children: [
           { element: <Init />, index: true },
-          {
-            path: 'user',
-            element: (
-              <ProtectedRoute>
-                <User />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: 'membership',
-            element: (
-              <ProtectedRoute>
-                <Membership />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: 'ranking',
-            element: (
-              <ProtectedRoute>
-                <Ranking />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: 'ranking-detail', 
-            element: (
-              <ProtectedRoute>
-                <RankingDetail />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: 'mypocket',
-            element: (
-              <ProtectedRoute>
-                <MyPocket />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: 'select-stock',
-            element: (
-              <ProtectedRoute>
-                <SelectStock />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: 'etf-pocket',
-            element: (
-              <ProtectedRoute>
-                <ETFPocket />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: 'create-etf',
-            element: (
-              <ProtectedRoute>
-                <CreateETF />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: 'signup',
-            element: (
-              <GuestRoute>
-                <SignUp />
-              </GuestRoute>
-            ),
-          },
-          {
-            path: 'login',
-            element: (
-              <GuestRoute>
-                <Login />
-              </GuestRoute>
-            ),
-          },
+          { element: <User />, path: 'user' },
+          { element: <Membership />, path: 'membership' },
+          { element: <Ranking />, path: 'ranking' },
+          { element: <RankingDetail />, path: 'ranking-detail' }, 
+          { element: <MyPocket />, path: 'mypocket' },
+          { element: <SelectStock />, path: 'select-stock' },
+          { element: <ETFPocket />, path: 'etf-pocket' },
+          { element: <CreateETF />, path: 'create-etf' },
+          { element: <Grade />, path: 'grade' },
+          { element: <Login />, path: 'login' },
+          { element: <SignUp />, path: 'signup' },
+
         ],
       },
     ],
