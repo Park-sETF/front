@@ -33,7 +33,7 @@ export default function Component({ stocks, addStock, setStocks }) {
   );
 
   const [percentages, setPercentages] = useState(
-    stocks.map(() => 0) // 초기 모든 비율은 0
+    stocks.map(() => 3) // 초기 모든 비율은 3
   );
 
   // 데이터 보낼 땐 이 양식을 따르면 됨.
@@ -176,7 +176,7 @@ export default function Component({ stocks, addStock, setStocks }) {
       <div>
         <h1 className="text-center mb-4">나만의 ETF 만들기</h1>
         <Row className="justify-content-center">
-          <Col md={8}>
+          <Col className="w-100">
             <div className="text-center mb-2">
               <span className="text-danger">
                 잔액: {totalBalance.toLocaleString()}원
@@ -213,6 +213,12 @@ export default function Component({ stocks, addStock, setStocks }) {
                     ● {stocks[activeTooltipIndex].name}
                   </span>
                   <span>비율: {percentages[activeTooltipIndex]}%</span>
+                  <br />
+                  <span>
+                    가격 : {''}
+                    {stocks[activeTooltipIndex].price.toLocaleString()}
+                    원
+                  </span>
                 </div>
               )}
               <div className="investment-amount-container">
