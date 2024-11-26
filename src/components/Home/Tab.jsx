@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import List from './List';
+import ETFButtonList from './ETFButtonList';
 
 export default function Tab({ ETFList, SubscriberList }) {
   const [activeTab, setActiveTab] = useState('구독 목록');
@@ -83,7 +84,7 @@ export default function Tab({ ETFList, SubscriberList }) {
 
       <div>
         {activeTab === '내 거래' && <div></div>}
-        {activeTab === '나의 ETF' && <List items={ETFList} />}
+        {activeTab === '나의 ETF' && <ETFButtonList items={ETFList} />}
         {activeTab === '구독 목록' && <List items={SubscriberList} />}
       </div>
     </div>

@@ -1,58 +1,90 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import UserInfo from '~/components/Home/UserInfo';
 import Tab from '~/components/Home/Tab';
 import BigButton from '~/components/buttons/BigButton';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 export default function User() {
   const navigate = useNavigate();
-  const [ETFList, setETFList] = useState([]); // ETF 상태 추가
-  const [SubscriberList,setSubscriberList] = useState([]); //구독 리스트 추가 
-  const userId = 1; // 고정된 userId
+  const [ETFList, setETFList] = useState([]); // ETF 포트폴리오 상태
+  const [SubscriberList, setSubscriberList] = useState([]); // 구독 리스트 상태
+  const userId = 1; // 고정된 userId (추후 필요 시 동적으로 변경 가능)
 
-  const handleButtonClick = () => {
-    navigate('/select-stock'); // 클릭 시 경로 이동
+  // ETFList 초기 데이터 가져오기
+  const fetchETFList = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/userinfo/etf/list/${userId}`);
+      console.log(response);
+      const ETFList = response.data.portfolios.map((portfolio) => ({
+        portfolioId: portfolio.portfolioId,
+        name: portfolio.title,
+        revenue: portfolio.revenue,
+      }));
+      setETFList(ETFList);
+    } catch (error) {
+      console.error('ETFList 목록 불러오기 오류:', error);
+    }
   };
 
+  // SubscriberList 초기 데이터 가져오기
+  const fetchSubscriberList = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/subscribe/list/${userId}`);
+      const SubscriberList = response.data.map((subscriber) => ({
+        id: subscriber.publisher_id,
+        name: subscriber.nickname,
+        revenue: subscriber.revenue,
+      }));
+      setSubscriberList(SubscriberList);
+    } catch (error) {
+      console.error('SubscriberList 목록 불러오기 오류:', error);
+    }
+  };
+
+  // SSE 연결
   useEffect(() => {
+    const eventSource = new EventSource(`/api/notifications/subscribe/${userId}`);
 
-    const fetchETFList = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/api/userinfo/etf/list/${userId}`);
-        const ETFList = response.data.portfolios.map((portfolio) => ({
-          name: portfolio.title,
-          revenue: portfolio.revenue,
-        }));
-        setETFList(ETFList); // 상태 업데이트
-      } catch (error) {
-        console.log('ETFList 목록 불러오기 오류', error);
-      }
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      // ETFList 업데이트
+      setETFList((prevETFList) =>
+        prevETFList.map((portfolio) =>
+          portfolio.portfolioId === data.portfolioId
+            ? { ...portfolio, revenue: data.revenue }
+            : portfolio
+        )
+      );
     };
 
-    const fetchSubscriberList = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/api/subscribe/list/${userId}`);
-        const SubscriberList = response.data.map((subscriber) => ({
-          id: subscriber.publisher_id,
-          name: subscriber.nickname,
-          revenue: subscriber.revenue,
-        }));
-        setSubscriberList(SubscriberList);
-      } catch (error) {
-        console.log('SubscriberList 목록 불러오기 오류', error);
-      }
+    eventSource.onerror = () => {
+      console.error('SSE 연결 오류');
+      eventSource.close();
     };
 
-    fetchETFList(); // 함수 호출
+    // 컴포넌트 언마운트 시 연결 종료
+    return () => {
+      eventSource.close();
+    };
+  }, [userId]);
+
+  // 초기 데이터 로드
+  useEffect(() => {
+    fetchETFList();
     fetchSubscriberList();
   }, []);
+
+  const handleButtonClick = () => {
+    navigate('/select-stock'); // '나만의 ETF 만들기' 버튼 클릭 시 경로 이동
+  };
 
   return (
     <div>
       <UserInfo />
       <Tab ETFList={ETFList} SubscriberList={SubscriberList} />
-      <BigButton  text={'나만의 ETF 만들기'} onClick={handleButtonClick} />
+      <BigButton text={'나만의 ETF 만들기'} onClick={handleButtonClick} />
     </div>
   );
 }
