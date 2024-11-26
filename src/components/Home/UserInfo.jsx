@@ -60,9 +60,13 @@ export default function UserInfo() {
           </span>
           <span
             className="fw-medium"
-            style={{ color: '#ff3b3b', fontSize: '14px', marginLeft: '10px' }}
+            style={{
+              color: userData.revenue >= 0 ? '#ff3b3b' : '#0051c7', // 수익률 양수면 빨간색, 음수면 파란색
+              fontSize: '14px',
+              marginLeft: '10px',
+            }}
           >
-            수익률 10%
+            수익률 {userData.revenue?.toFixed(2) ?? '0'}%
           </span>
         </div>
       </div>

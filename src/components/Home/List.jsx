@@ -9,8 +9,8 @@ export default function List({ items, onItemClick }) {
         maxWidth: '430px',
         margin: '0 auto',
         display: 'flex',
-        flexDirection: 'column', // 수직 레이아웃
-        height: '100%', // 부모 높이에 맞추기
+        flexDirection: 'column',
+        height: '100%',
       }}
     >
       <div
@@ -27,9 +27,9 @@ export default function List({ items, onItemClick }) {
             style={{
               paddingTop: '1.1rem',
               paddingBottom: '1.1rem',
-              cursor: 'pointer', // 클릭 가능한 UI로 변경
+              cursor: 'pointer',
             }}
-            onClick={() => onItemClick(item)} // 클릭 이벤트 핸들러
+            onClick={() => onItemClick && onItemClick(item)}
           >
             <span className="fw-medium" style={{ fontSize: '16px' }}>
               {item.name}
@@ -37,12 +37,12 @@ export default function List({ items, onItemClick }) {
             <div className="d-flex align-items-center gap-3">
               <span
                 style={{
-                  color: item.isPositive ? '#ff3b3b' : '#0051c7',
+                  color: item.revenue >= 0 ? '#ff3b3b' : '#0051c7',
                   fontSize: '16px',
                 }}
               >
-                수익률 {item.isPositive ? '+' : '-'}
-                {item.rate}%
+                수익률 {item.revenue >= 0 ? '+' : ''}
+                {item.revenue.toFixed(2)}%
               </span>
               <ChevronRight size={20} style={{ color: '#666' }} />
             </div>
@@ -51,7 +51,6 @@ export default function List({ items, onItemClick }) {
       </div>
 
       <style>{`
-        /* Custom scrollbar styling */
         div::-webkit-scrollbar {
           width: 6px;
         }
@@ -67,12 +66,6 @@ export default function List({ items, onItemClick }) {
         
         div::-webkit-scrollbar-thumb:hover {
           background: #555;
-        }
-
-        @media (min-width: 375px) and (max-width: 430px) {
-          .fw-medium {
-            font-weight: 500;
-          }
         }
       `}</style>
     </div>
