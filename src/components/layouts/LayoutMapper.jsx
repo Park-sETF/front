@@ -59,7 +59,6 @@ const layoutMapper = (pathname) => {
 
     default:
       headerComponent = null;
-<<<<<<< HEAD
       if (pathname.includes('/ranking-detail')){
         headerComponent = RankingHeader;
         headerProps = { text: '유저 랭킹 상세보기', notifications: 5 }; 
@@ -69,8 +68,6 @@ const layoutMapper = (pathname) => {
         headerComponent = MobileHeader;
       headerProps = { text: '알림' }; 
       }
-=======
->>>>>>> ddf9e76ec26a3fa2f9e445dad9a30da769c1f284
       break;
   }
 
