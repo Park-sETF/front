@@ -1,4 +1,3 @@
-// import React from 'react';
 import { useNavigate } from "react-router-dom";
 
 export default function Membership() {
@@ -49,6 +48,51 @@ export default function Membership() {
           display: 'block'
         }}
       />
+
+      {/* Fixed buttons */}
+      <div style={{
+        position: 'fixed',
+        bottom: '80px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: 'calc(100% - 32px)',
+        maxWidth: '398px',
+        display: 'flex',
+        gap: '8px',
+        zIndex: 10
+      }}>
+        <button
+          onClick={() => {/* 탈퇴 처리 로직 */}}
+          className="btn"
+          style={{
+            flex: 1,
+            padding: '12px',
+            borderRadius: '8px',
+            backgroundColor: 'white',
+            border: '1px solid #dee2e6',
+            color: '#212529',
+            fontWeight: '700'  // Changed from '500' to '700' for bold text
+          }}
+        >
+          탈퇴하기
+        </button>
+        <button
+          onClick={() => {/* 가입 처리 로직 */}}
+          className="btn"
+          style={{
+            flex: 1,
+            padding: '12px',
+            borderRadius: '8px',
+            backgroundColor: '#0245C2',
+            border: 'none',
+            color: 'white',
+            fontWeight: '700'  // Changed from '500' to '700' for bold text
+          }}
+        >
+          가입하기
+        </button>
+      </div>
     </div>
   );
 }
+
