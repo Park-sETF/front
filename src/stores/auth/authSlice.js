@@ -15,6 +15,7 @@ export const login = createAsyncThunk(
   async (credentials, thunkAPI) => {
     try {
       const response = await api.post('/auth/login', credentials); // 쿠키에 accessToken 저장
+      localStorage.setItem("id", response.data.id);
 
       // Cookies.set('accessToken', response.data.accessToken, {
       //   secure: true,
@@ -25,6 +26,7 @@ export const login = createAsyncThunk(
       //   secure: true,
       //   sameSite: 'Strict',
       // });
+      
 
       return response.data;
     } catch (error) {
