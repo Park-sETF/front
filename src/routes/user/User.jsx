@@ -9,7 +9,7 @@ export default function User() {
   const navigate = useNavigate();
   const [ETFList, setETFList] = useState([]); // ETF 포트폴리오 상태
   const [SubscriberList, setSubscriberList] = useState([]); // 구독 리스트 상태
-  const userId = 1; // 고정된 userId (추후 필요 시 동적으로 변경 가능)
+  const userId = 3; // 고정된 userId (추후 필요 시 동적으로 변경 가능)
 
   // ETFList 초기 데이터 가져오기
   const fetchETFList = async () => {

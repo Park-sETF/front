@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { Plus } from 'react-bootstrap-icons';
+import { useLocation } from 'react-router-dom';
 
 import {
   Container,
@@ -70,6 +71,12 @@ export default function Component({ stocks, addStock, setStocks }) {
   useEffect(() => {
     setInitialTotalBalance(totalBalance);
     setInitialInvestmentAmount(investmentAmount);
+
+    const location = useLocation();
+
+    if(location.state != null) {
+      stocks = location.state.stocks;
+    }
   }, []);
 
   useEffect(() => {

@@ -28,7 +28,6 @@ const layoutMapper = (pathname) => {
       headerComponent = RankingHeader;
       headerProps = { text: '오늘의 랭킹', notifications: 5 };
       break;
-
     
 
     case '/mypocket': // 개발 예정
@@ -67,6 +66,16 @@ const layoutMapper = (pathname) => {
         console.log("BB")
         headerComponent = RankingHeader;
         headerProps = { text: '유저 랭킹 상세보기', notifications: 5 }; 
+      }
+
+      if(pathname.includes('/my-detail')) {
+        headerComponent = MobileHeader;
+        headerProps = {text: ''};
+      }
+
+      if(pathname.includes('/etf/detail')) {
+        headerComponent = MobileHeader;
+        headerProps = {text: ''};
       }
       break;
   }
