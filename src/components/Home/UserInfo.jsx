@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Axios를 사용하여 API 호출
 
 export default function UserInfo() {
@@ -7,19 +8,31 @@ export default function UserInfo() {
   const [error, setError] = useState(null); // 에러 상태
   const id = localStorage.getItem("id");
 
+  const navigate = useNavigate();
+
+  const handleMembership = ()=>{
+    navigate(`/membership`);
+
+  };
+
   useEffect(() => {
-    // API 호출
-    axios.get(`http://localhost:8080/api/userinfo/${id}`)
-      .then(response => {
+    // 비동기 함수 정의
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/userinfo/1');
         setUserData(response.data); // API 응답 데이터를 상태에 저장
-        setLoading(false);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error(err);
         setError('사용자 정보를 불러올 수 없습니다.');
-        setLoading(false);
-      });
+      } finally {
+        setLoading(false); // 로딩 상태 해제
+      }
+    };
+
+    fetchUserData(); // 비동기 함수 호출
   }, []);
+
+  
 
   if (loading) {
     return <div>로딩 중...</div>; // 로딩 상태 표시
@@ -37,7 +50,8 @@ export default function UserInfo() {
           <div className="d-flex align-items-center gap-2 mb-1">
             <span className="fw-bold" style={{ fontSize: '26px' }}>{userData.nickname}</span>
             <div>
-              <span className="badge" style={{ backgroundColor: '#e8f3ff', color: '#0051c7', fontSize: '12px', padding: '4px 8px' }}>
+              <span className="badge" style={{ backgroundColor: '#e8f3ff', color: '#0051c7', fontSize: '12px', padding: '4px 8px' }} 
+              onClick={handleMembership}>
                 {userData.member ? '쏠 회원' : '비회원'}
               </span>
               <span className="badge rounded-pill" style={{ color: '#333', fontSize: '10px', padding: '4px 8px' }}>

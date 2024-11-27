@@ -60,7 +60,6 @@ export const mainRoutes = [
           { element: <Login />, path: 'login' },
           { element: <SignUp />, path: 'signup' },
           { element: <Notification />, path: 'notification' },
-          { element: <Membership />, path: 'Membership' },
         ],
       },
     ],
