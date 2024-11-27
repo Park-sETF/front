@@ -4,11 +4,11 @@ const NotificationContext = createContext();
 
 export function NotificationProvider({ children }) {
   const [notifications, setNotifications] = useState([]); // 알림 데이터
-  const userId = 1; // 고정된 userId (로그인 사용자 ID로 변경 가능)
+  const id = localStorage.getItem("id");
 
   // SSE 연결
   useEffect(() => {
-    const eventSource = new EventSource(`/api/notifications/subscribe/${userId}`);
+    const eventSource = new EventSource(`/api/notifications/subscribe/${id}`);
 
     eventSource.onopen = () => {
       console.log("SSE 연결이 열렸습니다.");

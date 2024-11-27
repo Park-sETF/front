@@ -9,12 +9,13 @@ export default function User() {
   const navigate = useNavigate();
   const [ETFList, setETFList] = useState([]); // ETF 포트폴리오 상태
   const [SubscriberList, setSubscriberList] = useState([]); // 구독 리스트 상태
-  const userId = 3; // 고정된 userId (추후 필요 시 동적으로 변경 가능)
+  // const userId = 3; // 고정된 userId (추후 필요 시 동적으로 변경 가능)
+  const id = localStorage.getItem("id");
 
   // ETFList 초기 데이터 가져오기
   const fetchETFList = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/userinfo/etf/list/${userId}`);
+      const response = await axios.get(`http://localhost:8080/api/userinfo/etf/list/${id}`);
       console.log(response);
       const ETFList = response.data.portfolios.map((portfolio) => ({
         portfolioId: portfolio.portfolioId,
@@ -30,7 +31,7 @@ export default function User() {
   // SubscriberList 초기 데이터 가져오기
   const fetchSubscriberList = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/subscribe/list/${userId}`);
+      const response = await axios.get(`http://localhost:8080/api/subscribe/list/${id}`);
       const SubscriberList = response.data.map((subscriber) => ({
         id: subscriber.publisher_id,
         name: subscriber.nickname,
@@ -44,7 +45,7 @@ export default function User() {
 
   // SSE 연결
   useEffect(() => {
-    const eventSource = new EventSource(`/api/notifications/subscribe/${userId}`);
+    const eventSource = new EventSource(`/api/notifications/subscribe/${id}`);
 
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -68,7 +69,7 @@ export default function User() {
     return () => {
       eventSource.close();
     };
-  }, [userId]);
+  }, [id]);
 
   // 초기 데이터 로드
   useEffect(() => {
