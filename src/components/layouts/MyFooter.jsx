@@ -50,7 +50,7 @@ export default function Footer() {
         <button
           onClick={() => {
             setActiveTab('알림');
-            navigate('/notifications'); 
+            navigate('/notification'); 
           }}
           className="btn btn-link text-decoration-none d-flex flex-column align-items-center"
           style={{
