@@ -2,19 +2,27 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import {useNavigate} from 'react-router-dom'
 
 import { Container, Row, Col, FormControl } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '~/components/myPocket/Chart.css';
 import BigButton from '../buttons/BigButton';
 
+import api from '~/lib/apis/auth'
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Component() {
   const { portfolioId } = useParams(); // URL에서 portfolioId를 가져옴
   const colorPalette = ['#62B2FD', '#9BDFC4', '#B4A4FF', '#F99BAB', '#FFB44F'];
-  const navigate = useNavigate();
+
+  const sellMyETF = async () => {
+    await api.delete(`/api/etf/sell/${portfolioId}`).then(() => {
+      console.log("포트폴리오 삭제가 완료되었습니다.")
+    }).catch(() => {
+      console.log("포트폴리오 삭제가 완료되었습니다.")
+    })
+  }
 
   const generatePastelColor = () => {
     const r = Math.floor(Math.random() * 127 + 128);
@@ -173,10 +181,7 @@ export default function Component() {
         </Row>
       </div>
 
-      <BigButton text={'복사하기'} onClick={() => navigate('/create-etf', { state: { stocks: stocks } })}
-      >
-
-      </BigButton>
+      <BigButton text={'매도하기'} onClick={() => sellMyETF(responseData.portfolioId)}></BigButton>
     </Container>
   );
 }
