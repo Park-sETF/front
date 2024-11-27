@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import Chart from './Chart';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function StockTab() {
+export default function StockTab({volumeList, profitList,fluctuationList,marketcapList}) {
   const [activeTab, setActiveTab] = useState('실시간 차트');
 
   return (
@@ -108,13 +109,13 @@ export default function StockTab() {
         </button>
       </div>
 
-      {/* 
+      
       <div>
-        {activeTab === '거래대금' && <div></div>}
-        {activeTab === '거래량' && <div></div>} 
-        {activeTab === '급상승' && <div></div>}
-        {activeTab === '급하락' && <div></div>}
-      </div> */}
+        {activeTab === '거래대금' && <Chart stocks={volumeList}/>}
+        {activeTab === '거래량' && <Chart stocks={profitList}/>} 
+        {activeTab === '급상승' && <Chart stocks={fluctuationList}/>}
+        {activeTab === '급하락' && <Chart stocks = {marketcapList}/>}
+      </div>
 
       <style>{`
         .btn-link:hover {

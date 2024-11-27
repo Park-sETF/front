@@ -17,6 +17,7 @@ const Login = lazy(() => import('~/routes/login/page'));
 const SignUp = lazy(() => import('~/routes/signup/page'));
 const ETFDetail = lazy(() => import('~/components/etfdetail/ETFDetail'));
 const MyETFDetail = lazy(() => import('~/components/etfdetail/MyETFDetail'));
+const Notification = lazy(() => import('~/routes/notification/page'));
 
 // 로딩 스피너 컴포넌트
 function MySpinner() {
@@ -44,7 +45,6 @@ export const mainRoutes = [
       {
         element: <SuspenseLayout />,
         children: [
-          
           { element: <Init />, index: true },
           { element: <User />, path: 'user',  },
           { element: <Membership />, path: 'membership' },
@@ -59,6 +59,8 @@ export const mainRoutes = [
           { element: <Grade />, path: 'grade' },
           { element: <Login />, path: 'login' },
           { element: <SignUp />, path: 'signup' },
+          { element: <Notification />, path: 'notification' },
+          { element: <Membership />, path: 'Membership' },
         ],
       },
     ],
