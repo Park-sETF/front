@@ -1,40 +1,8 @@
-import React, { useState, useEffect } from "react";
-import "./NotificationPage.css"; // 스타일링을 위한 CSS 파일
+import { useNotifications } from "~/components/context/NotificationContext";
+import "./NotificationPage.css"; 
 
 const NotificationPage = () => {
-  const [notifications, setNotifications] = useState([]);
-  const userId = 1; // 고정된 userId (추후 필요 시 동적으로 변경 가능)
-
-  // SSE 연결 및 알림 수신
-  useEffect(() => {
-    const eventSource = new EventSource(`/api/notifications/subscribe/${userId}`);
-
-    eventSource.onopen = () => {
-      console.log("SSE 연결이 열렸습니다.");
-    };
-
-    // notice 이벤트 수신 처리
-    eventSource.addEventListener("notice", (event) => {
-      try {
-        const newNotification = JSON.parse(event.data);
-        console.log("수신된 notice 이벤트:", newNotification);
-
-        // 새로운 알림 추가
-        setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
-      } catch (error) {
-        console.error("알림 데이터 처리 중 오류 발생:", error, "데이터:", event.data);
-      }
-    });
-
-    eventSource.onerror = () => {
-      console.error("SSE 연결 오류 발생");
-      eventSource.close();
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, []);
+  const { notifications } = useNotifications(); // 알림 데이터 가져오기
 
   return (
     <div className="notification-page">

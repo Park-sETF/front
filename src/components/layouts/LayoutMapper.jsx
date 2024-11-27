@@ -63,10 +63,9 @@ const layoutMapper = (pathname) => {
         headerComponent = RankingHeader;
         headerProps = { text: '유저 랭킹 상세보기', notifications: 5 }; 
       }
-      
       if (pathname.includes('/notification')){
         headerComponent = MobileHeader;
-      headerProps = { text: '알림' }; 
+        headerProps = { text: '알림' }; 
       }
       break;
   }
