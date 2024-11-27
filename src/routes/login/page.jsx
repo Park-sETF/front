@@ -34,8 +34,8 @@ function Login() {
     const resultAction = await dispatch(login(credentials));
 
     if (login.fulfilled.match(resultAction)) {
-      const { userId } = resultAction.payload;
-      if (userId) {
+      const { id } = resultAction.payload;
+      if (id) {
         setIsSubmitting(false);
         navigate('/user');
       } else {
