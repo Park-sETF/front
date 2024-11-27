@@ -4,10 +4,8 @@ import RankingHeader from '~/components/layouts/RankingHeader';
 
 // 헤더 매퍼 로직
 const layoutMapper = (pathname) => {
-
   let headerComponent = null; // 헤더가 없는 경우
   let headerProps = {}; // 헤더에 전달할 props
-  
 
   switch (pathname) {
     case '/select-stock':
@@ -24,12 +22,10 @@ const layoutMapper = (pathname) => {
       headerComponent = null;
       break;
 
-    case '/ranking': 
+    case '/ranking': // 개발 예정
       headerComponent = RankingHeader;
       headerProps = { text: '오늘의 랭킹', notifications: 5 };
       break;
-
-    
 
     case '/mypocket': // 개발 예정
       headerComponent = null;
@@ -63,6 +59,7 @@ const layoutMapper = (pathname) => {
 
     default:
       headerComponent = null;
+<<<<<<< HEAD
       if (pathname.includes('/ranking-detail')){
         headerComponent = RankingHeader;
         headerProps = { text: '유저 랭킹 상세보기', notifications: 5 }; 
@@ -72,6 +69,8 @@ const layoutMapper = (pathname) => {
         headerComponent = MobileHeader;
       headerProps = { text: '알림' }; 
       }
+=======
+>>>>>>> ddf9e76ec26a3fa2f9e445dad9a30da769c1f284
       break;
   }
 
