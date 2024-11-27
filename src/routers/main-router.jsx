@@ -15,7 +15,7 @@ const CreateETF = lazy(() => import('~/routes/user/CreateETF'));
 const Grade = lazy(() => import('~/routes/grade/page'));
 const Login = lazy(() => import('~/routes/login/page'));
 const SignUp = lazy(() => import('~/routes/signup/page'));
-const ETFDetail = lazy(() => import('~/routes/etfdetail/page'));
+const ETFDetail = lazy(() => import('~/routes/ETFDetail/page'));
 const Notification = lazy(() => import('~/routes/notification/page'));
 
 

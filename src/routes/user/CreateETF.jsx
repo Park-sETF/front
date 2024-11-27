@@ -13,6 +13,8 @@ export default function ETFPocket() {
   const navigate = useNavigate();
 
   const {selectedStocks,setSelectedStocks} = useStockContext(); // context로 가져오기 
+  console.log(selectedStocks);
+  
 
   const addStock = () => {
     navigate('/select-stock'); // 추가하기 버튼 클릭시 종목 선택하기 페이지로 이동 
@@ -20,10 +22,19 @@ export default function ETFPocket() {
 
   const addButtonClick = async () => {
     try {
+
+      const etfList = selectedStocks.map((stock) => ({
+        stockCode: stock.stockCode,
+        stockName: stock.name,
+        price: stock.price,
+        percentage: stock.percentage || 0, 
+      }));
+      console.log(etfList);
+
       // 서버에 전달할 데이터 구성 (예: 선택된 종목)
       const requestData = {
-        userId,
-        selectedStocks,
+        etfList,
+        title: "우량주가 좋아", // 여기에 적절한 title 값을 추가
       };
   
       // POST 요청

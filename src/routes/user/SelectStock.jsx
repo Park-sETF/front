@@ -1,75 +1,124 @@
 import StockHeader from '~/components/layouts/StockHeader';
 import StockTab from '~/components/Stock/StockTab';
-import Chart from '~/components/Stock/Chart';
 import { useNavigate } from 'react-router-dom';
 import { useStockContext } from '~/components/context/StockProvider';
 import BigButton from '~/components/buttons/BigButton';
-
-
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function SelectStock() {
   const navigate = useNavigate();
 
-  // selectedStocks 상태 추가
-  const {selectedStocks} = useStockContext();
+  // 선택된 주식 상태
+  const { selectedStocks } = useStockContext();
+
+  // 거래량 기준 종목 리스트 상태
+  const [volumeList, setVolumeList] = useState([]);
+  // 거래량 기준 종목 리스트 상태 
+  const [profitList, setProfitList] = useState([]);
+  //급상승 기준 종목 리스트 상태 
+  const [fluctuationList, setFluctuationList] = useState([]);
+  //급하락 기준 종목 리스트 상태 
+  const [marketcapList, setMarketcapList] = useState([]);
+
+  // 페이지 로드 시 주식 데이터 받아오기
+  useEffect(() => {
+    const fetchVolumeList = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/stockList/top30/volume`);
+        const volumeList = response.data.map((stock, index) => ({
+          id: index, // 고유 id 생성
+          stockCode: stock.stockCode,
+          name: stock.stockName,
+          logo: stock.logo,
+          price: stock.percentage,
+          change: stock.change || '+10', // 변화율 기본값
+          percentage: 0 //빈값 저장
+        }));
+        setVolumeList(volumeList); // 상태에 저장
+      } catch (error) {
+        console.error('거래량 기준 종목 목록 불러오기 오류', error);
+      }
+    };
+
+    const fetchProfitList = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/stockList/top30/profit`);
+        const profitList = response.data.map((stock, index) => ({
+          id: index, // 고유 id 생성
+          stockCode: stock.stockCode,
+          name: stock.stockName,
+          logo: stock.logo,
+          price: stock.percentage,
+          change: stock.change || '+10', // 변화율 기본값
+          percentage: "" //빈값 저장
+        }));
+        setProfitList(profitList); // 상태에 저장
+      } catch (error) {
+        console.error('거래량 기준 종목 목록 불러오기 오류', error);
+      }
+    };
+
+    const fetchFluctuationList = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/stockList/top30/market_cap`);
+        const fluctuationList = response.data.map((stock, index) => ({
+          id: index, // 고유 id 생성
+          stockCode: stock.stockCode,
+          name: stock.stockName,
+          logo: stock.logo,
+          price: stock.percentage,
+          change: stock.change || '+10', // 변화율 기본값
+          percentage: "" //빈값 저장
+        }));
+        setFluctuationList(fluctuationList) // 상태에 저장
+      } catch (error) {
+        console.error('거래량 기준 종목 목록 불러오기 오류', error);
+      }
+    };
+
+    const fetchMarketcapList = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/stockList/top30/fluctuation`);
+        const marketcapList = response.data.map((stock, index) => ({
+          id: index, // 고유 id 생성
+          stockCode: stock.stockCode,
+          name: stock.stockName,
+          logo: stock.logo,
+          price: stock.percentage,
+          change: stock.change || '+10', // 변화율 기본값
+          percentage: "" //빈값 저장
+        }));
+        setMarketcapList(marketcapList); // 상태에 저장
+      } catch (error) {
+        console.error('거래량 기준 종목 목록 불러오기 오류', error);
+      }
+    };
+
+
+    fetchVolumeList();// 컴포넌트 마운트 시 실행
+    fetchProfitList(); 
+    fetchFluctuationList();
+    fetchMarketcapList();
+  }, []);
   
 
-  //버튼 클릭 시 이동
+  // 버튼 클릭 시 이동
   const handleButtonClick = () => {
-
-    navigate('/etf-pocket'); // 클릭 시 경로 이동
+    navigate('/etf-pocket');
   };
 
-  //장바구니 아이콘 클릭 시 이동 
-  const handlePocketClick = () =>{
-    navigate('/etf-pocket'); // 클릭 시 경로 이동
-  }
-
-  // 주식 데이터
-  const stocks = [
-    {
-      id: 1,
-      stockCode: 'A005930',
-      name: '삼성전자',
-      logo: '',
-      price: '50,600원',
-      change: '-4.5%',
-    },
-    {
-      id: 2,
-      stockCode: 'A000660',
-      name: 'SK하이닉스',
-      logo: '',
-      price: '18,2900원',
-      change: '-1.5%',
-    },
-    {
-      id: 3,
-      stockCode: 'A035420',
-      name: 'NAVER',
-      logo: '',
-      price: '18,2900원',
-      change: '+10.9%',
-    },
-    {
-      id: 4,
-      stockCode: 'A012330',
-      name: '현대모비스',
-      logo: '',
-      price: '353,000원',
-      change: '-7.4%',
-    },
-  ];
+  // 장바구니 아이콘 클릭 시 이동
+  const handlePocketClick = () => {
+    navigate('/etf-pocket');
+  };
 
   return (
     <div>
       {/* 실시간으로 선택된 주식 수 전달 */}
       <StockHeader Quantity={selectedStocks.length.toString()} handlePocketClick={handlePocketClick} />
-      <StockTab />
-      {/* Chart에 stocks와 상태 관리 함수 전달 */}
-      <Chart stocks={stocks}/>
-      {/* <button onClick={handleButtonClick}>ETF pocket</button> */}
-      <BigButton text='ETF 포켓'  onClick={handleButtonClick} />
+      <StockTab volumeList={volumeList} profitList={profitList} fluctuationList={fluctuationList} marketcapList={marketcapList}/>
+      <BigButton text="ETF 포켓" onClick={handleButtonClick} />
     </div>
   );
 }
