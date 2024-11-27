@@ -7,7 +7,8 @@ import { useStockContext } from '~/components/context/StockProvider';
 
 export default function ETFPocket() {
   // 임시로 지정함!
-  const userId = 3; 
+  const id = localStorage.getItem("id");
+
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function ETFPocket() {
 
       // POST 요청
       const response = await axios.post(
-        `http://localhost:8080/api/etf/buy/${userId}`,
+        `http://localhost:8080/api/etf/buy/${id}`,
         requestData
       );
 
