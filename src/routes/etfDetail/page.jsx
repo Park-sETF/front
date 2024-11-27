@@ -1,4 +1,4 @@
-import ETFDetail from "~/components/ETFDetail/ETFDetail";
+import ETFDetail from "~/components/etfdetail/ETFDetail";
 
 const RankingDetailRoute = () => {
     return <ETFDetail />;
