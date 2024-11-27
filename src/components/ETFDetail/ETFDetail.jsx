@@ -173,7 +173,8 @@ export default function Component() {
         </Row>
       </div>
 
-      <BigButton text={'복사하기'} onClick={() => navigate('/create-etf', {state: {stocks: stocks}})}>
+      <BigButton text={'복사하기'} onClick={() => navigate('/create-etf', { state: { stocks: stocks } })}
+      >
 
       </BigButton>
     </Container>

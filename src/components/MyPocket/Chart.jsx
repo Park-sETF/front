@@ -56,6 +56,10 @@ export default function Component({ stocks, addStock, setStocks }) {
   const inputRef = useRef(null);
   const chartRef = useRef(null);
 
+  // useEffect(() => {
+  //   console.log(stocks);
+  // }, [])
+
   useEffect(() => {
     if (inputRef.current) {
       const baseWidth = 50;
@@ -71,12 +75,6 @@ export default function Component({ stocks, addStock, setStocks }) {
   useEffect(() => {
     setInitialTotalBalance(totalBalance);
     setInitialInvestmentAmount(investmentAmount);
-
-    const location = useLocation();
-
-    if(location.state != null) {
-      stocks = location.state.stocks;
-    }
   }, []);
 
   useEffect(() => {
@@ -142,7 +140,7 @@ export default function Component({ stocks, addStock, setStocks }) {
   };
 
   const chartData = {
-    labels: stocks.map((stock) => stock.name),
+    labels: stocks.map((stock) => stock.stockName),
     datasets: [
       {
         data: percentages, // percentages를 데이터로 사용
@@ -217,13 +215,13 @@ export default function Component({ stocks, addStock, setStocks }) {
                       color: colors[activeTooltipIndex],
                     }}
                   >
-                    ● {stocks[activeTooltipIndex].name}
+                    ● {stocks[activeTooltipIndex].stockName}
                   </span>
                   <span>비율: {percentages[activeTooltipIndex]}%</span>
                   <br />
                   <span>
                     가격 : {''}
-                    {stocks[activeTooltipIndex].price.toLocaleString()}
+                    {stocks[activeTooltipIndex].purchasePrice.toLocaleString()}
                     원
                   </span>
                 </div>
@@ -253,7 +251,7 @@ export default function Component({ stocks, addStock, setStocks }) {
                       borderRadius: '1rem',
                     }}
                   ></div>
-                  <span className="stock-name">{stock.name}</span>
+                  <span className="stock-name">{stock.stockName}</span>
                   <div className="stock-percentage">
                     <FormControl
                       type="text"

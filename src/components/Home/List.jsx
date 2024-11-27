@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function List({ items, onItemClick }) {
   const navigate = useNavigate();
-
-  console.log(">>>>>>>>" + JSON.stringify(items))
   return (
     <div
       style={{
@@ -34,8 +32,7 @@ export default function List({ items, onItemClick }) {
               cursor: 'pointer',
             }}
             onClick={() => {
-              navigate(`/etf/detail/${items[index].portfolioId}`)
-              console.log("$$$$$$$" + JSON.stringify(items))
+              navigate(`/etf/detail/${items[index].id}`)
             }}
           >
             <span className="fw-medium" style={{ fontSize: '16px' }}>

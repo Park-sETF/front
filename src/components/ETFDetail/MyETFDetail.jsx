@@ -181,7 +181,7 @@ export default function Component() {
         </Row>
       </div>
 
-      <BigButton text={'판매하기'} onClick={() => sellMyETF(responseData.portfolioId)}></BigButton>
+      <BigButton text={'매도하기'} onClick={() => sellMyETF(responseData.portfolioId)}></BigButton>
     </Container>
   );
 }
