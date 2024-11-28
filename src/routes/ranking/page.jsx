@@ -1,4 +1,4 @@
-import RankingPage from '~/components/Ranking/RankingPage';
+import RankingPage from '~/components/ranking/RankingPage';
 
 const RankingRoute = () => {
   return <RankingPage />;

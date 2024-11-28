@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MembershipModal from "~/components/Home/MembershipModal";
+import MembershipModal from "~/components/home/MembershipModal";
 
 export default function Membership() {
   const navigate = useNavigate();

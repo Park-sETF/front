@@ -1,5 +1,5 @@
 import BigButton from '~/components/buttons/BigButton';
-import Chart from '~/components/MyPocket/Chart';
+import Chart from '~/components/myPocket/Chart';
 import axios from 'axios';
 import { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
