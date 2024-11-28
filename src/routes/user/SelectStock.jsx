@@ -1,5 +1,5 @@
 import StockHeader from '~/components/layouts/StockHeader';
-import StockTab from '~/components/Stock/StockTab';
+import StockTab from '~/components/stock/StockTab';
 import { useNavigate } from 'react-router-dom';
 import { useStockContext } from '~/components/context/StockProvider';
 import BigButton from '~/components/buttons/BigButton';
