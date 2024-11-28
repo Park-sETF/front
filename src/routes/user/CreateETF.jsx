@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStockContext } from '~/components/context/StockProvider';
+import api from '~/lib/apis/auth'
 
 export default function ETFPocket() {
   // 임시로 지정함!
@@ -22,6 +23,10 @@ export default function ETFPocket() {
     }
   }, [location.state, setSelectedStocks]);
 
+  // useEffect(() => {
+  //   console.log("#####" + JSON.stringify(selectedStocks));
+  // }, [selectedStocks])
+
   const addStock = () => {
     navigate('/select-stock'); // 추가하기 버튼 클릭시 종목 선택하기 페이지로 이동
   };
@@ -31,8 +36,8 @@ export default function ETFPocket() {
 
       const etfList = selectedStocks.map((stock) => ({
         stockCode: stock.stockCode,
-        stockName: stock.name,
-        price: stock.price,
+        stockName: stock.stockName,
+        price: stock.purchasePrice,
         percentage: stock.percentage || 0, 
       }));
       console.log(etfList);
@@ -44,8 +49,8 @@ export default function ETFPocket() {
       };
 
       // POST 요청
-      const response = await axios.post(
-        `http://localhost:8080/api/etf/buy/${id}`,
+      const response = await api.post(
+        `/api/etf/buy/${id}`,
         requestData
       );
 

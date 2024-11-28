@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MembershipModal from "~/components/home/MembershipModal";
+import api from '~/lib/apis/auth'
 
 export default function Membership() {
   const navigate = useNavigate();
@@ -8,16 +9,11 @@ export default function Membership() {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
   const [modalMessage, setModalMessage] = useState(""); // 모달에 표시할 메시지
 
-  const user_id = localStorage.getItem('id');
+  const id = localStorage.getItem('id');
 
   const handleUpdateMembership = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/userinfo/membership/${user_id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await api.get(`/api/userinfo/membership/${id}`);
       if (response.ok) {
         const message = await response.text(); // 서버에서 받은 메시지
         setModalMessage(message); // 모달 메시지 설정
@@ -36,12 +32,7 @@ export default function Membership() {
 
   const handleDeleteMembership = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/userinfo/membership/${user_id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await api.delete(`/api/userinfo/membership/${id}`);
       if (response.ok) {
         const message = await response.text(); // 서버에서 받은 메시지
         setModalMessage(message); // 모달 메시지 설정

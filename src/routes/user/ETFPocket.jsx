@@ -13,8 +13,6 @@ export default function ETFPocket() {
   const {selectedStocks} = useStockContext(); // context로 가져오기 
 
 
-
-
   return (
     <div>
       <Chart stocks={selectedStocks}/>

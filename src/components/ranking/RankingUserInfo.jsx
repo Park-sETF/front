@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import api from '~/lib/apis/auth'
 
 export default function RankingUserInfo() {
   const [userData, setUserData] = useState(null); 
   const [profitRate, setProfitRate] = useState(null); 
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
+  const id = localStorage.getItem("id");
 
   useEffect(() => {
-    axios
-      .get('http://localhost:8080/api/userinfo/1')
+    api
+      .get(`/api/userinfo/${id}`)
       .then((response) => {
         setUserData(response.data);
       })
@@ -21,8 +23,8 @@ export default function RankingUserInfo() {
 
   //수익률
   useEffect(() => {
-    axios
-      .get('http://localhost:8080/api/userinfo/1/revenue-percentage')
+    api
+      .get(`/api/userinfo/${id}/revenue-percentage`)
       .then((response) => {
         setProfitRate(response.data); 
         setLoading(false);

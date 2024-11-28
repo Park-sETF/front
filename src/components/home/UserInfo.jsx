@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Axios를 사용하여 API 호출
+import api from '~/lib/apis/auth'
+
 
 export default function UserInfo() {
   const [userData, setUserData] = useState(null); // 사용자 데이터 상태 관리
@@ -19,7 +21,7 @@ export default function UserInfo() {
     // 비동기 함수 정의
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/userinfo/1');
+        const response = await api.get(`/api/userinfo/${id}`);
         setUserData(response.data); // API 응답 데이터를 상태에 저장
       } catch (err) {
         console.error(err);

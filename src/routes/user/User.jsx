@@ -4,6 +4,7 @@ import UserInfo from '~/components/home/UserInfo';
 import Tab from '~/components/home/Tab';
 import BigButton from '~/components/buttons/BigButton';
 import { useNavigate } from 'react-router-dom';
+import api from '~/lib/apis/auth'
 
 export default function User() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function User() {
   // ETFList 초기 데이터 가져오기
   const fetchETFList = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/userinfo/etf/list/${id}`);
+      const response = await api.get(`/api/userinfo/etf/list/${id}`);
       console.log(response);
       const ETFList = response.data.portfolios.map((portfolio) => ({
         portfolioId: portfolio.portfolioId,
@@ -31,7 +32,7 @@ export default function User() {
   // SubscriberList 초기 데이터 가져오기
   const fetchSubscriberList = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/subscribe/list/${id}`);
+      const response = await api.get(`/api/subscribe/list/${id}`);
       const SubscriberList = response.data.map((subscriber) => ({
         id: subscriber.publisher_id,
         name: subscriber.nickname,

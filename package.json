@@ -55,6 +55,5 @@
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off"
     }
-  },
-  "proxy": "http://localhost:8080"
+  }
 }
