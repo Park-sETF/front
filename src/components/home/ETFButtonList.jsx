@@ -2,8 +2,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { Bell, BellOff } from 'lucide-react';
 import PercentageModal from './PercentageModal';
+import { ChevronRight } from 'react-bootstrap-icons';
+import {useNavigate} from 'react-router-dom'
 
-export default function ETFButtonList({ items, onItemClick }) {
+export default function ETFButtonList({ items }) {
+  // console.log('####' + JSON.stringify(items));
+  // navigtate
+  const navigate = useNavigate();
 
   //각 항목의 알림 상태를 저장하는 객체 
   const [activeItems, setActiveItems] = useState({});
@@ -61,7 +66,7 @@ export default function ETFButtonList({ items, onItemClick }) {
               paddingBottom: '1.1rem',
               cursor: 'pointer',
             }}
-            onClick={() => onItemClick(item)}
+            onClick={() => navigate(`/etf/my-detail/${items[index].portfolioId}`)}
           >
             <span className="fw-medium" style={{ fontSize: '16px' }}>
               {item.name}
@@ -69,13 +74,14 @@ export default function ETFButtonList({ items, onItemClick }) {
             <div className="d-flex align-items-center gap-3">
               <span
                 style={{
-                  color: item.isPositive ? '#ff3b3b' : '#0051c7',
+                  color: item.revenue >= 0 ? '#ff3b3b' : '#0051c7',
                   fontSize: '16px',
                 }}
               >
-                수익률 {item.isPositive ? '+' : '-'}
-                {item.rate}%
+                수익률 {item.revenue >= 0 ? '+' : ''}
+                {item.revenue.toFixed(2)}%
               </span>
+              <ChevronRight size={20} style={{ color: '#666' }} />
 
               {/* 알림 버튼 */}
               <button

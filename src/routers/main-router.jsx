@@ -15,7 +15,8 @@ const CreateETF = lazy(() => import('~/routes/user/CreateETF'));
 const Grade = lazy(() => import('~/routes/grade/page'));
 const Login = lazy(() => import('~/routes/login/page'));
 const SignUp = lazy(() => import('~/routes/signup/page'));
-const ETFDetail = lazy(() => import('~/routes/ETFDetail/page'));
+const ETFDetail = lazy(() => import('~/components/etfDetail/ETFDetail'));
+const MyETFDetail = lazy(() => import('~/components/etfDetail/MyETFDetail'));
 const Notification = lazy(() => import('~/routes/notification/page'));
 const Search = lazy(() => import('~/routes/search/page'));
 
@@ -46,12 +47,12 @@ export const mainRoutes = [
       {
         element: <SuspenseLayout />,
         children: [
-          
           { element: <Init />, index: true },
           { element: <User />, path: 'user',  },
           { element: <Membership />, path: 'membership' },
           { element: <Ranking />, path: 'ranking' },
           { element: <RankingDetail />, path: "ranking-detail/:userId" },
+          { element: <MyETFDetail />, path: 'etf/my-detail/:portfolioId' },
           { element: <ETFDetail />, path: 'etf/detail/:portfolioId' },
           { element: <MyPocket />, path: 'mypocket' },
           { element: <SelectStock />, path: 'select-stock' },
@@ -61,8 +62,11 @@ export const mainRoutes = [
           { element: <Login />, path: 'login' },
           { element: <SignUp />, path: 'signup' },
           { element: <Notification />, path: 'notification' },
+<<<<<<< HEAD
           { element: <Membership />, path: 'Membership' },
           { element: <Search />, path: 'search' },
+=======
+>>>>>>> e74d8c83e863da1ad17ee036cd215ad7b236c2b1
         ],
       },
     ],

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import {useNavigate} from 'react-router-dom'
 
 import { Container, Row, Col, FormControl } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,6 +14,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default function Component() {
   const { portfolioId } = useParams(); // URL에서 portfolioId를 가져옴
   const colorPalette = ['#62B2FD', '#9BDFC4', '#B4A4FF', '#F99BAB', '#FFB44F'];
+  const navigate = useNavigate();
 
   const generatePastelColor = () => {
     const r = Math.floor(Math.random() * 127 + 128);
@@ -171,7 +173,10 @@ export default function Component() {
         </Row>
       </div>
 
-      <BigButton text={'복사하기'}></BigButton>
+      <BigButton text={'복사하기'} onClick={() => navigate('/create-etf', { state: { stocks: stocks } })}
+      >
+
+      </BigButton>
     </Container>
   );
 }

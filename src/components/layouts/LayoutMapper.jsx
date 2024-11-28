@@ -26,8 +26,13 @@ const layoutMapper = (pathname) => {
       headerComponent = MobileHeader;
       headerProps = { text: '오늘의 랭킹', notifications: 5 };
       break;
+<<<<<<< HEAD
 
     case '/mypocket': 
+=======
+      
+    case '/mypocket': // 개발 예정
+>>>>>>> e74d8c83e863da1ad17ee036cd215ad7b236c2b1
       headerComponent = null;
       break;
 
@@ -67,6 +72,17 @@ const layoutMapper = (pathname) => {
         headerComponent = RankingHeader;
         headerProps = { text: '유저 랭킹 상세보기', notifications: 5 }; 
       }
+
+      if(pathname.includes('/my-detail')) {
+        headerComponent = MobileHeader;
+        headerProps = {text: ''};
+      }
+
+      if(pathname.includes('/etf/detail')) {
+        headerComponent = MobileHeader;
+        headerProps = {text: ''};
+      }
+
       if (pathname.includes('/notification')){
         headerComponent = MobileHeader;
         headerProps = { text: '알림' }; 

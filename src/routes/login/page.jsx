@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '~/stores/auth/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
-import './Login.css';
+import './login.css';
 
 function Login() {
   const [credentials, setCredentials] = useState({
@@ -34,8 +34,8 @@ function Login() {
     const resultAction = await dispatch(login(credentials));
 
     if (login.fulfilled.match(resultAction)) {
-      const { userId } = resultAction.payload;
-      if (userId) {
+      const { id } = resultAction.payload;
+      if (id) {
         setIsSubmitting(false);
         navigate('/user');
       } else {

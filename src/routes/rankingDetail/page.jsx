@@ -1,4 +1,4 @@
-import RankingDetail from '~/components/Ranking/RankingDetail';
+import RankingDetail from '~/components/ranking/RankingDetail';
 
 const RankingDetailRoute = () => {
   return <RankingDetail />;
