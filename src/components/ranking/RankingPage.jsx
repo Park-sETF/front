@@ -5,7 +5,7 @@ import axios from "axios";
 const RankingContent = () => {
   const [rankingData, setRankingData] = useState([]);
   const navigate = useNavigate(); // 네비게이션 훅 추가
-  const subscriberId = 4; // 현재 로그인한 사용자의 ID (임시 값)
+  const subscriberId = localStorage.getItem('id'); // 현재 로그인한 사용자의 ID (임시 값)
 
   // 구독 목록과 랭킹 데이터를 가져오는 함수
   const fetchRankingData = async () => {
