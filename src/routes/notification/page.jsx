@@ -1,4 +1,4 @@
-import NotificationPage from '~/components/notification/NotificationPage';
+import NotificationPage from "~/components/notificaton/NotificationPage";
 
 const RankingRoute = () => {
   return <NotificationPage />;

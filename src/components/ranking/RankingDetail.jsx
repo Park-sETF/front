@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams ,useNavigate} from "react-router-dom";
-import RankingUserInfo from "~/components/Ranking/RankingUserInfo";
+import RankingUserInfo from "~/components/ranking/RankingUserInfo";
 import List from "~/components/Home/List";
 
 export default function RankingDetail() {
