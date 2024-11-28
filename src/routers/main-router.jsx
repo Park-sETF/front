@@ -16,7 +16,7 @@ const Grade = lazy(() => import('~/routes/grade/page'));
 const Login = lazy(() => import('~/routes/login/page'));
 const SignUp = lazy(() => import('~/routes/signup/page'));
 const ETFDetail = lazy(() => import('~/components/etfDetail/ETFDetail'));
-const MyETFDetail = lazy(() => import('~/components/etfdetail/MyETFDetail'));
+const MyETFDetail = lazy(() => import('~/components/etfDetail/MyETFDetail'));
 const Notification = lazy(() => import('~/routes/notification/page'));
 
 // 로딩 스피너 컴포넌트
