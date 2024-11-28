@@ -5,7 +5,6 @@ import axios from "axios";
 const RankingContent = () => {
   const [rankingData, setRankingData] = useState([]);
   const navigate = useNavigate(); // 네비게이션 훅 추가
-
   const subscriberId = 4; // 현재 로그인한 사용자의 ID (임시 값)
 
   // 구독 목록과 랭킹 데이터를 가져오는 함수
@@ -105,9 +104,9 @@ const RankingContent = () => {
               display: "flex",
               alignItems: "center",
               marginBottom: "16px",
-              cursor: "pointer", // 클릭 가능하도록
+              cursor: "pointer", 
             }}
-            onClick={() => handleUserClick(item.userId)} // 클릭 이벤트 추가
+            onClick={() => handleUserClick(item.userId)} 
           >
             <span
               style={{
@@ -180,6 +179,23 @@ const RankingContent = () => {
                 ({item.percentage})
               </div>
             </div>
+            {/* 구독 버튼 */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation(); // 클릭 이벤트가 부모로 전파되지 않도록 설정
+                toggleSubscription(index, item.userId, item.subscribed);
+              }}
+              style={{
+                backgroundColor: item.subscribed ? "#FF3B30" : "#34A853",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                padding: "5px 10px",
+                cursor: "pointer",
+              }}
+            >
+              {item.subscribed ? "구독 취소" : "구독"}
+            </button>
           </li>
         ))}
       </ul>
