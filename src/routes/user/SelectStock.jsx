@@ -5,6 +5,7 @@ import { useStockContext } from '~/components/context/StockProvider';
 import BigButton from '~/components/buttons/BigButton';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import api from '~/lib/apis/auth'
 
 export default function SelectStock() {
   const navigate = useNavigate();
@@ -25,15 +26,15 @@ export default function SelectStock() {
   useEffect(() => {
     const fetchVolumeList = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/stockList/top30/volume`);
+        const response = await api.get(`/api/stockList/top30/volume`);
         const volumeList = response.data.map((stock, index) => ({
           id: index, // 고유 id 생성
           stockCode: stock.stockCode,
-          name: stock.stockName,
+          stockName: stock.stockName,
           logo: stock.logo,
-          price: stock.percentage,
-          change: stock.change || '+10', // 변화율 기본값
-          percentage: 0 //빈값 저장
+          purchasePrice: stock.price,
+          change: stock.priceChangeRate || '+10', // 변화율 기본값
+          percentage: stock.percentage || 0 //빈값 저장
         }));
         setVolumeList(volumeList); // 상태에 저장
       } catch (error) {
@@ -43,15 +44,15 @@ export default function SelectStock() {
 
     const fetchProfitList = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/stockList/top30/profit`);
+        const response = await api.get(`/api/stockList/top30/profit`);
         const profitList = response.data.map((stock, index) => ({
           id: index, // 고유 id 생성
           stockCode: stock.stockCode,
-          name: stock.stockName,
+          stockName: stock.stockName,
           logo: stock.logo,
-          price: stock.percentage,
-          change: stock.change || '+10', // 변화율 기본값
-          percentage: "" //빈값 저장
+          purchasePrice: stock.price,
+          change: stock.priceChangeRate || '+10', // 변화율 기본값
+          percentage: stock.percentage || 0 //빈값 저장
         }));
         setProfitList(profitList); // 상태에 저장
       } catch (error) {
@@ -61,15 +62,15 @@ export default function SelectStock() {
 
     const fetchFluctuationList = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/stockList/top30/market_cap`);
+        const response = await api.get(`/api/stockList/top30/market_cap`);
         const fluctuationList = response.data.map((stock, index) => ({
           id: index, // 고유 id 생성
           stockCode: stock.stockCode,
-          name: stock.stockName,
+          stockName: stock.stockName,
           logo: stock.logo,
-          price: stock.percentage,
-          change: stock.change || '+10', // 변화율 기본값
-          percentage: "" //빈값 저장
+          purchasePrice: stock.price,
+          change: stock.priceChangeRate || '+10', // 변화율 기본값
+          percentage: stock.percentage || 0 //빈값 저장
         }));
         setFluctuationList(fluctuationList) // 상태에 저장
       } catch (error) {
@@ -79,15 +80,15 @@ export default function SelectStock() {
 
     const fetchMarketcapList = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/stockList/top30/fluctuation`);
+        const response = await api.get(`/api/stockList/top30/fluctuation`);
         const marketcapList = response.data.map((stock, index) => ({
           id: index, // 고유 id 생성
           stockCode: stock.stockCode,
-          name: stock.stockName,
+          stockName: stock.stockName,
           logo: stock.logo,
-          price: stock.percentage,
-          change: stock.change || '+10', // 변화율 기본값
-          percentage: "" //빈값 저장
+          purchasePrice: stock.price,
+          change: stock.priceChangeRate || '+10', // 변화율 기본값
+          percentage: stock.percentage || 0 //빈값 저장
         }));
         setMarketcapList(marketcapList); // 상태에 저장
       } catch (error) {

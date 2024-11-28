@@ -18,6 +18,10 @@ import './Chart.css';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Component({ stocks, addStock, setStocks }) {
+  // useEffect(() => {
+  //   console.log("######## : myPocket/Chart.jsx" + JSON.stringify(stocks));
+  // }, [])
+
   const colorPalette = ['#62B2FD', '#9BDFC4', '#B4A4FF', '#F99BAB', '#FFB44F'];
 
   const generatePastelColor = () => {
@@ -36,14 +40,6 @@ export default function Component({ stocks, addStock, setStocks }) {
   const [percentages, setPercentages] = useState(
     stocks.map(() => 3) // 초기 모든 비율은 3
   );
-
-  // 데이터 보낼 땐 이 양식을 따르면 됨.
-
-  // const portfolio = stocks.map((stock, index) => ({
-  //   name: stock.name,
-  //   price: stock.price,
-  //   percentage: percentages[index],
-  // }));
 
   const [totalBalance, setTotalBalance] = useState(100000000);
   const [investmentAmount, setInvestmentAmount] = useState(50000000);
@@ -73,6 +69,7 @@ export default function Component({ stocks, addStock, setStocks }) {
   }, [investmentAmount]);
 
   useEffect(() => {
+    // console.log("###############: "+ JSON.stringify(stocks));
     setInitialTotalBalance(totalBalance);
     setInitialInvestmentAmount(investmentAmount);
   }, []);
@@ -221,7 +218,7 @@ export default function Component({ stocks, addStock, setStocks }) {
                   <br />
                   <span>
                     가격 : {''}
-                    {stocks[activeTooltipIndex].purchasePrice.toLocaleString()}
+                    {stocks[activeTooltipIndex].price.toLocaleString()}
                     원
                   </span>
                 </div>

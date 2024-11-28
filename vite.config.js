@@ -18,7 +18,6 @@ export default defineConfig({
       '~/routes': '/src/routes',
       '~/pages': '/src/pages',
       '~/stores': '/src/stores'
-
     },
   },
 });

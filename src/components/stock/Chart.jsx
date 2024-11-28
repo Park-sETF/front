@@ -3,6 +3,8 @@ import { useStockContext } from '~/components/context/StockProvider';
 
 export default function Chart({stocks}) {
 
+  // console.log("#####stock/chart.jsx: "+ JSON.stringify(stocks));
+
   //주식 종목 저장 변수 context에서 가져오기 
   const {selectedStocks, setSelectedStocks} = useStockContext();
 
@@ -58,12 +60,12 @@ export default function Chart({stocks}) {
                 <span className="text-primary fs-5 fw-bold" style={{width:'15px', textAlign: 'center'}}>{index + 1}</span>
                 <img
                   src={stock.logo}
-                  alt={stock.name}
+                  alt={stock.stockName}
                   className="rounded"
                   width="48"
                   height="48"
                 />
-                <div style={{ maxWidth: '180px', overflow: 'hidden' }}>
+                <div style={{ maxWidth: '120px', overflow: 'hidden' }}>
                   <div className="fw" 
                   style={{
                   fontSize: '1rem',
@@ -71,7 +73,7 @@ export default function Chart({stocks}) {
                   overflow: 'hidden',         // 넘치는 텍스트 숨김
                   textOverflow: 'ellipsis',   // "..." 처리
                 }}>
-                    {stock.name}
+                    {stock.stockName}
                   </div>
                   <div
                     className="d-flex align-items-center gap-2"
@@ -80,7 +82,7 @@ export default function Chart({stocks}) {
                     <span className="fw">{formatPrice(stock.price)}</span>
                     <span
                       className={
-                        stock.change.includes('+') ? 'text-danger' : 'text-primary'
+                        stock.change && stock.change.includes('+') ? 'text-danger' : 'text-primary'
                       }
                     >
                       {stock.change}%
@@ -98,6 +100,7 @@ export default function Chart({stocks}) {
                   borderRadius: '10px',
                   backgroundColor: isSaved ? '#8C97A7' : '#4B7BF5',
                   color: 'white',
+                  width: '80px',
                   border: 'none',
                 }}
               >
