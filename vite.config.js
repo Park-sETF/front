@@ -7,6 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': 'http://localhost:8080/',
+      changeOrigin: true,           // Origin 헤더를 백엔드 주소로 변경
+      secure: false,                // HTTPS가 아닌 경우 false
     },
   },
   resolve: {
