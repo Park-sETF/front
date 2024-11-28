@@ -62,11 +62,8 @@ export const mainRoutes = [
           { element: <Login />, path: 'login' },
           { element: <SignUp />, path: 'signup' },
           { element: <Notification />, path: 'notification' },
-<<<<<<< HEAD
-          { element: <Membership />, path: 'Membership' },
           { element: <Search />, path: 'search' },
-=======
->>>>>>> e74d8c83e863da1ad17ee036cd215ad7b236c2b1
+
         ],
       },
     ],
