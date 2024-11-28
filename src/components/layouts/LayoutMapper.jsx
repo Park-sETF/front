@@ -10,52 +10,56 @@ const layoutMapper = (pathname) => {
   switch (pathname) {
     case '/select-stock':
       headerComponent = MobileHeader;
-      headerProps = { text: '종목 선택하기' }; // MobileHeader에 전달할 props
+      headerProps = { text: '종목 선택하기' }; 
       break;
 
     case '/user':
       headerComponent = HomeHeader;
-      headerProps = { Quantity: '4' }; // HomeHeader에 전달할 props
+      headerProps = { Quantity: '4' }; 
       break;
 
-    case '/membership': // 개발 예정
+    case '/membership': 
       headerComponent = null;
       break;
 
-    case '/ranking': // 개발 예정
-      headerComponent = RankingHeader;
+    case '/ranking': 
+      headerComponent = MobileHeader;
       headerProps = { text: '오늘의 랭킹', notifications: 5 };
       break;
 
-    case '/mypocket': // 개발 예정
+    case '/mypocket': 
       headerComponent = null;
       break;
 
     case '/etf-pocket':
       headerComponent = MobileHeader;
-      headerProps = { text: 'ETF 포켓' }; // MobileHeader에 전달할 props
+      headerProps = { text: 'ETF 포켓' }; 
       break;
 
     case '/create-etf':
       headerComponent = MobileHeader;
-      headerProps = { text: '나만의 ETF 만들기' }; // MobileHeader에 전달할 props
+      headerProps = { text: '나만의 ETF 만들기' }; 
       break;
 
     case '/login':
       headerComponent = MobileHeader;
-      headerProps = { text: '로그인하기' }; // MobileHeader에 전달할 props
+      headerProps = { text: '로그인하기' }; 
       break;
 
     case '/signup':
       headerComponent = MobileHeader;
-      headerProps = { text: '간편회원가입 하기' }; // MobileHeader에 전달할 props
+      headerProps = { text: '간편회원가입 하기' }; 
       break;
 
     case '/grade':
       headerComponent = MobileHeader;
-      headerProps = { text: '등급' }; // MobileHeader에 전달할 props
+      headerProps = { text: '등급' }; 
       break;
-      
+
+    case '/search':
+      headerComponent = MobileHeader;
+      headerProps = { text: '종목 검색' }; 
+      break;
 
     default:
       headerComponent = null;
