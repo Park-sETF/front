@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:8080/',
+      '/api': 'http://43.201.75.185:8080/',
       changeOrigin: true,           // Origin 헤더를 백엔드 주소로 변경
       secure: false,                // HTTPS가 아닌 경우 false
     },
