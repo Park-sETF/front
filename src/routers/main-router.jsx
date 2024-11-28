@@ -18,6 +18,7 @@ const SignUp = lazy(() => import('~/routes/signup/page'));
 const ETFDetail = lazy(() => import('~/components/etfDetail/ETFDetail'));
 const MyETFDetail = lazy(() => import('~/components/etfDetail/MyETFDetail'));
 const Notification = lazy(() => import('~/routes/notification/page'));
+const Search = lazy(() => import('~/routes/search/page'));
 
 
 // 로딩 스피너 컴포넌트
@@ -61,6 +62,8 @@ export const mainRoutes = [
           { element: <Login />, path: 'login' },
           { element: <SignUp />, path: 'signup' },
           { element: <Notification />, path: 'notification' },
+          { element: <Search />, path: 'search' },
+
         ],
       },
     ],
