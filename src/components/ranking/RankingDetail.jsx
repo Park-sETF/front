@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams ,useNavigate} from "react-router-dom";
 import RankingUserInfo from "~/components/ranking/RankingUserInfo";
-import List from "~/components/Home/List";
+import List from "~/components/home/List";
 
 export default function RankingDetail() {
   const { userId } = useParams(); // URL에서 userId 추출
