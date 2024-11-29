@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const RankingContent = () => {
   const [rankingData, setRankingData] = useState([]);
@@ -11,7 +10,7 @@ const RankingContent = () => {
   const fetchRankingData = async () => {
     try {
       // 구독 목록 가져오기
-      const subscriptionsResponse = await axios.get(
+      const subscriptionsResponse = await api.get(
         `/api/subscribe/list/${subscriberId}`
       );
 
@@ -20,7 +19,7 @@ const RankingContent = () => {
         : []; // 데이터가 배열이 아니면 빈 배열 처리
 
       // 랭킹 데이터 가져오기
-      const rankingsResponse = await axios.get("/api/etf/user/ranking");
+      const rankingsResponse = await api.get("/api/etf/user/ranking");
       const data = rankingsResponse.data.map((item, index) => ({
         userId: item.userId, // 수정된 필드명
         name: item.nickname,
@@ -48,10 +47,10 @@ const RankingContent = () => {
     try {
       if (isSubscribed) {
         // 구독 취소 API 호출
-        await axios.delete(`/api/subscribe/${subscriberId}/${userId}`);
+        await api.delete(`/api/subscribe/${subscriberId}/${userId}`);
       } else {
         // 구독 API 호출
-        await axios.post(`/api/subscribe/${subscriberId}/${userId}`);
+        await api.post(`/api/subscribe/${subscriberId}/${userId}`);
       }
 
       // 상태 업데이트

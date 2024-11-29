@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import api from '~/lib/apis/auth'
 
 export default function RankingUserInfo() {

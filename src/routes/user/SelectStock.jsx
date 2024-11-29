@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useStockContext } from '~/components/context/StockProvider';
 import BigButton from '~/components/buttons/BigButton';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import api from '~/lib/apis/auth'
 
 export default function SelectStock() {
