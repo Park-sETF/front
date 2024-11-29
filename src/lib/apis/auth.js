@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:8080';
+// const baseURL = 'http://localhost:8080';
 
 const api = axios.create({
-  baseURL: `${baseURL}/api`, // Spring Boot API URL
+  baseURL: `/api`, // Spring Boot API URL
   headers: {
     'Content-Type': 'application/json',
   },
@@ -30,7 +30,7 @@ api.interceptors.response.use(
       try {
         // Refresh API 요청
         await axios.post(
-          `${baseURL}/auth/refresh`,
+          `/api/auth/refresh`,
           {},
           { withCredentials: true }
         );
