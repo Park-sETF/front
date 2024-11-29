@@ -10,7 +10,7 @@ export default function RankingUserInfo() {
 
   useEffect(() => {
     api
-      .get(`/api/userinfo/${id}`)
+      .get(`/userinfo/${id}`)
       .then((response) => {
         setUserData(response.data);
       })
@@ -23,7 +23,7 @@ export default function RankingUserInfo() {
   //수익률
   useEffect(() => {
     api
-      .get(`/api/userinfo/${id}/revenue-percentage`)
+      .get(`/userinfo/${id}/revenue-percentage`)
       .then((response) => {
         setProfitRate(response.data); 
         setLoading(false);

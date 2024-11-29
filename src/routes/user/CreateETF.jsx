@@ -45,7 +45,7 @@ export default function ETFPocket() {
 
       // POST 요청
       const response = await api.post(
-        `/api/etf/buy/${id}`,
+        `/etf/buy/${id}`,
         requestData
       );
 

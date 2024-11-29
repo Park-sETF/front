@@ -25,7 +25,7 @@ export default function SelectStock() {
   useEffect(() => {
     const fetchVolumeList = async () => {
       try {
-        const response = await api.get(`/api/stockList/top30/volume`);
+        const response = await api.get(`/stockList/top30/volume`);
         const volumeList = response.data.map((stock, index) => ({
           id: index, // 고유 id 생성
           stockCode: stock.stockCode,
@@ -43,7 +43,7 @@ export default function SelectStock() {
 
     const fetchProfitList = async () => {
       try {
-        const response = await api.get(`/api/stockList/top30/profit`);
+        const response = await api.get(`/stockList/top30/profit`);
         const profitList = response.data.map((stock, index) => ({
           id: index, // 고유 id 생성
           stockCode: stock.stockCode,
@@ -61,7 +61,7 @@ export default function SelectStock() {
 
     const fetchFluctuationList = async () => {
       try {
-        const response = await api.get(`/api/stockList/top30/market_cap`);
+        const response = await api.get(`/stockList/top30/market_cap`);
         const fluctuationList = response.data.map((stock, index) => ({
           id: index, // 고유 id 생성
           stockCode: stock.stockCode,
@@ -79,7 +79,7 @@ export default function SelectStock() {
 
     const fetchMarketcapList = async () => {
       try {
-        const response = await api.get(`/api/stockList/top30/fluctuation`);
+        const response = await api.get(`/stockList/top30/fluctuation`);
         const marketcapList = response.data.map((stock, index) => ({
           id: index, // 고유 id 생성
           stockCode: stock.stockCode,
