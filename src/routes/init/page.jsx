@@ -46,7 +46,7 @@ export default function Init() {
       {user ? (
         // 로그인된 상태일 때 로그아웃 버튼 표시
         <div>
-          <p>안녕하세요, {user.userId}님!</p>
+          <p>안녕하세요, {user.nickname}님!</p>
           <Button className="mt-3" onClick={handleLogout}>
             로그아웃
           </Button>

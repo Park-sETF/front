@@ -3,7 +3,7 @@ import { useStockContext } from '~/components/context/StockProvider';
 
 export default function Chart({stocks}) {
 
-  // console.log("#####stock/chart.jsx: "+ JSON.stringify(stocks));
+  console.log("#####stock/chart.jsx: "+ JSON.stringify(stocks));
 
   //주식 종목 저장 변수 context에서 가져오기 
   const {selectedStocks, setSelectedStocks} = useStockContext();
@@ -79,10 +79,10 @@ export default function Chart({stocks}) {
                     className="d-flex align-items-center gap-2"
                     style={{ fontSize: '0.83rem' }}
                   >
-                    <span className="fw">{formatPrice(stock.price)}</span>
+                    <span className="fw">{formatPrice(stock.purchasePrice)}</span>
                     <span
                       className={
-                        stock.change && stock.change.includes('+') ? 'text-danger' : 'text-primary'
+                        stock.change.includes('-') ? 'text-primary' : 'text-danger'
                       }
                     >
                       {stock.change}%

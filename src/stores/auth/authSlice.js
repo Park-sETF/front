@@ -16,6 +16,8 @@ export const login = createAsyncThunk(
     try {
       const response = await api.post('/auth/login', credentials); // 쿠키에 accessToken 저장
       localStorage.setItem("id", response.data.id);
+      localStorage.setItem("nickname", response.data.nickname);
+
 
       // Cookies.set('accessToken', response.data.accessToken, {
       //   secure: true,
@@ -90,7 +92,8 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = {
-          userId: action.payload.userId,
+          id: action.payload.id,
+          nickname: action.payload.nickname
           // accessToken: action.payload.accessToken,
           // refreshToken: action.payload.refreshToken,
         };

@@ -13,7 +13,7 @@ export default function Membership() {
 
   const handleUpdateMembership = async () => {
     try {
-      const response = await api.get(`/api/userinfo/membership/${id}`);
+      const response = await api.post(`/userinfo/membership/${id}`);
       if (response.ok) {
         const message = await response.text(); // 서버에서 받은 메시지
         setModalMessage(message); // 모달 메시지 설정
@@ -32,7 +32,7 @@ export default function Membership() {
 
   const handleDeleteMembership = async () => {
     try {
-      const response = await api.delete(`/api/userinfo/membership/${id}`);
+      const response = await api.delete(`/userinfo/membership/${id}`);
       if (response.ok) {
         const message = await response.text(); // 서버에서 받은 메시지
         setModalMessage(message); // 모달 메시지 설정
