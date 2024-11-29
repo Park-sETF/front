@@ -5,7 +5,6 @@ import { Plus } from 'react-bootstrap-icons';
 import BigButton from '~/components/buttons/BigButton';
 import api from '~/lib/apis/auth'
 
-
 import {
   Container,
   Row,
@@ -25,6 +24,8 @@ export default function Component({ stocks, addStock, setStocks }) {
   // }, [])
 
   const colorPalette = ['#62B2FD', '#9BDFC4', '#B4A4FF', '#F99BAB', '#FFB44F'];
+
+  const id = localStorage.getItem("id");
 
   const generatePastelColor = () => {
     const r = Math.floor(Math.random() * 127 + 128); // 128~255 범위로 제한
@@ -50,7 +51,8 @@ export default function Component({ stocks, addStock, setStocks }) {
   const [initialInvestmentAmount, setInitialInvestmentAmount] = useState(0);
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
-  const [title, setTitle] = useState('포트폴리오 제목을 설정해주세요.');
+  const [isNotNumber, setIsNotNumber] = useState(false);
+  const [title, setTitle] = useState('제목을 입력해주세요');
 
   const addButtonClick = async () => {
     try {
@@ -61,9 +63,6 @@ export default function Component({ stocks, addStock, setStocks }) {
         percentage: stock.percentage || 0, 
       }));
       console.log(etfList);
-
-      // 몇개 사는지랑 비율이 있어야 될듯
-      // 금액 넣고 해당 금액에 알맞는 비율이 필요함
 
       // 서버에 전달할 데이터 구성 (예: 선택된 종목)
       const requestData = {
@@ -94,6 +93,14 @@ export default function Component({ stocks, addStock, setStocks }) {
   // }, [])
 
   useEffect(() => {
+    // console.log("###############: "+ JSON.stringify(stocks));
+    setInitialTotalBalance(totalBalance);
+    setInitialInvestmentAmount(investmentAmount);
+  }, []);
+
+  useEffect(() => {
+    setTotalBalance(totalBalance - investmentAmount);
+
     if (inputRef.current) {
       const baseWidth = 50;
       const charWidth = 14;
@@ -103,13 +110,11 @@ export default function Component({ stocks, addStock, setStocks }) {
         maxWidth
       )}px`;
     }
-  }, [investmentAmount]);
 
-  useEffect(() => {
-    // console.log("###############: "+ JSON.stringify(stocks));
-    setInitialTotalBalance(totalBalance);
-    setInitialInvestmentAmount(investmentAmount);
-  }, []);
+    if(investmentAmount === initialInvestmentAmount) {
+      setTotalBalance(initialTotalBalance)
+    }
+  }, [investmentAmount]);
 
   useEffect(() => {
     if (totalBalance <= 0) {
@@ -134,13 +139,21 @@ export default function Component({ stocks, addStock, setStocks }) {
     }
   }, [activeTooltipIndex]);
 
-  useEffect(() => {
-    setTotalBalance(totalBalance - investmentAmount);
-  }, [investmentAmount]);
-
   const handleInvestmentChange = (value) => {
+    if(Number.isNaN(Number(value))) {
+      setIsNotNumber(true);
+      setTotalBalance(initialTotalBalance);
+      setInvestmentAmount(initialInvestmentAmount);
+    } else {
+      setIsNotNumber(false);
+    }
     const sanitizedValue = Number(value);
     const newValue = Math.min(totalBalance, Math.max(0, sanitizedValue));
+
+    if(newValue === 0) {
+      setTotalBalance(initialTotalBalance)
+    }
+
     setInvestmentAmount(newValue);
   };
 
@@ -213,14 +226,14 @@ export default function Component({ stocks, addStock, setStocks }) {
   return (
     <Container>
       <div>
-        <h1 className="text-center mb-4">
+        <div className="text-center mb-4">
           <FormControl
                   type="text"
                   value={title}
                   className="border-0 bg-transparent investment-input"
                   onChange = {() => setTitle(title)}
             />
-        </h1>
+        </div>
         <Row className="justify-content-center">
           <Col className="w-100">
             <div className="text-center mb-2">
@@ -238,6 +251,12 @@ export default function Component({ stocks, addStock, setStocks }) {
             {warning && (
               <Alert variant="warning" className="text-center">
                 설정한 투자 금액보다 더 적은 금액을 투자 중입니다.
+              </Alert>
+            )}
+
+            {isNotNumber && (
+              <Alert variant="warning" className="text-center">
+                숫자만 입력가능합니다.
               </Alert>
             )}
 

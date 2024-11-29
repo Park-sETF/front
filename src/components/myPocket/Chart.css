@@ -29,8 +29,6 @@
   box-sizing: border-box; /* padding 포함하여 크기 계산 */
 }
 
-/* Previous .investment-amount-container rule is removed */
-
 .investment-input:focus {
   outline: none;
   box-shadow: none;
