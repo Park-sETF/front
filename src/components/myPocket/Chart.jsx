@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { Plus } from 'react-bootstrap-icons';
-import { useLocation } from 'react-router-dom';
+import BigButton from '~/components/buttons/BigButton';
+import api from '~/lib/apis/auth'
+
 
 import {
   Container,
@@ -48,6 +50,41 @@ export default function Component({ stocks, addStock, setStocks }) {
   const [initialInvestmentAmount, setInitialInvestmentAmount] = useState(0);
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
+  const [title, setTitle] = useState('포트폴리오 제목을 설정해주세요.');
+
+  const addButtonClick = async () => {
+    try {
+      const etfList = stocks.map((stock) => ({
+        stockCode: stock.stockCode,
+        stockName: stock.stockName,
+        price: stock.purchasePrice,
+        percentage: stock.percentage || 0, 
+      }));
+      console.log(etfList);
+
+      // 몇개 사는지랑 비율이 있어야 될듯
+      // 금액 넣고 해당 금액에 알맞는 비율이 필요함
+
+      // 서버에 전달할 데이터 구성 (예: 선택된 종목)
+      const requestData = {
+        etfList,
+        title: title, // 여기에 적절한 title 값을 추가
+      };
+
+      // POST 요청
+      const response = await api.post(
+        `/etf/buy/${id}`,
+        requestData
+      );
+
+      // 성공 메시지 확인 또는 후속 처리
+      console.log('ETF 투자 성공', response.data);
+      alert('투자 요청이 성공적으로 완료되었습니다!');
+    } catch (error) {
+      console.error('ETF 투자하기 오류', error);
+      alert('투자 요청 중 오류가 발생했습니다.');
+    }
+  };
 
   const inputRef = useRef(null);
   const chartRef = useRef(null);
@@ -114,11 +151,11 @@ export default function Component({ stocks, addStock, setStocks }) {
     setPercentages(newPercentages);
   };
 
-  const handleColorChange = (index, newColor) => {
-    const newColors = [...colors];
-    newColors[index] = newColor;
-    setColors(newColors);
-  };
+  // const handleColorChange = (index, newColor) => {
+  //   const newColors = [...colors];
+  //   newColors[index] = newColor;
+  //   setColors(newColors);
+  // };
 
   const addStockWithColor = () => {
     addStock();
@@ -176,7 +213,14 @@ export default function Component({ stocks, addStock, setStocks }) {
   return (
     <Container>
       <div>
-        <h1 className="text-center mb-4">나만의 ETF 만들기</h1>
+        <h1 className="text-center mb-4">
+          <FormControl
+                  type="text"
+                  value={title}
+                  className="border-0 bg-transparent investment-input"
+                  onChange = {() => setTitle(title)}
+            />
+        </h1>
         <Row className="justify-content-center">
           <Col className="w-100">
             <div className="text-center mb-2">
@@ -218,7 +262,7 @@ export default function Component({ stocks, addStock, setStocks }) {
                   <br />
                   <span>
                     가격 : {''}
-                    {stocks[activeTooltipIndex].price.toLocaleString()}
+                    {stocks[activeTooltipIndex].purchasePrice.toLocaleString()}
                     원
                   </span>
                 </div>
@@ -298,6 +342,9 @@ export default function Component({ stocks, addStock, setStocks }) {
           </Col>
         </Row>
       </div>
+
+      <BigButton text={'투자하기'} onClick={addButtonClick}/>
+
     </Container>
   );
 }

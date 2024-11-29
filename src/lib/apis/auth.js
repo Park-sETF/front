@@ -30,7 +30,7 @@ api.interceptors.response.use(
       try {
         // Refresh API 요청
         await axios.post(
-          `${baseURL}/api/auth/refresh`,
+          `${baseURL}/auth/refresh`,
           {},
           { withCredentials: true }
         );
