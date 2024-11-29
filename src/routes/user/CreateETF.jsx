@@ -1,6 +1,5 @@
 import BigButton from '~/components/buttons/BigButton';
 import Chart from '~/components/myPocket/Chart';
-import axios from 'axios';
 import { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStockContext } from '~/components/context/StockProvider';
@@ -22,10 +21,6 @@ export default function ETFPocket() {
       setSelectedStocks([...location.state.stocks]);
     }
   }, [location.state, setSelectedStocks]);
-
-  // useEffect(() => {
-  //   console.log("#####" + JSON.stringify(selectedStocks));
-  // }, [selectedStocks])
 
   const addStock = () => {
     navigate('/select-stock'); // 추가하기 버튼 클릭시 종목 선택하기 페이지로 이동

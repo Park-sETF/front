@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import UserInfo from '~/components/home/UserInfo';
 import Tab from '~/components/home/Tab';
 import BigButton from '~/components/buttons/BigButton';
