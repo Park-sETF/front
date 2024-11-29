@@ -21,7 +21,7 @@ export default function UserInfo() {
     // 비동기 함수 정의
     const fetchUserData = async () => {
       try {
-        const response = await api.get(`/api/userinfo/${id}`);
+        const response = await api.get(`/userinfo/${id}`);
         setUserData(response.data); // API 응답 데이터를 상태에 저장
       } catch (err) {
         console.error(err);

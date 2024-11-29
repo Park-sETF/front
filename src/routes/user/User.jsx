@@ -15,7 +15,7 @@ export default function User() {
   // ETFList 초기 데이터 가져오기
   const fetchETFList = async () => {
     try {
-      const response = await api.get(`/api/userinfo/etf/list/${id}`);
+      const response = await api.get(`/userinfo/etf/list/${id}`);
       console.log(response);
       const ETFList = response.data.portfolios.map((portfolio) => ({
         portfolioId: portfolio.portfolioId,
@@ -31,7 +31,7 @@ export default function User() {
   // SubscriberList 초기 데이터 가져오기
   const fetchSubscriberList = async () => {
     try {
-      const response = await api.get(`/api/subscribe/list/${id}`);
+      const response = await api.get(`/subscribe/list/${id}`);
       const SubscriberList = response.data.map((subscriber) => ({
         id: subscriber.publisher_id,
         name: subscriber.nickname,

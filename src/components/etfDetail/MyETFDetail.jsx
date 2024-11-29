@@ -17,7 +17,7 @@ export default function Component() {
   const colorPalette = ['#62B2FD', '#9BDFC4', '#B4A4FF', '#F99BAB', '#FFB44F'];
 
   const sellMyETF = async () => {
-    await api.delete(`/api/etf/sell/${portfolioId}`).then(() => {
+    await api.delete(`/etf/sell/${portfolioId}`).then(() => {
       console.log("포트폴리오 삭제가 완료되었습니다.")
     }).catch(() => {
       console.log("포트폴리오 삭제가 완료되었습니다.")
