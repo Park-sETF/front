@@ -14,10 +14,14 @@ export const login = createAsyncThunk(
   'auth/login',
   async (credentials, thunkAPI) => {
     try {
-      const response = await api.post('/auth/login', credentials); // 쿠키에 accessToken 저장
-      localStorage.setItem("id", response.data.id);
-      localStorage.setItem("nickname", response.data.nickname);
+      const id = localStorage.getItem('id');
+      if (id) {
+        logout();
+      }
 
+      const response = await api.post('/auth/login', credentials); // 쿠키에 accessToken 저장
+      localStorage.setItem('id', response.data.id);
+      localStorage.setItem('nickname', response.data.nickname);
 
       // Cookies.set('accessToken', response.data.accessToken, {
       //   secure: true,
@@ -28,7 +32,6 @@ export const login = createAsyncThunk(
       //   secure: true,
       //   sameSite: 'Strict',
       // });
-      
 
       return response.data;
     } catch (error) {
@@ -42,6 +45,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
     // 서버에 로그아웃 요청 (Refresh Token 무효화)
     await api.post('/auth/logout', {}, { withCredentials: true });
+    localStorage.removeItem('id');
 
     // 클라이언트에서 접근 못하므로 주석처리
     // 클라이언트 쪽 상태 초기화 (API 호출 없음)
@@ -93,7 +97,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = {
           id: action.payload.id,
-          nickname: action.payload.nickname
+          nickname: action.payload.nickname,
           // accessToken: action.payload.accessToken,
           // refreshToken: action.payload.refreshToken,
         };
