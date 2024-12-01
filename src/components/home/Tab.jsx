@@ -2,6 +2,7 @@ import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import List from './List';
 import ETFButtonList from './ETFButtonList';
+import MyReport from './MyReport';
 
 export default function Tab({ ETFList, SubscriberList }) {
   const [activeTab, setActiveTab] = useState('구독 목록');
@@ -14,17 +15,17 @@ export default function Tab({ ETFList, SubscriberList }) {
       >
         <button
           className={`btn btn-link text-decoration-none px-3 py-2 position-relative ${
-            activeTab === '내 거래' ? 'active' : ''
+            activeTab === '분석 리포트' ? 'active' : ''
           }`}
-          onClick={() => setActiveTab('내 거래')}
+          onClick={() => setActiveTab('분석 리포트')}
           style={{
             color: '#666',
             fontSize: '18px',
-            fontWeight: activeTab === '내 거래' ? '600' : '400',
+            fontWeight: activeTab === '분석 리포트' ? '600' : '400',
           }}
         >
-          내 거래
-          {activeTab === '내 거래' && (
+          분석 리포트
+          {activeTab === '분석 리포트' && (
             <div
               className="position-absolute bottom-0 start-0 w-100"
               style={{
@@ -83,7 +84,7 @@ export default function Tab({ ETFList, SubscriberList }) {
       </div>
 
       <div>
-        {activeTab === '내 거래' && <div></div>}
+        {activeTab === '분석 리포트' && <MyReport/>}
         {activeTab === '나의 ETF' && <ETFButtonList items={ETFList} />}
         {activeTab === '구독 목록' && <List items={SubscriberList} />}
       </div>
