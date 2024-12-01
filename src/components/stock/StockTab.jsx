@@ -2,8 +2,13 @@ import { useState } from 'react';
 import Chart from './Chart';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function StockTab({volumeList, profitList,fluctuationList,marketcapList}) {
-  const [activeTab, setActiveTab] = useState('실시간 차트');
+export default function StockTab({
+  volumeList,
+  profitList,
+  fluctuationList,
+  marketcapList,
+}) {
+  const [activeTab, setActiveTab] = useState('거래대금');
 
   return (
     <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
@@ -22,6 +27,8 @@ export default function StockTab({volumeList, profitList,fluctuationList,marketc
             color: '#666',
             fontSize: '16px',
             fontWeight: activeTab === '거래대금' ? '600' : '400',
+            flexGrow: 1,
+            whiteSpace: 'nowrap',
           }}
         >
           거래대금
@@ -46,6 +53,8 @@ export default function StockTab({volumeList, profitList,fluctuationList,marketc
             color: '#666',
             fontSize: '16px',
             fontWeight: activeTab === '거래량' ? '600' : '400',
+            flexGrow: 1,
+            whiteSpace: 'nowrap',
           }}
         >
           거래량
@@ -70,6 +79,8 @@ export default function StockTab({volumeList, profitList,fluctuationList,marketc
             color: '#666',
             fontSize: '16px',
             fontWeight: activeTab === '급상승' ? '600' : '400',
+            flexGrow: 1,
+            whiteSpace: 'nowrap',
           }}
         >
           급상승
@@ -94,6 +105,8 @@ export default function StockTab({volumeList, profitList,fluctuationList,marketc
             color: '#666',
             fontSize: '16px',
             fontWeight: activeTab === '급하락' ? '600' : '400',
+            flexGrow: 1,
+            whiteSpace: 'nowrap',
           }}
         >
           급하락
@@ -109,12 +122,11 @@ export default function StockTab({volumeList, profitList,fluctuationList,marketc
         </button>
       </div>
 
-      
       <div>
-        {activeTab === '거래대금' && <Chart stocks={volumeList}/>}
-        {activeTab === '거래량' && <Chart stocks={profitList}/>} 
-        {activeTab === '급상승' && <Chart stocks={fluctuationList}/>}
-        {activeTab === '급하락' && <Chart stocks = {marketcapList}/>}
+        {activeTab === '거래대금' && <Chart stocks={volumeList} />}
+        {activeTab === '거래량' && <Chart stocks={profitList} />}
+        {activeTab === '급상승' && <Chart stocks={fluctuationList} />}
+        {activeTab === '급하락' && <Chart stocks={marketcapList} />}
       </div>
 
       <style>{`
