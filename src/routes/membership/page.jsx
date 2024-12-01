@@ -14,38 +14,41 @@ export default function Membership() {
   const handleUpdateMembership = async () => {
     try {
       const response = await api.post(`/userinfo/membership/${id}`);
-      if (response.ok) {
-        const message = await response.text(); // 서버에서 받은 메시지
-        setModalMessage(message); // 모달 메시지 설정
-        setIsModalOpen(true); // 모달 열기
+      if (response.status === 400) {
+        setModalMessage(response.data); // 서버에서 반환된 메시지
       } else {
-        const errorMessage = await response.text();
-        setModalMessage(`${errorMessage}`); // 실패 메시지 설정
-        setIsModalOpen(true); // 모달 열기
+        setModalMessage(response.data); // 정상적으로 반환된 메시지
       }
+      setIsModalOpen(true);
     } catch (error) {
       console.error('가입 요청 중 오류 발생:', error);
-      setModalMessage('가입 요청에 실패했습니다. 다시 시도해주세요.');
+      if (error.response) {
+        setModalMessage(error.response.data || '가입 요청에 실패했습니다.');
+      } else {
+        setModalMessage('가입 요청에 실패했습니다. 다시 시도해주세요.');
+      }
       setIsModalOpen(true);
     }
   };
+  
 
   const handleDeleteMembership = async () => {
     try {
       const response = await api.delete(`/userinfo/membership/${id}`);
-      if (response.ok) {
-        const message = await response.text(); // 서버에서 받은 메시지
-        setModalMessage(message); // 모달 메시지 설정
-        setIsModalOpen(true); // 모달 열기
+      if (response.status === 400) {
+        setModalMessage(response.data); // 서버에서 반환된 메시지
       } else {
-        const errorMessage = await response.text();
-        setModalMessage(`${errorMessage}`); // 실패 메시지 설정
-        setIsModalOpen(true); // 모달 열기
+        setModalMessage(response.data); // 정상적으로 반환된 메시지
       }
-    } catch (error) {
-      console.error('해지 요청 중 오류 발생:', error);
-      setModalMessage('해지 요청에 실패했습니다. 다시 시도해주세요.');
       setIsModalOpen(true);
+      } catch (error) {
+        console.error('해지 요청 중 오류 발생:', error);
+        if (error.response) {
+          setModalMessage(error.response.data || '해지 요청에 실패했습니다.');
+        } else {
+          setModalMessage('해지 요청에 실패했습니다. 다시 시도해주세요.');
+        }
+        setIsModalOpen(true);
     }
   };
 
