@@ -1,6 +1,8 @@
+import { Button } from 'react-bootstrap';
+
 export default function BigButton({ text, onClick }) {
   return (
-    <button
+    <Button
       onClick={onClick}
       className="btn btn-primary d-flex flex-row justify-content-center"
       style={{
@@ -21,6 +23,6 @@ export default function BigButton({ text, onClick }) {
       }}
     >
       {text}
-    </button>
+    </Button>
   );
 }

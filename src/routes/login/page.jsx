@@ -18,7 +18,7 @@ function Login() {
   useEffect(() => {
     if (error) {
       setLocalError(error);
-      const timer = setTimeout(() => setLocalError(null), 3000); // 3초 후 에러 메시지 제거
+      const timer = setTimeout(() => setLocalError(null), 2000); // 2초 후 에러 메시지 제거
       return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
     }
   }, [error]);
