@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Chart from './Chart';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -9,6 +9,11 @@ export default function StockTab({
   marketcapList,
 }) {
   const [activeTab, setActiveTab] = useState('거래대금');
+
+  // 컴포넌트가 처음 로드될 때 기본 활성화 탭 설정
+  useEffect(() => {
+    setActiveTab('거래대금'); // 초기 탭을 명시적으로 설정
+  }, []);
 
   return (
     <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
