@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Axios를 사용하여 API 호출
-import api from '~/lib/apis/auth'
+import api from '~/lib/apis/auth';
+import { logout } from '~/stores/auth/authSlice';
+import { useDispatch } from 'react-redux';
 
 
 export default function UserInfo() {
@@ -11,10 +12,15 @@ export default function UserInfo() {
   const id = localStorage.getItem("id");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleMembership = ()=>{
     navigate(`/membership`);
 
+  };
+  const handleLogout = () => {
+    dispatch(logout()); // 로그아웃 Thunk 호출
+    navigate('/'); // 로그아웃 후 /로 리디렉션
   };
 
   useEffect(() => {
@@ -68,9 +74,27 @@ export default function UserInfo() {
           className="rounded-circle"
           style={{ width: '60px', height: '60px', objectFit: 'cover' }}
         />
+        
       </div>
       <div className="mt-3" style={{ margin: '24px', marginBottom: 0 }}>
-        <div className="text-secondary mb-1" style={{ fontSize: '14px' }}>총 투자금액</div>
+        <div className='d-flex justify-content-between align-items-center'>
+          <div className="text-secondary mb-1" style={{ fontSize: '14px' }}>총 투자금액</div>
+          {/* 로그아웃 버튼 추가 */}
+          <button
+              className="btn btn-link "
+              style={{
+                color: '#62626C',
+                fontSize: '12px',
+                padding: 0,
+                marginRight: '9px',
+                marginBottom: '2px'
+              }}
+              onClick={handleLogout}
+            >
+              로그아웃
+            </button>
+        </div>
+        
         <div className="d-flex align-items-baseline gap-2">
           <span className="fs-4 fw-bold" style={{ color: '#333' }}>
             {(userData.asset ?? 0).toLocaleString()}원
