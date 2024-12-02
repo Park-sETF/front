@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import api from '~/lib/apis/auth';
@@ -28,9 +28,21 @@ export default function MyReport() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  //수익률을 -100% 에서 +100%로 정규화 
+  // 포트폴리오가 없을 경우 처리
+  if (!reportData.stockPerformances || reportData.stockPerformances.length === 0) {
+    return (
+      <div className="container mt-4" style={{ margin: '23px' }}>
+        <h1 className="fw-bold" style={{ fontSize: '19px', lineHeight: '1.5', marginBottom: 0 }}>
+          {reportData.nickName}님의 투자 데이터가 없습니다
+        </h1>
+        <p style={{ fontSize: '11px', color: '#8E8E93', marginTop: '6px' }}>
+          포트폴리오를 추가하고 투자 수익률을 확인해 보세요!
+        </p>
+      </div>
+    );
+  }
 
-  // 정규화 함수 (-값 포함)
+  // 정규화 함수; 수익률을 -100% 에서 +100%로 정규화 
   const normalize = (value, min, max) => {
     if (value >= 0) {
       // 양수: 0 ~ 100%로 정규화
@@ -77,7 +89,8 @@ export default function MyReport() {
                 fontSize: '9px',
               }}
             >
-              수익률 {reportData.portfolioRevenue.toFixed(2)}%
+              {/* 기본 값 설정 */}
+              수익률 {(reportData.portfolioRevenue || 0).toFixed(2)}%
             </span>
           </div>
 
