@@ -36,6 +36,7 @@
     font-weight: bold;
     margin-right: 12px;
     width: 16px;
+    color: #2d81ff;
   }
   
   .avatarWrapper {
@@ -84,14 +85,15 @@
   
   .button {
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     padding: 8px 12px;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: '1500';
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s, color 0.3s;
     min-width: 80px;
+    
   }
   
   .subscribed {
