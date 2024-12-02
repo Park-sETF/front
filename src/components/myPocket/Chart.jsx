@@ -3,10 +3,10 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { getRelativePosition } from 'chart.js/helpers';
 import { Doughnut } from 'react-chartjs-2';
 import { Plus } from 'react-bootstrap-icons';
+import {useNavigate} from 'react-router-dom'
 import BigButton from '~/components/buttons/BigButton';
 import api from '~/lib/apis/auth';
 import debounce from 'lodash/debounce';
-
 import { Container, Row, Col, FormControl, Button } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,6 +18,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
   const id = localStorage.getItem('id');
 
   const colorPalette = ['#62B2FD', '#9BDFC4', '#9F97F7', '#F99BAB', '#FFB44F'];
+  const navigate = useNavigate();
 
   const generatePastelColor = () => {
     const r = Math.floor(Math.random() * 127 + 128);
@@ -289,6 +290,16 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
 
   const addButtonClick = async () => {
     try {
+      if(title.length == 0) {
+        alert('제목을 입력해주세요.');
+        return;
+      }
+
+      if(!isTotalPercentage100) {
+        alert('모든 주식의 비율 합이 100%가 되어야 합니다.');
+        return;
+      }
+
       const etfList = stocks.map((stock, index) => ({
         stockCode: stock.stockCode,
         stockName: stock.stockName,
@@ -305,6 +316,8 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
 
       console.log('ETF 투자 성공', response.data);
       alert('투자 요청이 성공적으로 완료되었습니다!');
+      localStorage.setItem("saveStocks", null);
+      navigate("/");
     } catch (error) {
       console.error('ETF 투자하기 오류', error);
       alert('투자 요청 중 오류가 발생했습니다.');
@@ -314,7 +327,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
   return (
     <Container>
       <div>
-        <div className="text-center mb-4">
+        <div className="text-center mt-1 mb-3">
           <FormControl
             type="text"
             value={title}

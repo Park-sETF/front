@@ -31,7 +31,7 @@ export default function List({ items, onItemClick }) {
             }}
             onClick={() => onItemClick(item)} 
           >
-            <span className="fw-medium" style={{ fontSize: "16px" }}>
+            <span className="fw-medium" style={{ fontSize: "16px", width: '50%' }}>
               {item.name}
             </span>
             <div className="d-flex align-items-center gap-3">

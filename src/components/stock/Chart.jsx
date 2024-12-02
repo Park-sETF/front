@@ -4,8 +4,17 @@ import { useStockContext } from '~/components/context/StockProvider';
 export default function Chart({ stocks }) {
   console.log('Received stocks:', stocks);
 
+<<<<<<< HEAD
   // 주식 종목 저장 변수 context에서 가져오기
   const { selectedStocks, setSelectedStocks } = useStockContext();
+=======
+  // console.log("%%%%%%stock/chart.jsx: "+ JSON.stringify(stocks));
+  // console.log("%%%%%%stock/chart.jsx: "+ typeof stocks.reduce((ele, idx) => {console.log(ele.change)}));
+
+
+  //주식 종목 저장 변수 context에서 가져오기 
+  const {selectedStocks, setSelectedStocks} = useStockContext();
+>>>>>>> 899cfbc355be7830f385a128092f4d4f6c2eea4e
 
   // 주식 선택/해제 처리
   const handleButtonClick = (stock) => {
@@ -84,9 +93,17 @@ export default function Chart({ stocks }) {
                   >
                     <span className="fw">{formatPrice(stock.purchasePrice)}</span>
                     <span
+<<<<<<< HEAD
                       className={change.includes('-') ? 'text-primary' : 'text-danger'}
                     >
                       {change}
+=======
+                      className={
+                        stock.change && stock.change.includes('-') ? 'text-primary' : 'text-danger'
+                      }
+                    >
+                      {stock.change ? stock.change : 0}%
+>>>>>>> 899cfbc355be7830f385a128092f4d4f6c2eea4e
                     </span>
                   </div>
                 </div>
