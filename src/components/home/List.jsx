@@ -41,12 +41,12 @@ export default function List({ items, onItemClick }) {
             <div className="d-flex align-items-center gap-3">
               <span
                 style={{
-                  color: item.revenue >= 0 ? '#ff3b3b' : '#0051c7',
+                  color: item.rate >= 0 ? '#ff3b3b' : '#0051c7',
                   fontSize: '16px',
                 }}
               >
-                수익률 {item.revenue >= 0 ? '+' : ''}
-                {item.revenue.toFixed(2)}%
+                수익률 {item.rate >= 0 ? '+' : '-'}
+                {item.rate.toFixed(2)}%
               </span>
               <ChevronRight size={20} style={{ color: '#666' }} />
             </div>

@@ -1,33 +1,45 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./RankingContent.module.css"; // CSS 모듈을 임포트
+import api from "~/lib/apis/auth";
+
+function getRandomImage() {
+  const images = [
+    "/profile/chunsik.jpg",
+    "/profile/doremi.webp",
+    "/profile/lululala.webp",
+    "/profile/moli.webp",
+    "/profile/pli.webp",
+    "/profile/rino.webp",
+    "/profile/shoo.webp",
+    "/profile/sol.jpg",
+  ];
+  return images[Math.floor(Math.random() * images.length)];
+}
 
 const RankingContent = () => {
   const [rankingData, setRankingData] = useState([]);
-  const navigate = useNavigate(); // 네비게이션 훅 추가
-  const subscriberId = localStorage.getItem('id'); // 현재 로그인한 사용자의 ID (임시 값)
+  const navigate = useNavigate();
+  const subscriberId = 1; // 테스트용 고정 값
 
-  // 구독 목록과 랭킹 데이터를 가져오는 함수
   const fetchRankingData = async () => {
     try {
-      // 구독 목록 가져오기
       const subscriptionsResponse = await api.get(
         `/subscribe/list/${subscriberId}`
       );
 
       const subscriptions = Array.isArray(subscriptionsResponse.data)
         ? subscriptionsResponse.data.map((sub) => sub.publisher_id)
-        : []; // 데이터가 배열이 아니면 빈 배열 처리
+        : [];
 
-      // 랭킹 데이터 가져오기
       const rankingsResponse = await api.get("/etf/user/ranking");
       const data = rankingsResponse.data.map((item, index) => ({
-        userId: item.userId, // 수정된 필드명
+        userId: item.userId,
         name: item.nickname,
-        image: item.image,
-        amount: `+${item.totalRevenue.toLocaleString()}원`,
-        percentage: `${item.revenuePercentage.toFixed(1)}%`,
-        subscribed: subscriptions.includes(item.userId), // 구독 여부
-        color: getColorByIndex(index), // 기본 색상
+        image: item.image || getRandomImage(),
+        totalRevenue: item.totalRevenue,
+        revenuePercentage: item.revenuePercentage,
+        subscribed: subscriptions.includes(item.userId),
       }));
 
       setRankingData(data);
@@ -36,24 +48,14 @@ const RankingContent = () => {
     }
   };
 
-  // 유저 이미지가 없을 경우 기본 배경 색상
-  const getColorByIndex = (index) => {
-    const colors = ["#4285F4", "#EA4335", "#FBBC05", "#34A853"];
-    return colors[index % colors.length];
-  };
-
-  // 구독 상태 변경 함수
   const toggleSubscription = async (index, userId, isSubscribed) => {
     try {
       if (isSubscribed) {
-        // 구독 취소 API 호출
         await api.delete(`/subscribe/${subscriberId}/${userId}`);
       } else {
-        // 구독 API 호출
         await api.post(`/subscribe/${subscriberId}/${userId}`);
       }
 
-      // 상태 업데이트
       setRankingData((prevData) =>
         prevData.map((item, i) =>
           i === index ? { ...item, subscribed: !item.subscribed } : item
@@ -64,9 +66,8 @@ const RankingContent = () => {
     }
   };
 
-  // 유저 클릭 시 상세 페이지로 이동
   const handleUserClick = (userId) => {
-    navigate(`/ranking-detail/${userId}`); // 클릭한 유저의 userId를 전달
+    navigate(`/ranking-detail/${userId}`);
   };
 
   useEffect(() => {
@@ -74,126 +75,49 @@ const RankingContent = () => {
   }, []);
 
   return (
-    <div style={{ padding: "0 23px" }}>
-      <p
-        style={{
-          fontSize: "14px",
-          color: "#666666",
-          marginTop: "16px",
-          marginBottom: "16px",
-          lineHeight: "1.5",
-        }}
-      >
-        <span style={{ display: "block" }}>최근 7일간</span>
-        <span
-          style={{
-            fontSize: "16px",
-            fontWeight: "bold",
-            color: "#000000",
-          }}
-        >
-          수익률이 제일 높아요
-        </span>
+    <div className={styles.container}>
+      <p className={styles.header}>
+        <span>최근 7일간</span>
+        <span className={styles.title}>수익률이 제일 높아요</span>
       </p>
-      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+      <ul className={styles.list}>
         {rankingData.map((item, index) => (
           <li
             key={index}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "16px",
-              cursor: "pointer", 
-            }}
-            onClick={() => handleUserClick(item.userId)} 
+            className={styles.listItem}
+            onClick={() => handleUserClick(item.userId)}
           >
-            <span
-              style={{
-                fontSize: "16px",
-                fontWeight: "bold",
-                marginRight: "12px",
-                width: "16px",
-              }}
-            >
-              {index + 1}
-            </span>
-            <div
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                backgroundColor: item.image ? "transparent" : item.color,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
-                marginRight: "12px",
-              }}
-            >
-              {item.image ? (
-                <img
-                  src={item.image}
-                  alt="유저 프로필"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              ) : (
+            <span className={styles.rank}>{index + 1}</span>
+            <div className={styles.avatarWrapper}>
+              <img src={item.image} alt="유저 프로필" className={styles.avatar} />
+            </div>
+            <div className={styles.info}>
+              <div className={styles.name}>{item.name}</div>
+              <div className={styles.revenue}>
                 <span
-                  style={{
-                    color: "white",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                  }}
+                  className={
+                    item.totalRevenue > 0 ? styles.positive : styles.negative
+                  }
                 >
-                  {item.name.charAt(0)}
+                  {item.totalRevenue > 0
+                    ? `+${item.totalRevenue.toLocaleString()}원`
+                    : `-${Math.abs(item.totalRevenue).toLocaleString()}원`}
                 </span>
-              )}
-            </div>
-            <div style={{ flex: 1 }}>
-              <div
-                style={{
-                  fontSize: "16px",
-                  fontWeight: "medium",
-                }}
-              >
-                {item.name}
-              </div>
-              <div
-                style={{
-                  fontSize: "14px",
-                  color: "#FF3B30",
-                }}
-              >
-                {item.amount}
-              </div>
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: "#666666",
-                }}
-              >
-                ({item.percentage})
+                <span className={styles.percentage}>
+                  ({item.revenuePercentage.toFixed(1)}%)
+                </span>
               </div>
             </div>
-            {/* 구독 버튼 */}
             <button
+              className={`${styles.button} ${
+                item.subscribed ? styles.subscribed : styles.notSubscribed
+              }`}
               onClick={(e) => {
-                e.stopPropagation(); // 클릭 이벤트가 부모로 전파되지 않도록 설정
+                e.stopPropagation();
                 toggleSubscription(index, item.userId, item.subscribed);
               }}
-              style={{
-                backgroundColor: item.subscribed ? "#FF3B30" : "#34A853",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                padding: "5px 10px",
-                cursor: "pointer",
-              }}
             >
-              {item.subscribed ? "구독 취소" : "구독"}
+              {item.subscribed ? "구독취소" : "구독"}
             </button>
           </li>
         ))}
