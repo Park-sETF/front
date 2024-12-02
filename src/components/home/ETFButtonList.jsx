@@ -1,60 +1,55 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
-import { Bell, BellOff } from 'lucide-react';
-import PercentageModal from './PercentageModal';
-import { ChevronRight } from 'react-bootstrap-icons';
-import {useNavigate} from 'react-router-dom'
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useState } from "react";
+import { Bell, BellOff } from "lucide-react";
+import PercentageModal from "./PercentageModal";
+import { ChevronRight } from "react-bootstrap-icons";
+import { useNavigate } from "react-router-dom";
 
 export default function ETFButtonList({ items }) {
-  // console.log('####' + JSON.stringify(items));
-  // navigtate
   const navigate = useNavigate();
 
-  //각 항목의 알림 상태를 저장하는 객체 
   const [activeItems, setActiveItems] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(null); // 현재 선택된 항목의 인덱스 저장
+  const [currentIndex, setCurrentIndex] = useState(null);
 
   const handleToggle = (index, event) => {
     event.stopPropagation();
-    setCurrentIndex(index); // 현재 항목 설정
-    setShowModal(true); // 모달 열기
+    setCurrentIndex(index);
+    setShowModal(true);
   };
 
   const handleModalSave = () => {
-    // "알림 켜기" 버튼 클릭 시 알림 활성화 true 일 경우 파란색 버튼
     setActiveItems((prev) => ({
       ...prev,
       [currentIndex]: true,
     }));
-    setShowModal(false); // 모달 닫기
+    setShowModal(false);
   };
 
   const handleModalCancel = () => {
-    // "알림 끄기" 버튼 클릭 시 알림 비활성화 false 인 경우 회색 버튼 
     setActiveItems((prev) => ({
       ...prev,
       [currentIndex]: false,
     }));
-    setShowModal(false); // 모달 닫기
+    setShowModal(false);
   };
 
   return (
     <div
       style={{
-        minWidth: '375px',
-        maxWidth: '430px',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
+        minWidth: "375px",
+        maxWidth: "430px",
+        margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
       }}
     >
       <div
         className="px-3"
         style={{
-          margin: '20px',
-          marginTop: '3px',
+          margin: "20px",
+          marginTop: "3px",
         }}
       >
         {items.map((item, index) => (
@@ -62,51 +57,57 @@ export default function ETFButtonList({ items }) {
             key={index}
             className="d-flex justify-content-between align-items-center"
             style={{
-              paddingTop: '1.1rem',
-              paddingBottom: '1.1rem',
-              cursor: 'pointer',
+              paddingTop: "1.1rem",
+              paddingBottom: "1.1rem",
+              cursor: "pointer",
             }}
-            onClick={() => navigate(`/etf/my-detail/${items[index].portfolioId}`)}
+            onClick={() =>
+              navigate(`/etf/my-detail/${item.portfolioId || "unknown"}`)
+            }
           >
-            <span className="fw-medium" style={{ fontSize: '16px' }}>
+            <span className="fw-medium" style={{ fontSize: "16px" }}>
               {item.name}
             </span>
             <div className="d-flex align-items-center gap-3">
               <span
                 style={{
-                  color: item.revenue >= 0 ? '#ff3b3b' : '#0051c7',
-                  fontSize: '16px',
+                  color: item.revenue >= 0 ? "#ff3b3b" : "#0051c7",
+                  fontSize: "16px",
                 }}
               >
-                수익률 {item.revenue >= 0 ? '+' : ''}
-                {item.revenue.toFixed(2)}%
+                {/* 안전한 toFixed 호출 */}
+                수익률 {item.revenue >= 0 ? "+" : ""}
+                {(typeof item.revenue === "number" ? item.revenue : 0).toFixed(
+                  2
+                )}
+                %
               </span>
-              <ChevronRight size={20} style={{ color: '#666' }} />
+              <ChevronRight size={20} style={{ color: "#666" }} />
 
               {/* 알림 버튼 */}
               <button
                 onClick={(e) => handleToggle(index, e)}
                 className={`btn btn-sm rounded-pill ${
-                  activeItems[index] ? 'btn-primary' : 'btn-secondary'
+                  activeItems[index] ? "btn-primary" : "btn-secondary"
                 }`}
                 style={{
-                  width: '48px',
-                  height: '24px',
+                  width: "48px",
+                  height: "24px",
                   padding: 0,
-                  position: 'relative',
-                  transition: 'background-color 0.3s',
+                  position: "relative",
+                  transition: "background-color 0.3s",
                 }}
               >
                 <div
                   className="bg-white rounded-circle d-flex align-items-center justify-content-center"
                   style={{
-                    width: '20px',
-                    height: '20px',
-                    position: 'absolute',
-                    top: '0.9px',
-                    transition: 'transform 0.3s',
+                    width: "20px",
+                    height: "20px",
+                    position: "absolute",
+                    top: "0.9px",
+                    transition: "transform 0.3s",
                     transform: `translateX(${
-                      activeItems[index] ? '24px' : '2px'
+                      activeItems[index] ? "24px" : "2px"
                     })`,
                   }}
                 >
@@ -124,9 +125,7 @@ export default function ETFButtonList({ items }) {
 
       <PercentageModal
         show={showModal}
-        //알림 끄기 
         onHide={handleModalCancel}
-        //알림 켜기 
         onSave={handleModalSave}
       />
 
