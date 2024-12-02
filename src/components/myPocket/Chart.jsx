@@ -289,6 +289,16 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
 
   const addButtonClick = async () => {
     try {
+      if(title.length == 0) {
+        alert('제목을 입력해주세요.');
+        return;
+      }
+
+      if(!isTotalPercentage100) {
+        alert('모든 주식의 비율 합이 100%가 되어야 합니다.');
+        return;
+      }
+
       const etfList = stocks.map((stock, index) => ({
         stockCode: stock.stockCode,
         stockName: stock.stockName,
