@@ -19,7 +19,7 @@ export default function Tab({ ETFList, SubscriberList }) {
           onClick={() => setActiveTab('분석 리포트')}
           style={{
             color: '#666',
-            fontSize: '18px',
+            fontSize: '17px',
             fontWeight: activeTab === '분석 리포트' ? '600' : '400',
             flexGrow: 1,
             whiteSpace: 'nowrap',
@@ -44,7 +44,7 @@ export default function Tab({ ETFList, SubscriberList }) {
           onClick={() => setActiveTab('나의 ETF')}
           style={{
             color: '#666',
-            fontSize: '18px',
+            fontSize: '17px',
             fontWeight: activeTab === '나의 ETF' ? '600' : '400',
             flexGrow: 1,
             whiteSpace: 'nowrap',
@@ -69,7 +69,7 @@ export default function Tab({ ETFList, SubscriberList }) {
           onClick={() => setActiveTab('구독 목록')}
           style={{
             color: '#666',
-            fontSize: '18px',
+            fontSize: '17px',
             fontWeight: activeTab === '구독 목록' ? '600' : '400',
             flexGrow: 1,
             whiteSpace: 'nowrap',
