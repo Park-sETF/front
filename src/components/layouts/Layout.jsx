@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useMatch  } from 'react-router-dom';
+import { Outlet, useLocation} from 'react-router-dom';
 import LayoutMapper from './LayoutMapper';
 import Footer from '~/components/layouts/MyFooter';
 

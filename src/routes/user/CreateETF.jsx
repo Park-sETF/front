@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStockContext } from '~/components/context/StockProvider';
 
+
 export default function ETFPocket() {
-  // 임시로 지정함!
-  const id = localStorage.getItem("id");
+
 
   const location = useLocation();
   const navigate = useNavigate();
