@@ -320,6 +320,8 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
             value={title}
             className="border-0 bg-transparent title-input"
             onChange={(e) => setTitle(e.target.value)}
+            style={{color: '#9AA4B2'}}
+            onFocus={() => setTitle('')}
           />
         </div>
         <Row className="justify-content-center">
