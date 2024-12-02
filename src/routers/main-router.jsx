@@ -77,7 +77,7 @@ export const mainRoutes = [
       {
         element: <SuspenseLayout />,
         children: [
-          { element: <Init />, index: true },
+          { element: <Init />, index: true, guest: true },
 
           // 로그인되지 않은 사용자만 접근 가능한 라우트
           {

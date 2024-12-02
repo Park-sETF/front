@@ -314,7 +314,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
   return (
     <Container>
       <div>
-        <div className="text-center mb-4">
+        <div className="text-center mt-1 mb-3">
           <FormControl
             type="text"
             value={title}
