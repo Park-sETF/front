@@ -9,9 +9,7 @@ export default function Tab({ ETFList, SubscriberList }) {
 
   return (
     <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
-      <div
-        className="d-flex justify-content-between border-bottom"
-      >
+      <div className="d-flex justify-content-between border-bottom">
         <button
           className={`btn btn-link text-decoration-none px-3 py-2 position-relative ${
             activeTab === '분석 리포트' ? 'active' : ''
@@ -88,10 +86,23 @@ export default function Tab({ ETFList, SubscriberList }) {
         </button>
       </div>
 
+
       <div>
-        {activeTab === '분석 리포트' && <MyReport/>}
+        {activeTab === '분석 리포트' && <MyReport />}
         {activeTab === '나의 ETF' && <ETFButtonList items={ETFList} />}
-        {activeTab === '구독 목록' && <List items={SubscriberList} />}
+        {activeTab === '구독 목록' && (
+          <List
+            items={SubscriberList.map((subscriber) => ({
+              portfolioId: subscriber.id, 
+              name: subscriber.name,
+              rate: subscriber.revenue,
+              isPositive: subscriber.revenue > 0, 
+            }))}
+            onItemClick={(item) => {
+              console.log('구독 항목 클릭:', item);
+            }}
+          />
+        )}
       </div>
     </div>
   );

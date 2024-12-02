@@ -22,14 +22,14 @@ export default function List({ items, onItemClick }) {
       >
         {items.map((item, index) => (
           <div
-            key={item.portfolioId || index} // 고유 키로 설정
+            key={item.portfolioId || index}
             className="d-flex justify-content-between align-items-center"
             style={{
               paddingTop: "1.1rem",
               paddingBottom: "1.1rem",
               cursor: "pointer",
             }}
-            onClick={() => onItemClick(item)} // 전체 객체 전달
+            onClick={() => onItemClick(item)}
           >
             <span className="fw-medium" style={{ fontSize: "16px" }}>
               {item.name}
@@ -42,7 +42,7 @@ export default function List({ items, onItemClick }) {
                 }}
               >
                 수익률 {item.isPositive ? "+" : ""}
-                {item.rate ? item.rate.toFixed(2) : '0'}%
+                {item.rate.toFixed(2)}%
               </span>
               <ChevronRight size={20} style={{ color: "#666" }} />
             </div>
@@ -52,4 +52,3 @@ export default function List({ items, onItemClick }) {
     </div>
   );
 }
-
