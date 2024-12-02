@@ -4,7 +4,7 @@ import List from "~/components/home/List";
 import RankingUserInfo from "./RankingUserInfo";
 
 export default function RankingDetail() {
-  const { userId } = useParams(); // URL에서 userId 추출
+  const { userId } = useParams();
   const [etfItems, setEtfItems] = useState([]);
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ export default function RankingDetail() {
         const transformedData = (data.portfolios || []).map((portfolio) => ({
           portfolioId: portfolio.portfolioId || "unknown",
           name: portfolio.title || "Untitled",
-          rate: typeof portfolio.revenue === "number" ? portfolio.revenue : 0, // 기본값 처리
+          rate: typeof portfolio.revenue === "number" ? portfolio.revenue : 0, 
           isPositive: portfolio.revenue > 0,
         }));
         setEtfItems(transformedData);
@@ -34,7 +34,6 @@ export default function RankingDetail() {
 
   return (
     <div style={{ minWidth: "375px", maxWidth: "430px", margin: "0 auto" }}>
-      {/* userId를 RankingUserInfo로 전달 */}
       <RankingUserInfo userId={userId} />
       
       <h3 style={{ margin: "20px", color: "#333" }}>ETF 목록</h3>

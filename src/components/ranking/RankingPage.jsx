@@ -37,7 +37,7 @@ const RankingContent = () => {
       const data = rankingsResponse.data.map((item) => ({
         userId: item.userId,
         name: item.nickname,
-        image: item.image || getRandomImage(),
+        image: getRandomImage(),
         totalRevenue: item.totalRevenue,
         revenuePercentage: item.revenuePercentage || 0, // 기본값 0 설정
         subscribed: subscriptions.includes(item.userId),
