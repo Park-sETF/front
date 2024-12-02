@@ -3,19 +3,17 @@ import { useNavigate } from "react-router-dom";
 import styles from "./RankingContent.module.css"; // CSS 모듈을 임포트
 import api from "~/lib/apis/auth";
 
-function getRandomImage() {
-  const images = [
-    "/profile/chunsik.jpg",
-    "/profile/doremi.webp",
-    "/profile/lululala.webp",
-    "/profile/moli.webp",
-    "/profile/pli.webp",
-    "/profile/rino.webp",
-    "/profile/shoo.webp",
-    "/profile/sol.jpg",
-  ];
-  return images[Math.floor(Math.random() * images.length)];
-}
+
+const images = [
+  "/images/profile/doremi.png",
+  "/images/profile/lay.png",
+  "/images/profile/pli.png",
+  "/images/profile/moli.png",
+  "/images/profile/sol.png",
+  "/images/profile/shoo.png",
+  "/images/profile/rino.png",
+  "images/ink.png",
+];
 
 const RankingContent = () => {
   const [rankingData, setRankingData] = useState([]);
@@ -34,10 +32,10 @@ const RankingContent = () => {
         : [];
 
       const rankingsResponse = await api.get("/etf/user/ranking");
-      const data = rankingsResponse.data.map((item) => ({
+      const data = rankingsResponse.data.map((item,index) => ({
         userId: item.userId,
         name: item.nickname,
-        image: getRandomImage(),
+        image: images[index % images.length], // 순서대로 이미지를 배치
         totalRevenue: item.totalRevenue,
         revenuePercentage: item.revenuePercentage || 0, // 기본값 0 설정
         subscribed: subscriptions.includes(item.userId),
@@ -77,7 +75,7 @@ const RankingContent = () => {
 
   return (
     <div className={styles.container}>
-      <p className={styles.header}>
+      <p className={styles.header} style={{marginBottom:'17px'}}>
         <span>최근 7일간</span>
         <span className={styles.title}>수익률이 제일 높아요</span>
       </p>
@@ -93,8 +91,8 @@ const RankingContent = () => {
               <img src={item.image} alt="유저 프로필" className={styles.avatar} />
             </div>
             <div className={styles.info}>
-              <div className={styles.name}>{item.name}</div>
-              <div className={styles.revenue}>
+              <div className={styles.name} style={{fontSize: '15px',fontWeight: '500'}}>{item.name}</div>
+              <div className={styles.revenue} style={{fontSize: '14px',fontWeight: '500'}}>
                 <span
                   className={
                     item.totalRevenue > 0 ? styles.positive : styles.negative
@@ -104,7 +102,9 @@ const RankingContent = () => {
                     ? `+${item.totalRevenue.toLocaleString()}원`
                     : `-${Math.abs(item.totalRevenue).toLocaleString()}원`}
                 </span>
-                <span className={styles.percentage}>
+                <span className={
+                  item.revenuePercentage > 0 ? styles.positive : styles.negative
+                } style={{marginLeft: '3px'}}>
                   ({item.revenuePercentage.toFixed(1)}%) {/* 기본값 보장 */}
                 </span>
               </div>
@@ -116,6 +116,10 @@ const RankingContent = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 toggleSubscription(index, item.userId, item.subscribed);
+              }}
+              style={{
+                color: 'white',
+                backgroundColor: item.subscribed ? '#8C97A7' : '#4B7BF5',
               }}
             >
               {item.subscribed ? "구독취소" : "구독"}
