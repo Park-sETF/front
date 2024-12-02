@@ -30,7 +30,7 @@ export default function Layout() {
         ))}
       {/* 메인 콘텐츠 */}
       <main
-        className="flex-grow-1 overflow-auto"
+        className="flex-grow-1 overflow-hidden"
         style={{
           paddingBottom: '200px', // BigButton의 높이만큼 여백 추가
         }}

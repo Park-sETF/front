@@ -5,13 +5,12 @@ import ETFButtonList from './ETFButtonList';
 import MyReport from './MyReport';
 
 export default function Tab({ ETFList, SubscriberList }) {
-  const [activeTab, setActiveTab] = useState('구독 목록');
+  const [activeTab, setActiveTab] = useState('분석 리포트');
 
   return (
-    <div style={{ minWidth: '375px', maxWidth: '430px', margin: '0 auto' }}>
+    <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
       <div
         className="d-flex justify-content-between border-bottom"
-        style={{ margin: '23px', marginTop: 0, marginBottom: 0 }}
       >
         <button
           className={`btn btn-link text-decoration-none px-3 py-2 position-relative ${
@@ -22,6 +21,8 @@ export default function Tab({ ETFList, SubscriberList }) {
             color: '#666',
             fontSize: '18px',
             fontWeight: activeTab === '분석 리포트' ? '600' : '400',
+            flexGrow: 1,
+            whiteSpace: 'nowrap',
           }}
         >
           분석 리포트
@@ -45,6 +46,8 @@ export default function Tab({ ETFList, SubscriberList }) {
             color: '#666',
             fontSize: '18px',
             fontWeight: activeTab === '나의 ETF' ? '600' : '400',
+            flexGrow: 1,
+            whiteSpace: 'nowrap',
           }}
         >
           나의 ETF
@@ -68,6 +71,8 @@ export default function Tab({ ETFList, SubscriberList }) {
             color: '#666',
             fontSize: '18px',
             fontWeight: activeTab === '구독 목록' ? '600' : '400',
+            flexGrow: 1,
+            whiteSpace: 'nowrap',
           }}
         >
           구독 목록

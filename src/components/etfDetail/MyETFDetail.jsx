@@ -23,7 +23,7 @@ export default function Component() {
         console.log('포트폴리오 삭제가 완료되었습니다.');
       })
       .catch(() => {
-        console.log('포트폴리오 삭제가 완료되었습니다.');
+        console.log('포트폴리오 삭제 실패.');
       });
   };
 
@@ -43,7 +43,8 @@ export default function Component() {
 
   // 데이터 받아오기
   useEffect(() => {
-    fetch(`/api/etf/details/${portfolioId}`)
+    (async() => {
+      await api.get(`/etf/details/${portfolioId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch portfolio details');
@@ -66,7 +67,9 @@ export default function Component() {
         console.error(error);
         setFetchError('ETF 데이터를 가져오는 중 문제가 발생했습니다.');
       });
-  }, [portfolioId]);
+    })()
+    
+  }, []);
 
   useEffect(() => {
     if (activeTooltipIndex !== null) {
@@ -156,7 +159,7 @@ export default function Component() {
               <div className="investment-amount-container">
                 <div className="mb-2">투자 금액</div>
                 <span className="border-0 bg-transparent investment-input">
-                  원
+                  {responseData.investAmount}원
                 </span>
               </div>
             </div>
