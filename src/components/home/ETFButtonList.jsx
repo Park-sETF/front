@@ -4,6 +4,7 @@ import { Bell, BellOff } from 'lucide-react';
 import PercentageModal from './PercentageModal';
 import { useNavigate } from 'react-router-dom';
 import api from '~/lib/apis/auth';
+import { ChevronRight } from "react-bootstrap-icons";
 
 export default function ETFButtonList({ items }) {
   const navigate = useNavigate();
