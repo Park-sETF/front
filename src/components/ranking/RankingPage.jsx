@@ -33,12 +33,12 @@ const RankingContent = () => {
         : [];
 
       const rankingsResponse = await api.get("/etf/user/ranking");
-      const data = rankingsResponse.data.map((item, index) => ({
+      const data = rankingsResponse.data.map((item) => ({
         userId: item.userId,
         name: item.nickname,
         image: item.image || getRandomImage(),
         totalRevenue: item.totalRevenue,
-        revenuePercentage: item.revenuePercentage,
+        revenuePercentage: item.revenuePercentage || 0, // 기본값 0 설정
         subscribed: subscriptions.includes(item.userId),
       }));
 
@@ -83,7 +83,7 @@ const RankingContent = () => {
       <ul className={styles.list}>
         {rankingData.map((item, index) => (
           <li
-            key={index}
+            key={item.userId} // index 대신 userId를 key로 사용
             className={styles.listItem}
             onClick={() => handleUserClick(item.userId)}
           >
@@ -104,7 +104,7 @@ const RankingContent = () => {
                     : `-${Math.abs(item.totalRevenue).toLocaleString()}원`}
                 </span>
                 <span className={styles.percentage}>
-                  ({item.revenuePercentage.toFixed(1)}%)
+                  ({item.revenuePercentage.toFixed(1)}%) {/* 기본값 보장 */}
                 </span>
               </div>
             </div>
@@ -127,3 +127,4 @@ const RankingContent = () => {
 };
 
 export default RankingContent;
+
