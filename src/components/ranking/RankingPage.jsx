@@ -20,7 +20,8 @@ function getRandomImage() {
 const RankingContent = () => {
   const [rankingData, setRankingData] = useState([]);
   const navigate = useNavigate();
-  const subscriberId = 1; // 테스트용 고정 값
+  const subscriberId = localStorage.getItem("id");
+  // const subscriberId = 1; // 테스트용 고정 값 구독하는사람,유저아이디
 
   const fetchRankingData = async () => {
     try {
@@ -36,7 +37,7 @@ const RankingContent = () => {
       const data = rankingsResponse.data.map((item) => ({
         userId: item.userId,
         name: item.nickname,
-        image: item.image || getRandomImage(),
+        image: getRandomImage(),
         totalRevenue: item.totalRevenue,
         revenuePercentage: item.revenuePercentage || 0, // 기본값 0 설정
         subscribed: subscriptions.includes(item.userId),
@@ -83,7 +84,7 @@ const RankingContent = () => {
       <ul className={styles.list}>
         {rankingData.map((item, index) => (
           <li
-            key={item.userId} // index 대신 userId를 key로 사용
+            key={item.userId} 
             className={styles.listItem}
             onClick={() => handleUserClick(item.userId)}
           >

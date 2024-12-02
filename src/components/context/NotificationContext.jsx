@@ -5,7 +5,7 @@ const NotificationContext = createContext();
 export function NotificationProvider({ children }) {
   const [notifications, setNotifications] = useState([]); // 알림 데이터
   // const id = localStorage.getItem("id");
-  const id=6;
+  const id=1;
   // SSE 연결
   useEffect(() => {
     const eventSource = new EventSource(`/api/notifications/subscribe/${id}`);
