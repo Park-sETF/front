@@ -1,114 +1,114 @@
-import React, { useState, useEffect } from "react";
+import StockLogo from "../stock/StockLogo";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useStockContext } from "~/components/context/StockProvider";
+import BigButton from "~/components/buttons/BigButton";
 import axios from "axios";
+import "./SearchStock.css";
 
-const SearchHeader = ({ placeholder }) => {
-  const userId = 1; // 임시로 userId를 1로 고정
-  const [recentSearches, setRecentSearches] = useState([]); // 최근 검색어 상태
-  const [searchedStock, setSearchedStock] = useState(null); // 검색 결과 상태
-  const [searching, setSearching] = useState(false); // 검색 중 여부 상태
+export default function SearchStock() {
+  const navigate = useNavigate();
+  const { selectedStocks, setSelectedStocks } = useStockContext();
 
-  // 최근 검색어 가져오기
+  const [searchTerm, setSearchTerm] = useState("");
+  const [recentSearches, setRecentSearches] = useState([]);
+  const [searchedStock, setSearchedStock] = useState(null);
+  const [searching, setSearching] = useState(false);
+
+  const userId = localStorage.getItem("id");
+
   useEffect(() => {
-    const fetchRecentSearches = async () => {
-      try {
-        const response = await axios.get(`/api/search/recent`, {
-          params: {
-            userId,
-            count: 10, // 최신 10개 검색어 가져오기
-          },
-        });
-        setRecentSearches(response.data); // 검색어 상태 업데이트
-      } catch (error) {
-        console.error("최근 검색어 조회 실패:", error);
-      }
-    };
-
     fetchRecentSearches();
   }, [userId]);
 
-  // 검색 API 호출
-  const handleSearch = async (searchTerm) => {
+  const fetchRecentSearches = async () => {
+    try {
+      const response = await axios.get(`/api/search/recent`, {
+        params: { userId, count: 10 },
+      });
+      setRecentSearches(response.data);
+    } catch (error) {
+      console.error("최근 검색어 조회 실패:", error);
+    }
+  };
+
+  const getStockLogo = (stockCode) => {
+    const defaultLogo =
+      "https://static.toss.im/png-icons/securities/icn-sec-fill-900340.png";
+    const matchedLogo = StockLogo.find(
+      (logoItem) => logoItem.stockCode === stockCode
+    );
+    return matchedLogo ? matchedLogo.logoImageUrl : defaultLogo;
+  };
+
+  const handleSearch = async (term) => {
     try {
       const response = await axios.get(`/api/search`, {
-        params: {
-          userId,
-          stockName: searchTerm,
-        },
+        params: { userId, stockName: term },
       });
-      setSearchedStock(response.data); // 검색 결과 업데이트
-      setSearching(true); // 검색 상태 활성화
+
+      const stockData = response.data || {};
+      setSearchedStock({
+        stockCode: stockData.stockCode || "N/A",
+        stockName: stockData.stockName || "알 수 없음",
+        price: stockData.price || 0,
+        priceChangeRate: stockData.priceChangeRate || "0%",
+        logo: getStockLogo(stockData.stockCode),
+      });
+      setSearching(true);
     } catch (error) {
       console.error("검색 실패:", error);
     }
   };
 
-  // 숫자 포맷 함수
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("ko-KR").format(price) + "원";
+  const handleAddToBasket = (stock) => {
+    const formattedStock = {
+      stockCode: stock.stockCode,
+      stockName: stock.stockName,
+      purchasePrice: stock.price,
+      change: stock.priceChangeRate,
+      logo: stock.logo,
+    };
+
+    if (!selectedStocks.some((s) => s.stockCode === formattedStock.stockCode)) {
+      setSelectedStocks((prev) => [...prev, formattedStock]);
+    }
+    alert(`${stock.stockName}가 장바구니에 담겼습니다.`);
   };
 
-  // 검색 결과 뷰
+  const handlePocketClick = () => navigate("/etf-pocket");
+
   const renderSearchResult = () => {
     if (!searchedStock) return null;
 
     return (
-      <div style={{ padding: "10px" }}>
-        <div
-          className="d-flex align-items-center justify-content-between p-2 bg-white"
-          style={{
-            border: "1px solid #e0e0e0",
-            borderRadius: "8px",
-            marginBottom: "10px",
-          }}
-        >
+      <div className="search-result">
+        <div className="search-result-item">
           <div className="d-flex align-items-center gap-3">
             <img
-              src={
-                searchedStock.logo ||
-                "https://static.toss.im/png-icons/securities/icn-sec-fill-900340.png"
-              }
+              src={searchedStock.logo}
               alt={searchedStock.stockName}
-              className="rounded"
-              width="48"
-              height="48"
+              className="rounded stock-logo"
             />
             <div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                }}
-              >
-                {searchedStock.stockName}
-              </div>
-              <div style={{ fontSize: "0.9rem", color: "#666" }}>
-                {formatPrice(searchedStock.price)}
-              </div>
-              <div
-                style={{
-                  fontSize: "0.9rem",
-                  color:
-                    searchedStock.priceChangeRate &&
+              <div className="stock-name">{searchedStock.stockName}</div>
+              <div className="d-flex align-items-center gap-2 stock-info">
+                <span>{searchedStock.price?.toLocaleString()}원</span>
+                <span
+                  className={
                     searchedStock.priceChangeRate.includes("+")
-                      ? "red"
-                      : "blue",
-                }}
-              >
-                {searchedStock.priceChangeRate}
+                      ? "text-danger"
+                      : "text-primary"
+                  }
+                >
+                  {searchedStock.priceChangeRate}%
+                </span>
               </div>
             </div>
           </div>
           <button
-            className={`btn btn-primary`}
-            style={{
-              fontSize: "1rem",
-              padding: "5px 20px",
-              borderRadius: "10px",
-              backgroundColor: "#4B7BF5",
-              color: "white",
-              width: "80px",
-              border: "none",
-            }}
+            className="btn btn-primary add-button"
+            onClick={() => handleAddToBasket(searchedStock)}
           >
             담기
           </button>
@@ -118,64 +118,50 @@ const SearchHeader = ({ placeholder }) => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        backgroundColor: "#fff",
-      }}
-    >
-      {/* 검색 바 */}
-      <div
-        style={{
-          padding: "10px",
-          borderBottom: "1px solid #e0e0e0",
-        }}
-      >
-        <div
-          style={{
-            position: "relative",
-            width: "100%",
+    <div>
+      {/* 검색창 및 장바구니 */}
+      <div className="search-container">
+        <input
+          type="search"
+          placeholder="종목 이름을 검색하세요"
+          className="search-input"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && searchTerm.trim()) handleSearch(searchTerm);
           }}
-        >
-          <input
-            type="search"
-            placeholder={placeholder}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" && event.target.value.trim() !== "") {
-                handleSearch(event.target.value.trim());
-              }
-            }}
-            style={{
-              width: "100%",
-              padding: "8px 8px 8px 30px",
-              border: "none",
-              backgroundColor: "#f0f0f0",
-              borderRadius: "5px",
-              fontSize: "16px",
-            }}
-          />
-        </div>
+        />
+        <button className="btn pocket-button" onClick={handlePocketClick}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
+          <span className="badge">{selectedStocks.length}</span>
+        </button>
       </div>
-
       {/* 검색 결과 */}
       {searching && renderSearchResult()}
-
       {/* 최근 검색어 */}
       {!searching && (
-        <div style={{ padding: "10px", marginTop: "10px", flex: 1 }}>
-          <h2 style={{ fontSize: "18px", fontWeight: "bold" }}>최근에 본 주식</h2>
-          <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+        <div className="recent-container">
+          <h2 className="recent-title">최근에 본 주식</h2>
+          <hr className="recent-divider" />
+          <ul className="recent-list">
             {recentSearches.map((search, index) => (
               <li
                 key={index}
-                style={{
-                  padding: "8px 0",
-                  borderBottom: "1px solid #e0e0e0",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleSearch(search)} // 검색어 클릭 시 검색
+                className="recent-item"
+                onClick={() => handleSearch(search)}
               >
                 {search}
               </li>
@@ -183,8 +169,7 @@ const SearchHeader = ({ placeholder }) => {
           </ul>
         </div>
       )}
+      <BigButton text="ETF 포켓" onClick={handlePocketClick} />
     </div>
   );
-};
-
-export default SearchHeader;
+}

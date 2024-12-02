@@ -1,0 +1,108 @@
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .search-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin: 0px 18px 0px 13px;
+  }
+  
+  .pocket-button {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    border: none;
+    position: relative;
+    top: -4px; 
+    left: -9px; 
+  }
+  
+  .badge {
+    position: absolute;
+    top: 5px;
+    start: 100%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    background-color: #dc3545;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 50%;
+  }
+  
+  .search-result {
+    padding: 10px;
+  }
+  
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .stock-logo {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .stock-name {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .stock-info {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .add-button {
+    font-size: 1rem;
+    padding: 5px 20px;
+    border-radius: 10px;
+    background-color: #4b7bf5;
+    color: white;
+    width: 80px;
+    border: none;
+  }
+  
+  .recent-container {
+    padding: 10px;
+    margin-top: 10px;
+    flex: 1;
+  }
+  
+  .recent-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .recent-divider {
+    margin-bottom: 10px;
+    border: none;
+    height: 1px;
+    background-color: #ddd;
+  }
+  
+  .recent-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .recent-item {
+    padding: 10px 0;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-bottom: none;
+  }
+  
