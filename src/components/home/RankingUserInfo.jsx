@@ -4,10 +4,10 @@ import api from '~/lib/apis/auth'
 
 
 export default function UserInfo() {
-  const [userData, setUserData] = useState(null); // 사용자 데이터 상태 관리
-  const [loading, setLoading] = useState(true); // 로딩 상태
-  const [error, setError] = useState(null); // 에러 상태
-  const { id } = useParams(); // URL에서 userId 추출
+  const [userData, setUserData] = useState(null); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null);
+  const { id } = useParams(); 
 
   const navigate = useNavigate();
 
@@ -17,30 +17,30 @@ export default function UserInfo() {
   };
 
   useEffect(() => {
-    // 비동기 함수 정의
+
     const fetchUserData = async () => {
       try {
         const response = await api.get(`/userinfo/${id}`);
-        setUserData(response.data); // API 응답 데이터를 상태에 저장
+        setUserData(response.data); 
       } catch (err) {
         console.error(err);
         setError('사용자 정보를 불러올 수 없습니다.');
       } finally {
-        setLoading(false); // 로딩 상태 해제
+        setLoading(false); 
       }
     };
 
-    fetchUserData(); // 비동기 함수 호출
+    fetchUserData(); 
   }, []);
 
   
 
   if (loading) {
-    return <div>로딩 중...</div>; // 로딩 상태 표시
+    return <div>로딩 중...</div>; 
   }
 
   if (error) {
-    return <div>{error}</div>; // 에러 메시지 표시
+    return <div>{error}</div>; 
   }
 
   return (
@@ -77,7 +77,7 @@ export default function UserInfo() {
           <span
             className="fw-medium"
             style={{
-              color: userData.revenue >= 0 ? '#ff3b3b' : '#0051c7', // 수익률 양수면 빨간색, 음수면 파란색
+              color: userData.revenue >= 0 ? '#ff3b3b' : '#0051c7', 
               fontSize: '14px',
               marginLeft: '10px',
             }}

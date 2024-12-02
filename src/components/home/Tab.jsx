@@ -3,9 +3,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import List from './List';
 import ETFButtonList from './ETFButtonList';
 import MyReport from './MyReport';
+import { useNavigate } from 'react-router-dom';
 
 export default function Tab({ ETFList, SubscriberList }) {
   const [activeTab, setActiveTab] = useState('분석 리포트');
+  const navigate = useNavigate();
+
+  // 구독 항목 클릭 시 실행되는 함수
+  const handleUserClick = (userId) => {
+    navigate(`/ranking-detail/${userId}`); // 클릭된 userId로 이동
+  };
 
   return (
     <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
@@ -86,20 +93,19 @@ export default function Tab({ ETFList, SubscriberList }) {
         </button>
       </div>
 
-
       <div>
         {activeTab === '분석 리포트' && <MyReport />}
         {activeTab === '나의 ETF' && <ETFButtonList items={ETFList} />}
         {activeTab === '구독 목록' && (
           <List
             items={SubscriberList.map((subscriber) => ({
-              portfolioId: subscriber.id, 
+              userId: subscriber.id, // userId를 전달
               name: subscriber.name,
               rate: subscriber.revenue,
-              isPositive: subscriber.revenue > 0, 
+              isPositive: subscriber.revenue > 0, // 수익 여부
             }))}
             onItemClick={(item) => {
-              console.log('구독 항목 클릭:', item);
+              handleUserClick(item.userId); // 클릭 시 userId를 전달
             }}
           />
         )}

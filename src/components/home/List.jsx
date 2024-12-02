@@ -22,14 +22,14 @@ export default function List({ items, onItemClick }) {
       >
         {items.map((item, index) => (
           <div
-            key={item.portfolioId || index}
+            key={item.userId || index} 
             className="d-flex justify-content-between align-items-center"
             style={{
               paddingTop: "1.1rem",
               paddingBottom: "1.1rem",
               cursor: "pointer",
             }}
-            onClick={() => onItemClick(item)}
+            onClick={() => onItemClick(item)} 
           >
             <span className="fw-medium" style={{ fontSize: "16px" }}>
               {item.name}
