@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import axios from 'axios';
 import api from '~/lib/apis/auth';
 
 export default function MyReport() {
@@ -30,7 +31,7 @@ export default function MyReport() {
   if (error) return <div>Error: {error}</div>;
 
   // 포트폴리오가 없을 경우 처리
-  if (!reportData || !reportData.stockPerformances || reportData.stockPerformances.length === 0) {
+  if (!reportData.stockPerformances || reportData.stockPerformances.length === 0) {
     return (
       <div className="container mt-4" style={{ margin: '23px' }}>
         <h1 className="fw-bold" style={{ fontSize: '19px', lineHeight: '1.5', marginBottom: 0 }}>
