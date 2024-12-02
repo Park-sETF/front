@@ -15,11 +15,17 @@ import api from '~/lib/apis/auth';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Component() {
+  const [stocks, setLocalStocks] = useState([]); // 로컬 stocks 상태
+  const [percentages, setPercentages] = useState([]);
+  const [activeTooltipIndex, setActiveTooltipIndex] = useState(null);
+  const [fetchError, setFetchError] = useState(null);
+  const [responseData, setResponseData] = useState(null);
   const { portfolioId } = useParams(); // URL에서 portfolioId를 가져옴
-  const colorPalette = ['#62B2FD', '#9BDFC4', '#B4A4FF', '#F99BAB', '#FFB44F'];
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const navigate = useNavigate();
   const chartRef = useRef(null);
+
+  const colorPalette = ['#62B2FD', '#9BDFC4', '#9F97F7', '#F99BAB', '#FFB44F'];
 
   const generatePastelColor = () => {
     const r = Math.floor(Math.random() * 127 + 128);
@@ -28,12 +34,13 @@ export default function Component() {
     return `rgb(${r}, ${g}, ${b})`;
   };
 
-  const [stocks, setLocalStocks] = useState([]); // 로컬 stocks 상태
-  const [colors, setColors] = useState([]);
-  const [percentages, setPercentages] = useState([]);
-  const [activeTooltipIndex, setActiveTooltipIndex] = useState(null);
-  const [fetchError, setFetchError] = useState(null);
-  const [responseData, setResponseData] = useState(null);
+  const [colors, setColors] = useState(
+    stocks.map((_, index) =>
+      index < colorPalette.length ? colorPalette[index] : generatePastelColor()
+    )
+  );
+
+  console.log("##### stocks 복사하기" + JSON.stringify(stocks))
 
     // stockData를 생성하고, 비율에 따라 정렬하여 상위 5개를 선택하고 나머지는 '기타'로 합침.
 
@@ -54,16 +61,29 @@ export default function Component() {
     const topStockData = sortedStockData.slice(0, 5);
     const otherStockData = sortedStockData.slice(5);
 
+    const otherPercentage = otherStockData.reduce(
+      (sum, item) => sum + item.percentage,
+      0
+    );
+
+    if (otherPercentage > 0) {
+      topStockData.push({
+        stockName: '기타',
+        percentage: otherPercentage,
+        color: 'rgb(188, 194, 229)', // '기타'의 색상
+        purchasePrice: 0,
+        stockIndex: null, // '기타'는 인덱스 없음
+      });
+    }
+
   // 데이터 받아오기
+
   useEffect(() => {
-    fetch(`/api/etf/details/${portfolioId}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch portfolio details');
-        }
-        return response.json();
-      })
-      .then((data) => {
+    const fetchUserInfo = async () => {
+      try {
+        const id = localStorage.getItem('id');
+        const response = await api.get(`/etf/details/${portfolioId}`);
+        const data = response.data;
         setLocalStocks(data.etfStocks);
         setColors(
           data.etfStocks.map((_, index) =>
@@ -74,12 +94,14 @@ export default function Component() {
         );
         setPercentages(data.etfStocks.map((stock) => stock.percentage));
         setResponseData(data);
-      })
-      .catch((error) => {
-        console.error(error);
-        setFetchError('ETF 데이터를 가져오는 중 문제가 발생했습니다.');
-      });
-  }, [portfolioId]);
+
+      } catch (error) {
+        console.error('Failed to fetch user info:', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   useEffect(() => {
     if (activeTooltipIndex !== null) {
@@ -90,13 +112,6 @@ export default function Component() {
       return () => clearTimeout(timer);
     }
   }, [activeTooltipIndex]);
-
-  const handlePercentageChange = (index, newValue) => {
-    const newPercentages = [...percentages];
-    newValue = Math.min(100, Math.max(0, newValue));
-    newPercentages[index] = newValue;
-    setPercentages(newPercentages);
-  };
 
   if (fetchError) {
     return <div>{fetchError}</div>;

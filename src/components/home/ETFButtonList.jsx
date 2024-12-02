@@ -127,6 +127,18 @@ export default function ETFButtonList({ items }) {
             >
               {item.name}
             </span>
+            <div className="d-flex align-items-center gap-3">
+              { item.revenue ? <span
+                style={{
+                  color: item.revenue >= 0 ? '#ff3b3b' : '#0051c7',
+                  fontSize: '16px',
+                }}
+              >
+                수익률 {item.revenue >= 0 ? '+' : ''}
+                {item.revenue.toFixed(2)}%
+              </span>: ""}
+              <ChevronRight size={20} style={{ color: '#666' }} />
+            </div>
 
             {/* 수익률 */}
             <span
