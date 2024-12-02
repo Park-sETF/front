@@ -42,7 +42,7 @@ export default function List({ items, onItemClick }) {
                 }}
               >
                 수익률 {item.isPositive ? "+" : ""}
-                {item.rate.toFixed(2)}%
+                {item.rate ? item.rate.toFixed(2) : '0'}%
               </span>
               <ChevronRight size={20} style={{ color: "#666" }} />
             </div>
