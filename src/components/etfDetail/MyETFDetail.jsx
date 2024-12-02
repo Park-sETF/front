@@ -201,7 +201,7 @@ export default function Component() {
   return (
     <Container>
       <div>
-        <h1 className="text-center mb-4">{responseData.title}</h1>
+        <h3 className="text-center mb-4">{responseData.title}</h3>
         <Row className="justify-content-center">
           <Col md={8}>
             <div className="text-center mb-2">
