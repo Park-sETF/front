@@ -72,6 +72,10 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (step !== 2) {
+      // 마지막 단계가 아니면 폼 제출 방지
+      return;
+    }
     try {
       const result = await dispatch(signup(userData)).unwrap();
       if (result.message === '회원가입이 완료되었습니다.') {
@@ -103,7 +107,7 @@ function Signup() {
   useEffect(() => {
     if (error) {
       setLocalError(error); // 로컬 에러 상태 업데이트
-      const timer = setTimeout(() => setLocalError(null), 3000); // 3초 후 에러 제거
+      const timer = setTimeout(() => setLocalError(null), 2000); // 2초 후 에러 제거
       return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
     }
   }, [error]);

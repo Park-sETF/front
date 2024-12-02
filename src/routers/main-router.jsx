@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
-import Layout from '~/components/layouts/Layout'; 
+import Layout from '~/components/layouts/Layout';
 
 const Init = lazy(() => import('~/routes/init/page'));
 const User = lazy(() => import('~/routes/user/User'));
@@ -20,6 +20,36 @@ const MyETFDetail = lazy(() => import('~/components/etfDetail/MyETFDetail'));
 const Notification = lazy(() => import('~/routes/notification/page'));
 const Search = lazy(() => import('~/routes/search/page'));
 
+import GuestRoute from '~/routes/auth/GuestRoute';
+import ProtectedRoute from '~/routes/auth/ProtectedRoute';
+
+function wrapRoutes(routes) {
+  return routes.map((route) => {
+    // 하위 라우트가 있으면 재귀적으로 처리
+    if (route.children) {
+      route.children = wrapRoutes(route.children);
+    }
+
+    // 라우트에 'protected' 속성이 있으면 ProtectedRoute로 감쌈
+    if (route.protected) {
+      return {
+        ...route,
+        element: <ProtectedRoute>{route.element}</ProtectedRoute>,
+      };
+    }
+
+    // 라우트에 'guest' 속성이 있으면 GuestRoute로 감쌈
+    if (route.guest) {
+      return {
+        ...route,
+        element: <GuestRoute>{route.element}</GuestRoute>,
+      };
+    }
+
+    // 그렇지 않으면 원래 라우트 반환
+    return route;
+  });
+}
 
 // 로딩 스피너 컴포넌트
 function MySpinner() {
@@ -48,22 +78,63 @@ export const mainRoutes = [
         element: <SuspenseLayout />,
         children: [
           { element: <Init />, index: true },
-          { element: <User />, path: 'user',  },
+
+          // 로그인되지 않은 사용자만 접근 가능한 라우트
+          {
+            element: <Login />,
+            path: 'login',
+            guest: true,
+          },
+          {
+            element: <SignUp />,
+            path: 'signup',
+            guest: true,
+          },
+
+          // 로그인된 사용자만 접근 가능한 라우트
+          {
+            element: <User />,
+            path: 'user',
+            protected: true,
+          },
+          {
+            element: <MyPocket />,
+            path: 'mypocket',
+            protected: true,
+          },
+          {
+            element: <SelectStock />,
+            path: 'select-stock',
+            protected: true,
+          },
+          {
+            element: <ETFPocket />,
+            path: 'etf-pocket',
+            protected: true,
+          },
+          {
+            element: <CreateETF />,
+            path: 'create-etf',
+            protected: true,
+          },
+          {
+            element: <MyETFDetail />,
+            path: 'etf/my-detail/:portfolioId',
+            protected: true,
+          },
+          {
+            element: <Notification />,
+            path: 'notification',
+            protected: true,
+          },
+
+          // 누구나 접근 가능한 라우트
           { element: <Membership />, path: 'membership' },
           { element: <Ranking />, path: 'ranking' },
-          { element: <RankingDetail />, path: "ranking-detail/:userId" },
-          { element: <MyETFDetail />, path: 'etf/my-detail/:portfolioId' },
+          { element: <RankingDetail />, path: 'ranking-detail/:userId' },
           { element: <ETFDetail />, path: 'etf/detail/:portfolioId' },
-          { element: <MyPocket />, path: 'mypocket' },
-          { element: <SelectStock />, path: 'select-stock' },
-          { element: <ETFPocket />, path: 'etf-pocket' },
-          { element: <CreateETF />, path: 'create-etf' },
           { element: <Grade />, path: 'grade' },
-          { element: <Login />, path: 'login' },
-          { element: <SignUp />, path: 'signup' },
-          { element: <Notification />, path: 'notification' },
           { element: <Search />, path: 'search' },
-
         ],
       },
     ],
@@ -71,6 +142,7 @@ export const mainRoutes = [
 ];
 
 // 라우터 생성
-const router = createBrowserRouter(mainRoutes);
+const wrappedRoutes = wrapRoutes(mainRoutes);
+const router = createBrowserRouter(wrappedRoutes);
 
 export default router;

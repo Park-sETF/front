@@ -1,3 +1,4 @@
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { Bell, BellOff } from 'lucide-react';
@@ -10,12 +11,12 @@ export default function ETFButtonList({ items }) {
   // 각 항목의 알림 상태를 저장하는 객체
   const [activeItems, setActiveItems] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(null); // 현재 선택된 항목의 인덱스 저장
+  const [currentIndex, setCurrentIndex] = useState(null);
 
   const handleToggle = (index, event) => {
     event.stopPropagation();
-    setCurrentIndex(index); // 현재 항목 설정
-    setShowModal(true); // 모달 열기
+    setCurrentIndex(index);
+    setShowModal(true);
   };
 
   const handleModalSave = () => {
@@ -24,7 +25,7 @@ export default function ETFButtonList({ items }) {
       ...prev,
       [currentIndex]: true,
     }));
-    setShowModal(false); // 모달 닫기
+    setShowModal(false);
   };
 
   const handleModalCancel = () => {
@@ -33,25 +34,25 @@ export default function ETFButtonList({ items }) {
       ...prev,
       [currentIndex]: false,
     }));
-    setShowModal(false); // 모달 닫기
+    setShowModal(false);
   };
 
   return (
     <div
       style={{
-        minWidth: '375px',
-        maxWidth: '430px',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
+        minWidth: "375px",
+        maxWidth: "430px",
+        margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
       }}
     >
       <div
         className="px-3"
         style={{
-          margin: '20px',
-          marginTop: '3px',
+          margin: "20px",
+          marginTop: "3px",
         }}
       >
         {items.map((item, index) => (
@@ -59,11 +60,13 @@ export default function ETFButtonList({ items }) {
             key={index}
             className="d-flex justify-content-between align-items-center"
             style={{
-              paddingTop: '1.1rem',
-              paddingBottom: '1.1rem',
-              cursor: 'pointer',
+              paddingTop: "1.1rem",
+              paddingBottom: "1.1rem",
+              cursor: "pointer",
             }}
-            onClick={() => navigate(`/etf/my-detail/${items[index].portfolioId}`)}
+            onClick={() =>
+              navigate(`/etf/my-detail/${item.portfolioId || "unknown"}`)
+            }
           >
             {/* 이름 */}
             <span
@@ -132,6 +135,7 @@ export default function ETFButtonList({ items }) {
                 )}
               </div>
             </button>
+
           </div>
         ))}
       </div>
@@ -140,6 +144,8 @@ export default function ETFButtonList({ items }) {
         show={showModal}
         onHide={handleModalCancel} // 알림 끄기
         onSave={handleModalSave} // 알림 켜기
+
+
       />
 
       <style>{`

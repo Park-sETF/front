@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
-import { Container, Row, Col, FormControl } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '~/components/myPocket/Chart.css';
 import BigButton from '../buttons/BigButton';
 
-import api from '~/lib/apis/auth'
+import api from '~/lib/apis/auth';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -17,12 +17,15 @@ export default function Component() {
   const colorPalette = ['#62B2FD', '#9BDFC4', '#B4A4FF', '#F99BAB', '#FFB44F'];
 
   const sellMyETF = async () => {
-    await api.delete(`/etf/sell/${portfolioId}`).then(() => {
-      console.log("포트폴리오 삭제가 완료되었습니다.")
-    }).catch(() => {
-      console.log("포트폴리오 삭제가 완료되었습니다.")
-    })
-  }
+    await api
+      .delete(`/etf/sell/${portfolioId}`)
+      .then(() => {
+        console.log('포트폴리오 삭제가 완료되었습니다.');
+      })
+      .catch(() => {
+        console.log('포트폴리오 삭제 실패.');
+      });
+  };
 
   const generatePastelColor = () => {
     const r = Math.floor(Math.random() * 127 + 128);
@@ -40,7 +43,8 @@ export default function Component() {
 
   // 데이터 받아오기
   useEffect(() => {
-    fetch(`/api/etf/details/${portfolioId}`)
+    (async() => {
+      await api.get(`/etf/details/${portfolioId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch portfolio details');
@@ -63,7 +67,9 @@ export default function Component() {
         console.error(error);
         setFetchError('ETF 데이터를 가져오는 중 문제가 발생했습니다.');
       });
-  }, [portfolioId]);
+    })()
+    
+  }, []);
 
   useEffect(() => {
     if (activeTooltipIndex !== null) {
@@ -74,13 +80,6 @@ export default function Component() {
       return () => clearTimeout(timer);
     }
   }, [activeTooltipIndex]);
-
-  const handlePercentageChange = (index, newValue) => {
-    const newPercentages = [...percentages];
-    newValue = Math.min(100, Math.max(0, newValue));
-    newPercentages[index] = newValue;
-    setPercentages(newPercentages);
-  };
 
   if (fetchError) {
     return <div>{fetchError}</div>;
@@ -157,6 +156,12 @@ export default function Component() {
                   </span>
                 </div>
               )}
+              <div className="investment-amount-container">
+                <div className="mb-2">투자 금액</div>
+                <span className="border-0 bg-transparent investment-input">
+                  {responseData.investAmount}원
+                </span>
+              </div>
             </div>
 
             <div className="stock-list px-3">
@@ -181,7 +186,10 @@ export default function Component() {
         </Row>
       </div>
 
-      <BigButton text={'매도하기'} onClick={() => sellMyETF(responseData.portfolioId)}></BigButton>
+      <BigButton
+        text={'매도하기'}
+        onClick={() => sellMyETF(responseData.portfolioId)}
+      ></BigButton>
     </Container>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams ,useNavigate} from "react-router-dom";
-import RankingUserInfo from "~/components/ranking/RankingUserInfo";
+import { useParams, useNavigate } from "react-router-dom";
 import List from "~/components/home/List";
+import RankingUserInfo from "./RankingUserInfo";
 
 export default function RankingDetail() {
   const { userId } = useParams(); // URL에서 userId 추출
@@ -9,7 +9,7 @@ export default function RankingDetail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/api/userinfo/etf/list/${userId}`) // userId를 사용
+    fetch(`/api/userinfo/etf/list/${userId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch ETF data");
@@ -17,10 +17,10 @@ export default function RankingDetail() {
         return response.json();
       })
       .then((data) => {
-        const transformedData = data.portfolios.map((portfolio) => ({
-          portfolioId: portfolio.portfolioId,
-          name: portfolio.title,
-          rate: portfolio.revenue,
+        const transformedData = (data.portfolios || []).map((portfolio) => ({
+          portfolioId: portfolio.portfolioId || "unknown",
+          name: portfolio.title || "Untitled",
+          rate: typeof portfolio.revenue === "number" ? portfolio.revenue : 0, // 기본값 처리
           isPositive: portfolio.revenue > 0,
         }));
         setEtfItems(transformedData);
@@ -34,7 +34,9 @@ export default function RankingDetail() {
 
   return (
     <div style={{ minWidth: "375px", maxWidth: "430px", margin: "0 auto" }}>
-      <RankingUserInfo />
+      {/* userId를 RankingUserInfo로 전달 */}
+      <RankingUserInfo userId={userId} />
+      
       <h3 style={{ margin: "20px", color: "#333" }}>ETF 목록</h3>
       <List items={etfItems} onItemClick={handleItemClick} />
     </div>

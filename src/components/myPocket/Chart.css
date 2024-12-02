@@ -1,12 +1,24 @@
 .donut-chart-container {
   position: relative;
-  height: 300px;
   width: 300px;
+  height: 300px;
   margin: 0 auto;
+  z-index: 10; /* stock-list보다 높은 기본값 */
 }
 
 .form-control {
   display: inline;
+}
+
+.title-input {
+  box-sizing: border-box; /* padding 포함하여 크기 계산 */
+  min-width: 120px; /* 기본 너비를 조금 더 늘림 */
+  max-width: 300px; /* 최대 너비 유지 */
+  padding: 0.25rem; /* 기본 padding 추가 */
+  border: none; /* 테두리를 없애서 깔끔하게 */
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
 }
 
 .investment-amount-container {
@@ -15,18 +27,17 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  width: 100%;
 }
 
 .investment-input {
-  padding: 0.25rem; /* 기본 padding 추가 */
-  font-size: 1.2rem;
-  font-weight: bold;
+  box-sizing: border-box; /* padding 포함하여 크기 계산 */
   min-width: 120px; /* 기본 너비를 조금 더 늘림 */
   max-width: 200px; /* 최대 너비 유지 */
-  text-align: center;
+  padding: 0.25rem; /* 기본 padding 추가 */
   border: none; /* 테두리를 없애서 깔끔하게 */
-  box-sizing: border-box; /* padding 포함하여 크기 계산 */
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
 }
 
 .investment-input:focus {
@@ -36,57 +47,55 @@
 
 .stock-list {
   margin-top: 2rem;
+  z-index: 5; /* donut-chart-container보다 낮게 설정 */
 }
 
 .stock-item {
+  position: relative;
   display: flex;
   align-items: center;
   padding: 0.5rem 0;
-  position: relative;
 }
 
 .stock-color {
   width: 20px;
   height: 20px;
-  border-radius: 4px;
   margin-right: 1rem;
+  border-radius: 4px;
 }
 
 .stock-name {
   flex: 1;
   font-size: 1rem;
+  margin-right: 0.5rem;
 }
 
 .stock-percentage {
   display: flex;
   align-items: center;
-  margin-right: 1rem;
 }
 
-.percentage-input {
-  width: 70px;
-  text-align: right;
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-  padding: 0.25rem 0.5rem;
-  margin-right: 0.5rem;
-  font-weight: 600;
+.percentage-slider {
+  width: 100px;
+  margin-right: 10px;
 }
 
-.percentage-symbol {
-  color: #6c757d;
-  margin-right: 0.2rem;
+.percentage-value {
+  display: inline-block;
+  width: 30px;
+  padding-left: 1rem;
 }
 
 .delete-button {
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  padding: 0;
-  color: grey;
-  font-size: 1.2rem;
   position: absolute;
   right: 0;
+  padding: 0;
+  font-size: 1.2rem;
+  color: grey;
   text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  margin-left: 1rem;
 }
 
 .stock-item:hover .delete-button {
@@ -94,34 +103,79 @@
 }
 
 .add-button {
+  padding: 0;
+  color: black;
   text-decoration: none;
   transition: color 0.2s ease-in-out;
-  color: black;
-  padding: 0;
 }
 
 .add-button:hover {
-  opacity: 1;
+  color: grey;
 }
 
 .custom-tooltip {
-  font-size: 1rem; /* 글씨 크기 조정 */
-  font-weight: bold; /* 글씨 강조 */
-  background-color: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
-  color: white; /* 글씨 색상 변경 */
-  padding: 0.5rem 1rem; /* 패딩 추가 */
-  border-radius: 8px; /* 둥근 모서리 */
-  margin-top: 1rem; /* 도넛 차트와 간격 추가 */
+  z-index: 999;
+  pointer-events: none;
+  padding: 0.5rem 1rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
   text-align: center;
-  width: fit-content; /* 내용에 맞게 너비 조정 */
-  max-width: 80%; /* 모바일 화면에서 최대 너비 제한 */
-  margin-left: auto;
-  margin-right: auto;
+  position: absolute; /* 추가 */
 }
 
-@media (max-width: 768px) {
-  .custom-tooltip {
-    font-size: 0.9rem; /* 모바일에서 글씨 크기 약간 줄임 */
-    padding: 0.4rem 0.8rem; /* 패딩도 줄임 */
-  }
+.distribute-button {
+  background-color: #4b7bf5;
+  border-radius: 20rem;
+  padding: 0.9rem;
+  border: none;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Slider track */
+.custom-slider {
+  -webkit-appearance: none;
+  width: 60%;
+  height: 5px;
+  border-radius: 5px;
+  outline: none;
+  background: linear-gradient(
+    to right,
+    #005bbb 0%,
+    #005bbb 0%,
+    #e0e0e0 0%,
+    #e0e0e0 100%
+  );
+  transition: background 0.3s;
+}
+
+/* Slider thumb (for Chrome, Safari, and Opera) */
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  border: 0.15px solid #d0d0d0;
+  cursor: pointer;
+}
+
+/* Slider thumb (for Firefox) */
+.custom-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  border: 0.15px solid #d0d0d0;
+  cursor: pointer;
+}
+
+/* Optional - Slider track hover effect */
+.custom-slider:hover {
+  background: #d0d0d0;
 }
