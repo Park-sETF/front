@@ -3,7 +3,8 @@ h2,
 h3,
 h4,
 span,
-body {
+body,
+button {
   font-family: 'Kantumruy Pro';
   font-weight: 550;
   font-style: normal;

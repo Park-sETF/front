@@ -119,6 +119,7 @@ const RankingContent = () => {
               }}
               style={{
                 color: 'white',
+                fontWeight: '600',
                 backgroundColor: item.subscribed ? '#8C97A7' : '#4B7BF5',
               }}
             >

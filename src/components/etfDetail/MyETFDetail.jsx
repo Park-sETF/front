@@ -55,6 +55,8 @@ export default function Component() {
         setInvestAlertModalOpen(true); // 알림 모달창 열기
         console.log('포트폴리오 삭제 실패.');
       });
+
+      navigate('/user?activeTab=나의+ETF');
   };
 
   const [colors, setColors] = useState(

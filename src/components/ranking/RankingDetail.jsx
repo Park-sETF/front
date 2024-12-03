@@ -35,8 +35,7 @@ export default function RankingDetail() {
   return (
     <div style={{ minWidth: "375px", maxWidth: "430px", margin: "0 auto" }}>
       <RankingUserInfo userId={userId} />
-      
-      <h3 style={{ margin: "20px", color: "#333" }}>ETF 목록</h3>
+      <h3 className="px-3" style={{ margin: "20px", color: "#333" }}>ETF 목록</h3>
       <List items={etfItems} onItemClick={handleItemClick} />
     </div>
   );

@@ -1,10 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Bell, BellOff } from 'lucide-react';
 import PercentageModal from './PercentageModal';
 import { useNavigate } from 'react-router-dom';
 import api from '~/lib/apis/auth';
 import InvestAlertModal from './InvestAlertModal';
+
 
 export default function ETFButtonList({ items }) {
   const navigate = useNavigate();
@@ -13,13 +14,26 @@ export default function ETFButtonList({ items }) {
   const [showModal, setShowModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [modalValues, setModalValues] = useState({
-    takeProfit: 10,
-    stopLoss: -10,
+    takeProfit: 80,
+    stopLoss: -20,
   });
 
-  // 손절점, 익절점 모달창에서 완료됐을 경우 띄는 모달창 
+  // 손절점, 익절점 모달창에서 완료됐을 경우 띄는 모달창
   const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
   const [investAlertMessage, setInvestAlertMessage] = useState('');
+
+  // 알림 상태를 로컬 스토리지에서 복원
+  useEffect(() => {
+    const savedActiveItems = JSON.parse(localStorage.getItem('activeItems'));
+    if (savedActiveItems) {
+      setActiveItems(savedActiveItems);
+    }
+  }, []);
+
+  // 알림 상태가 변경될 때 로컬 스토리지에 저장
+  useEffect(() => {
+    localStorage.setItem('activeItems', JSON.stringify(activeItems));
+  }, [activeItems]);
 
   const handleToggle = (index, event) => {
     event.stopPropagation();
@@ -34,12 +48,11 @@ export default function ETFButtonList({ items }) {
 
     try {
       const requestBody = {
-        userId: localStorage.getItem('id'), 
-        portfolioId: selectedItem.portfolioId, 
-        profitSpot: modalValues.takeProfit, 
-        lossSpot: modalValues.stopLoss, 
+        userId: localStorage.getItem('id'),
+        portfolioId: selectedItem.portfolioId,
+        profitSpot: modalValues.takeProfit,
+        lossSpot: modalValues.stopLoss,
       };
-    
 
       await api.post('/notifications/subscribe/portfolio', requestBody);
 
@@ -48,16 +61,12 @@ export default function ETFButtonList({ items }) {
         [currentIndex]: true,
       }));
 
-      setInvestAlertMessage("알림 설정이 완료되었습니다!");
-      console.log(requestBody);
-      console.log("알림추가요");
+      setInvestAlertMessage('알림 설정이 완료되었습니다!');
       setInvestAlertModalOpen(true);
-
     } catch (error) {
       console.error('알림 설정 오류:', error);
-      setInvestAlertMessage("알림 설정시 오류 발생하였습니다!");
+      setInvestAlertMessage('알림 설정시 오류 발생하였습니다!');
       setInvestAlertModalOpen(true);
-
     } finally {
       setShowModal(false);
     }
@@ -74,7 +83,7 @@ export default function ETFButtonList({ items }) {
     try {
       const requestBody = {
         userId: localStorage.getItem('id'),
-        portfolioId: selectedItem.portfolioId, 
+        portfolioId: selectedItem.portfolioId,
       };
 
       await api.delete('/notifications/subscribe/portfolio', { data: requestBody });
@@ -84,18 +93,31 @@ export default function ETFButtonList({ items }) {
         [currentIndex]: false,
       }));
 
-      setInvestAlertMessage("알림이 해제되었습니다.");
+      setInvestAlertMessage('알림이 해제되었습니다.');
       setInvestAlertModalOpen(true);
     } catch (error) {
       console.error('알림 해제 오류:', error);
 
-      setInvestAlertMessage("설정된 알림이 없습니다.");
+      setInvestAlertMessage('설정된 알림이 없습니다.');
       setInvestAlertModalOpen(true);
-
     } finally {
       setShowModal(false);
     }
   };
+
+  // 데이터가 없는 경우
+  if (!items || items.length === 0) {
+    return (
+      <div className="container mt-4" style={{ margin: '23px' }}>
+        <h1 className="fw-bold" style={{ fontSize: '18.5px', lineHeight: '1.5', marginBottom: 0 }}>
+          ETF가 없습니다
+        </h1>
+        <p style={{ fontSize: '13px', color: '#8E8E93', marginTop: '6px' }}>
+          나만의 ETF를 만들어 보세요!
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -135,10 +157,8 @@ export default function ETFButtonList({ items }) {
                 minWidth: '100px',
                 maxWidth: '100px',
                 overflow: 'hidden',
-                // whiteSpace: 'nowrap',
                 textAlign: 'left',
                 flexShrink: 0,
-                // textOverflow: 'ellipsis', // "..." 처리
               }}
             >
               {item.name}
