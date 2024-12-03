@@ -11,10 +11,10 @@ import { Container, Row, Col, FormControl, Button } from 'react-bootstrap';
 import InvestModal from '../home/InvestModal';
 import AlertModal from '../home/AlertModal';
 import InvestAlertModal from '../home/InvestAlertModal';
+import { useStockContext } from '~/components/context/StockProvider';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Chart.css';
-import { Trophy } from 'lucide-react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -60,6 +60,8 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
   const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
   const [investAlertMessage, setInvestAlertMessage] = useState('');
 
+  const { selectedStocks, setSelectedStocks } = useStockContext(); // context로 가져오기
+
   //투자하기 버튼을 눌렀을 때 선택되는 함수 
   const handleInvestClick = () => {
     if (title.length === 0) {
@@ -90,6 +92,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
   // 투자 완료 알림 모달 닫기
    const handleInvestAlertClose = () => {
     setInvestAlertModalOpen(false); // 투자 완료 알림 모달창 닫기
+    
     navigate('/'); // 투자가 완료되면 홈으로 이동! 
 
   };
@@ -114,6 +117,9 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
       console.log('ETF 투자 성공', response.data);
       setInvestAlertMessage('투자 요청이 성공적으로 완료되었습니다!')
       setInvestAlertModalOpen(true); // 투자 완료 알림 모달창 열기
+
+      setSelectedStocks([]);
+
       localStorage.setItem("saveStocks", null);
 
     }catch(error){
