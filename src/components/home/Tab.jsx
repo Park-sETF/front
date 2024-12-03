@@ -27,7 +27,7 @@ export default function Tab({ ETFList, SubscriberList }) {
             fontSize: '17px',
             fontWeight: activeTab === '분석 리포트' ? '600' : '400',
             flexGrow: 1,
-            whiteSpace: 'nowrap',
+            whiteSpace: 'wrap',
           }}
         >
           분석 리포트

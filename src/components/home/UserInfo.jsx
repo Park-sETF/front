@@ -100,7 +100,6 @@ export default function UserInfo() {
             {(userData.asset ?? 0).toLocaleString()}원
           </span>
           <span
-            className="fw-medium"
             style={{
               color: userData.revenue >= 0 ? '#ff3b3b' : '#0051c7', // 수익률 양수면 빨간색, 음수면 파란색
               fontSize: '14px',

@@ -206,7 +206,7 @@ export default function Component() {
           <Col md={8}>
             <div className="text-center mb-2">
               <span className={responseData.revenue.toString().includes('-') ? 'text-primary' : 'text-danger'}>
-                수익률: {responseData.revenue}%
+                수익률: {responseData.revenue.toFixed(2)}%
               </span>
             </div>
 

@@ -114,15 +114,15 @@ export default function ETFButtonList({ items }) {
           >
             {/* ETF 이름 */}
             <span
-              className="fw-medium"
               style={{
                 fontSize: '16px',
                 minWidth: '100px',
                 maxWidth: '100px',
                 overflow: 'hidden',
-                whiteSpace: 'nowrap',
+                // whiteSpace: 'nowrap',
                 textAlign: 'left',
                 flexShrink: 0,
+                // textOverflow: 'ellipsis', // "..." 처리
               }}
             >
               {item.name}
