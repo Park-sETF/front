@@ -61,7 +61,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
   const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
   const [investAlertMessage, setInvestAlertMessage] = useState('');
 
-  const { selectedStocks, setSelectedStocks } = useStockContext(); // context로 가져오기
+  const {setSelectedStocks } = useStockContext(); // context로 가져오기
 
   //투자하기 버튼을 눌렀을 때 선택되는 함수 
   const handleInvestClick = () => {
