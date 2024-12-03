@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import axios from 'axios';
 import api from '~/lib/apis/auth';
 
 export default function MyReport() {
@@ -14,9 +13,11 @@ export default function MyReport() {
   useEffect(() => {
     const fetchReportData = async () => {
       try {
+
         const response = await api.get(`/userinfo/myreport/${id}`);
         setReportData(response.data);
         setLoading(false);
+        
       } catch (err) {
         setError(err.message);
         setLoading(false);
@@ -102,20 +103,22 @@ export default function MyReport() {
 
               return (
                 <div key={index} className="d-flex align-items-center mb-3">
-                  <div style={{ width: '150px', paddingRight: '20px' }}>
-                    <span className="fw-bold" style={{ fontSize: '15px'}}>
+                  <div style={{width: '74px', paddingRight: '20px',whiteSpace: 'nowrap', overflow: 'hidden', flexShrink: 0}}>
+                    <span className="fw-bold" style={{ fontSize: '14px'}}>
                       {stock.stockName}
                     </span>
                   </div>
                   {/* height 가 막대그래프 높이  */}
-                  <div className="flex-grow-1 position-relative" style={{ height: '25px' }}>
+                  <div className="flex-grow-1 position-relative" style={{ height: '25px'}}>
                     <div
                       style={{
                         position: 'absolute',
+                        //위치 조금만 내리기,
+                        top:'3px',
                         // 막대가 중앙에서 확장 (양수인 경우... 중앙에서 오른쪽으로 확장)
-                        left: normalizedYield > 0 ? '50%' : `calc(50% - ${Math.abs(normalizedYield)}%)`,
+                        left: normalizedYield > 0 ? '80%' : `calc(80% - ${Math.abs(normalizedYield)*0.7}%)`,
                         // 막대의 길이를 정규화된 수익률의 절대값으로 설정 
-                        width: `${Math.abs(normalizedYield)}%`,
+                        width: `${Math.abs(normalizedYield)* 0.7}%`,
                         height: '70%',
                         // 비율이 양수면 빨간색, 음수면 파란색 
                         backgroundColor: normalizedYield > 0 ? '#FF6B6B' : '#4A7DFF',
