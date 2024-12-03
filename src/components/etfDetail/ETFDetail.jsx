@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { getRelativePosition } from 'chart.js/helpers';
 import { Doughnut } from 'react-chartjs-2';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
-import { Container, Row, Col, FormControl } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '~/components/myPocket/Chart.css';
 import BigButton from '../buttons/BigButton';
@@ -40,48 +40,47 @@ export default function Component() {
     )
   );
 
-  console.log("##### stocks 복사하기" + JSON.stringify(stocks))
+  // console.log('##### stocks 복사하기' + JSON.stringify(stocks));
 
-    // stockData를 생성하고, 비율에 따라 정렬하여 상위 5개를 선택하고 나머지는 '기타'로 합침.
+  // stockData를 생성하고, 비율에 따라 정렬하여 상위 5개를 선택하고 나머지는 '기타'로 합침.
 
-    const stockData = stocks.map((stock, index) => ({
-      stockName: stock.stockName,
-      purchasePrice: stock.purchasePrice,
-      percentage: percentages[index],
-      color: colors[index],
-      stockIndex: index, // 원래 인덱스 저장
-    }));
+  const stockData = stocks.map((stock, index) => ({
+    stockName: stock.stockName,
+    purchasePrice: stock.purchasePrice,
+    percentage: percentages[index],
+    color: colors[index],
+    stockIndex: index, // 원래 인덱스 저장
+  }));
 
-    // 비율에 따라 내림차순 정렬
-    const sortedStockData = [...stockData].sort(
-      (a, b) => b.percentage - a.percentage
-    );
-  
-    // 상위 5개 선택
-    const topStockData = sortedStockData.slice(0, 5);
-    const otherStockData = sortedStockData.slice(5);
+  // 비율에 따라 내림차순 정렬
+  const sortedStockData = [...stockData].sort(
+    (a, b) => b.percentage - a.percentage
+  );
 
-    const otherPercentage = otherStockData.reduce(
-      (sum, item) => sum + item.percentage,
-      0
-    );
+  // 상위 5개 선택
+  const topStockData = sortedStockData.slice(0, 5);
+  const otherStockData = sortedStockData.slice(5);
 
-    if (otherPercentage > 0) {
-      topStockData.push({
-        stockName: '기타',
-        percentage: otherPercentage,
-        color: 'rgb(188, 194, 229)', // '기타'의 색상
-        purchasePrice: 0,
-        stockIndex: null, // '기타'는 인덱스 없음
-      });
-    }
+  const otherPercentage = otherStockData.reduce(
+    (sum, item) => sum + item.percentage,
+    0
+  );
+
+  if (otherPercentage > 0) {
+    topStockData.push({
+      stockName: '기타',
+      percentage: otherPercentage,
+      color: 'rgb(188, 194, 229)', // '기타'의 색상
+      purchasePrice: 0,
+      stockIndex: null, // '기타'는 인덱스 없음
+    });
+  }
 
   // 데이터 받아오기
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const id = localStorage.getItem('id');
         const response = await api.get(`/etf/details/${portfolioId}`);
         const data = response.data;
         setLocalStocks(data.etfStocks);
@@ -94,7 +93,6 @@ export default function Component() {
         );
         setPercentages(data.etfStocks.map((stock) => stock.percentage));
         setResponseData(data);
-
       } catch (error) {
         console.error('Failed to fetch user info:', error);
       }
@@ -185,17 +183,23 @@ export default function Component() {
         <Row className="justify-content-center">
           <Col md={8}>
             <div className="text-center mb-2">
-              <span className={responseData.revenue.toString().includes('-') ? 'text-primary' : 'text-danger'}>
+              <span
+                className={
+                  responseData.revenue.toString().includes('-')
+                    ? 'text-primary'
+                    : 'text-danger'
+                }
+              >
                 수익률: {responseData.revenue.toFixed(2)}%
               </span>
             </div>
 
             <div className="my-4 donut-chart-container">
               <Doughnut
-                  data={chartData}
-                  options={chartOptions}
-                  ref={chartRef}
-                  style={{ maxWidth: '430px' }}
+                data={chartData}
+                options={chartOptions}
+                ref={chartRef}
+                style={{ maxWidth: '430px' }}
               />
               {activeTooltipIndex !== null && (
                 <div
@@ -263,10 +267,14 @@ export default function Component() {
         </Row>
       </div>
 
-      <BigButton text={'복사하기'} onClick={() => navigate('/create-etf', { state: { stocks: stocks } })}
-      >
-
-      </BigButton>
+      <BigButton
+        text={'복사하기'}
+        onClick={() =>
+          navigate('/create-etf', {
+            state: { stocks: stocks, isForCopy: true },
+          })
+        }
+      ></BigButton>
     </Container>
   );
 }

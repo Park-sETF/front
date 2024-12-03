@@ -3,25 +3,28 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { getRelativePosition } from 'chart.js/helpers';
 import { Doughnut } from 'react-chartjs-2';
 import { Plus } from 'react-bootstrap-icons';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import BigButton from '~/components/buttons/BigButton';
 import api from '~/lib/apis/auth';
 import debounce from 'lodash/debounce';
 import { Container, Row, Col, FormControl, Button } from 'react-bootstrap';
-import InvestModal from '../home/InvestModal';
-import AlertModal from '../home/AlertModal';
-import InvestAlertModal from '../home/InvestAlertModal';
 import { useStockContext } from '~/components/context/StockProvider';
+import Modal from '~/components/modal/CustomModal';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Chart.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
-  const id = localStorage.getItem('id');
+const colorPalette = ['#62B2FD', '#9BDFC4', '#9F97F7', '#F99BAB', '#FFB44F'];
 
-  const colorPalette = ['#62B2FD', '#9BDFC4', '#9F97F7', '#F99BAB', '#FFB44F'];
+export default function ETFInvestmentChart({
+  stocks,
+  addStock,
+  setStocks,
+  isForCopy = false,
+}) {
+  const id = localStorage.getItem('id');
   const navigate = useNavigate();
 
   const generatePastelColor = () => {
@@ -31,115 +34,56 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
     return `rgb(${r}, ${g}, ${b})`;
   };
 
-  const [colors, setColors] = useState(
-    stocks.map((_, index) =>
-      index < colorPalette.length ? colorPalette[index] : generatePastelColor()
-    )
-  );
+  const MESSAGES = {
+    INVEST_CONFIRM: '정말 투자하시겠습니까?',
+    ALERT_TITLE_REQUIRED: '제목을 입력해주세요.',
+    ALERT_PERCENTAGE: '모든 주식의 비율 합이 100%가 되어야 합니다.',
+    INVEST_SUCCESS: '투자 요청이 성공적으로 완료되었습니다!',
+    INVEST_FAILURE: '투자 요청 중 오류가 발생했습니다.',
+  };
 
-  const [percentages, setPercentages] = useState(stocks.map(() => 3));
-  const initialInvestmentAmount = 5000000;
-  const DEFAULT_TITLE = '포트폴리오 제목을 입력해주세요';
+  const [percentages, setPercentages] = useState([]);
+
+  const [investmentAmount, setInvestmentAmount] = useState(5000000);
+  const [title, setTitle] = useState('포트폴리오 제목을 입력해주세요');
 
   const [totalBalance, setTotalBalance] = useState(0);
-  const [investmentAmount, setInvestmentAmount] = useState(
-    initialInvestmentAmount
-  );
+  const [initialTotalBalance, setInitialTotalBalance] = useState(0);
+
   const [activeTooltipIndex, setActiveTooltipIndex] = useState(null);
   const [isTotalPercentage100, setIsTotalPercentage100] = useState(false);
-  const [initialTotalBalance, setInitialTotalBalance] = useState(0);
-  const [title, setTitle] = useState(DEFAULT_TITLE);
 
   const inputRef = useRef(null);
   const chartRef = useRef(null);
-  const percentagesRef = useRef(percentages);
 
-  const [modalOpen, setModalOpen] = useState(false); // 투자하기 모달창 상태
-  const [alertModalOpen, setAlertModalOpen] = useState(false); // 알림 모달창 상태 
-  const [alertMessage, setAlertMessage] = useState(''); // 알림 메시지 상태
+  const [modalOpen, setModalOpen] = useState(false);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
   const [investAlertMessage, setInvestAlertMessage] = useState('');
 
-  const {setSelectedStocks } = useStockContext(); // context로 가져오기
+  const { setSelectedStocks } = useStockContext();
+  const [loading, setLoading] = useState(true);
 
-  //투자하기 버튼을 눌렀을 때 선택되는 함수 
-  const handleInvestClick = () => {
-    if(title === DEFAULT_TITLE) {
-      setAlertMessage('제목을 수정해주세요.');
-      setAlertModalOpen(true); // 알림 모달창 열기
-      return;
+  useEffect(() => {
+    setLoading(stocks.length === 0);
+  }, [stocks.length]);
+
+  useEffect(() => {
+    if (!loading) {
+      const initialPercentages = stocks.map((stock) =>
+        isForCopy ? (stock.percentage != null ? stock.percentage : 0) : 3
+      );
+      setPercentages(initialPercentages);
     }
-    if (title.length === 0) {
-      setAlertMessage('제목을 입력해주세요.');
-      setAlertModalOpen(true); // 알림 모달창 열기
-      return;
-    }
+  }, [stocks, isForCopy, loading]);
 
-    if (!isTotalPercentage100) {
-      setAlertMessage('모든 주식의 비율 합이 100%가 되어야 합니다.');
-      setAlertModalOpen(true); // 알림 모달창 열기
-      return;
-    }
+  useEffect(() => {
+    const total = percentages.reduce((sum, p) => sum + p, 0);
+    setIsTotalPercentage100(total === 100);
+  }, [percentages]);
 
-    setModalOpen(true); // 모달창 열기 
-  }
-
-  // 알림 모달창에서 닫기 버튼 클릭 시 실행되는 함수
-  const handleAlertClose = () => {
-    setAlertModalOpen(false); // 알림 모달창 닫기
-  };
-
-  //모달창에서 취소 눌렀을 때 실행되는 함수 
-  const handleModalClose = () => {
-    setModalOpen(false); //모달창 닫기 
-  }
-
-  // 투자 완료 알림 모달 닫기
-   const handleInvestAlertClose = () => {
-    setInvestAlertModalOpen(false); // 투자 완료 알림 모달창 닫기
-    
-    // navigate('/'); // 투자가 완료되면 홈으로 이동! 
-    navigate('/user?activeTab=나의+ETF');
-  };
-
-  //실제로 투자가 완료 버튼을 눌렀을 때 
-  const handleInvestComfirm =  async() =>{
-    try{
-      const etfList = stocks.map((stock, index) => ({
-        stockCode: stock.stockCode,
-        stockName: stock.stockName,
-        price: stock.purchasePrice,
-        percentage: percentages[index] || 0,
-      }));
-
-      const requestData = {
-        etfList,
-        title: title,
-        investmentAmount : investmentAmount,
-      };
-
-      const response = await api.post(`/etf/buy/${id}`, requestData);
-
-      console.log('ETF 투자 성공', response.data);
-      setInvestAlertMessage('투자 요청이 성공적으로 완료되었습니다!')
-      setInvestAlertModalOpen(true); // 투자 완료 알림 모달창 열기
-
-      setSelectedStocks([]);
-
-      localStorage.setItem("saveStocks", null);
-
-    }catch(error){
-      console.error('ETF 투자하기 오류', error);
-      setInvestAlertMessage('투자 요청 중 오류가 발생했습니다.')
-      setInvestAlertModalOpen(true); // 투자 완료 알림 모달창 열기
-    }finally {
-      setModalOpen(false); // 투자 모달창 닫기
-    }
-
-  }
-
-  
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -168,25 +112,9 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
         maxWidth
       )}px`;
     }
-  }, [investmentAmount]);
-
-  useEffect(() => {
-    const total = percentages.reduce((sum, percentage) => sum + percentage, 0);
-    setIsTotalPercentage100(total === 100);
-    percentagesRef.current = percentages;
-  }, [percentages]);
-
-  useEffect(() => {
-    if (activeTooltipIndex !== null) {
-      const timer = setTimeout(() => {
-        setActiveTooltipIndex(null);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [activeTooltipIndex]);
+  }, [investmentAmount, initialTotalBalance]);
 
   const handleInvestmentChange = (value) => {
-    if (typeof value !== 'string') return;
     const sanitizedValue = value.replace(/[^0-9]/g, '');
     let numberValue = sanitizedValue === '' ? 0 : Number(sanitizedValue);
     if (numberValue > initialTotalBalance) {
@@ -195,14 +123,13 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
     setInvestmentAmount(numberValue);
   };
 
-  // 디바운스된 handlePercentageChange 함수 정의
-  const debouncedHandlePercentageChange = useCallback(
+  const handlePercentageChange = useCallback(
     debounce((index, value) => {
       let newValue = parseInt(value, 10);
       if (isNaN(newValue)) newValue = 0;
       newValue = Math.min(100, Math.max(0, newValue));
 
-      let newPercentages = [...percentagesRef.current];
+      let newPercentages = [...percentages];
       const oldValue = newPercentages[index];
       newPercentages[index] = newValue;
 
@@ -214,7 +141,6 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
           .map((_, i) => i)
           .filter((i) => i !== index);
 
-        // 음수 값 방지를 위한 로직 추가
         let adjustableIndices = otherIndices.filter(
           (i) => newPercentages[i] > 0
         );
@@ -224,7 +150,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
 
             let maxAdjustable =
               difference > 0 ? newPercentages[i] : 100 - newPercentages[i];
-            let adjustment = Math.min(maxAdjustable, Math.abs(difference), 1); // 한번에 1씩 조정
+            let adjustment = Math.min(maxAdjustable, Math.abs(difference), 1);
 
             if (difference > 0) {
               newPercentages[i] -= adjustment;
@@ -234,7 +160,6 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
               difference += adjustment;
             }
 
-            // 업데이트된 값이 0이 되었는지 확인
             if (newPercentages[i] <= 0) {
               newPercentages[i] = 0;
             }
@@ -249,121 +174,78 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
 
       setPercentages(newPercentages);
     }, 30),
-    []
+    [percentages]
   );
 
-  const handlePercentageChange = (index, value) => {
-    debouncedHandlePercentageChange(index, value);
+  const handleInvestClick = () => {
+    if (title === '포트폴리오 제목을 입력해주세요') {
+      setAlertMessage(MESSAGES.ALERT_TITLE_REQUIRED);
+      setAlertModalOpen(true);
+      return;
+    }
+
+    if (!isTotalPercentage100) {
+      setAlertMessage(MESSAGES.ALERT_PERCENTAGE);
+      setAlertModalOpen(true);
+      return;
+    }
+
+    setModalOpen(true);
+  };
+
+  const handleAlertClose = () => {
+    setAlertModalOpen(false);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
+  const handleInvestConfirm = async () => {
+    try {
+      const etfList = stocks.map((stock, index) => ({
+        stockCode: stock.stockCode,
+        stockName: stock.stockName,
+        price: stock.purchasePrice,
+        percentage: percentages[index] || 0,
+      }));
+
+      const requestData = {
+        etfList,
+        title,
+        investmentAmount,
+      };
+
+      const response = await api.post(`/etf/buy/${id}`, requestData);
+
+      console.log('ETF 투자 성공', response.data);
+      setInvestAlertMessage('투자 요청이 성공적으로 완료되었습니다!');
+      setModalOpen(false); // Close the current modal first
+      setInvestAlertModalOpen(true); // Then open the next modal
+
+      setSelectedStocks([]);
+      localStorage.removeItem('saveStocks');
+    } catch (error) {
+      console.error('ETF 투자하기 오류', error);
+      setInvestAlertMessage('투자 요청 중 오류가 발생했습니다.');
+      setModalOpen(false); // Close the current modal first
+      setInvestAlertModalOpen(true); // Then open the next modal
+    }
+  };
+
+  const handleInvestAlertClose = () => {
+    setInvestAlertModalOpen(false);
+    navigate('/user?activeTab=나의+ETF');
   };
 
   const addStockWithColor = () => {
     addStock();
-    const newColor =
-      colors.length < colorPalette.length
-        ? colorPalette[colors.length]
-        : generatePastelColor();
-    setColors([...colors, newColor]);
-    setPercentages([...percentages, 0]);
+    setPercentages((prevPercentages) => [...prevPercentages, 0]);
   };
 
   const deleteStock = (index) => {
     setStocks(stocks.filter((_, i) => i !== index));
-    setColors(colors.filter((_, i) => i !== index));
     setPercentages(percentages.filter((_, i) => i !== index));
-  };
-
-  // stockData를 생성하고, 비율에 따라 정렬하여 상위 5개를 선택하고 나머지는 '기타'로 합침.
-
-  const stockData = stocks.map((stock, index) => ({
-    stockName: stock.stockName,
-    purchasePrice: stock.purchasePrice,
-    percentage: percentages[index],
-    color: colors[index],
-    stockIndex: index, // 원래 인덱스 저장
-  }));
-
-  // 비율에 따라 내림차순 정렬
-  const sortedStockData = [...stockData].sort(
-    (a, b) => b.percentage - a.percentage
-  );
-
-  // 상위 5개 선택
-  const topStockData = sortedStockData.slice(0, 5);
-  const otherStockData = sortedStockData.slice(5);
-
-  // 나머지 비율 합산
-  const otherPercentage = otherStockData.reduce(
-    (sum, item) => sum + item.percentage,
-    0
-  );
-
-  if (otherPercentage > 0) {
-    topStockData.push({
-      stockName: '기타',
-      percentage: otherPercentage,
-      color: 'rgb(188, 194, 229)', // '기타'의 색상
-      purchasePrice: 0,
-      stockIndex: null, // '기타'는 인덱스 없음
-    });
-  }
-
-  const chartData = {
-    labels: topStockData.map((item) => item.stockName),
-    datasets: [
-      {
-        data: topStockData.map((item) => item.percentage),
-        backgroundColor: topStockData.map((item) => item.color),
-        borderWidth: 0,
-      },
-    ],
-  };
-
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-
-  const chartOptions = {
-    cutout: '70%',
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false },
-    },
-    animation: { animateRotate: true, animateScale: true },
-    onClick: (event, elements) => {
-      if (elements.length > 0) {
-        const clickedIndex = elements[0].index;
-        setActiveTooltipIndex(
-          activeTooltipIndex === clickedIndex ? null : clickedIndex
-        );
-
-        // 마우스 클릭 위치 계산
-        const canvasPosition = getRelativePosition(event, chartRef.current);
-
-        const chartArea = chartRef.current.chartArea;
-
-        // 툴팁의 예상 크기
-        const tooltipWidth = 150; // 툴팁의 예상 너비
-        const tooltipHeight = 70; // 툴팁의 예상 높이
-
-        // 툴팁 위치 계산 및 경계 검사
-        let x = chartArea.left + canvasPosition.x;
-        let y = chartArea.top + canvasPosition.y;
-
-        // 가로 위치 조정
-        if (x - tooltipWidth / 2 < chartArea.left) {
-          x = chartArea.left + tooltipWidth / 2;
-        } else if (x + tooltipWidth / 2 > chartArea.right) {
-          x = chartArea.right - tooltipWidth / 2;
-        }
-
-        // 세로 위치 조정
-        if (y - tooltipHeight < chartArea.top) {
-          y = chartArea.top + tooltipHeight;
-        }
-
-        setTooltipPosition({ x, y });
-      } else {
-        setActiveTooltipIndex(null);
-      }
-    },
   };
 
   const distributeEqually = () => {
@@ -379,7 +261,91 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
     setPercentages(newPercentages);
   };
 
-  
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
+  const stockData = stocks.map((stock, index) => ({
+    stockName: stock.stockName,
+    purchasePrice: stock.purchasePrice,
+    percentage: percentages[index],
+    color:
+      index < colorPalette.length ? colorPalette[index] : generatePastelColor(),
+    stockIndex: index,
+  }));
+
+  const sortedStockData = [...stockData].sort(
+    (a, b) => b.percentage - a.percentage
+  );
+
+  const topStockData = sortedStockData.slice(0, 5);
+  const otherStockData = sortedStockData.slice(5);
+
+  const otherPercentage = otherStockData.reduce(
+    (sum, item) => sum + item.percentage,
+    0
+  );
+
+  if (otherPercentage > 0) {
+    topStockData.push({
+      stockName: '기타',
+      percentage: otherPercentage,
+      color: 'rgb(188, 194, 229)',
+      purchasePrice: 0,
+      stockIndex: null,
+    });
+  }
+
+  const chartData = {
+    labels: topStockData.map((item) => item.stockName),
+    datasets: [
+      {
+        data: topStockData.map((item) => item.percentage),
+        backgroundColor: topStockData.map((item) => item.color),
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    cutout: '70%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false },
+    },
+    animation: { animateRotate: true, animateScale: true },
+    onClick: (event, elements) => {
+      if (elements.length > 0) {
+        const clickedIndex = elements[0].index;
+        setActiveTooltipIndex(
+          activeTooltipIndex === clickedIndex ? null : clickedIndex
+        );
+
+        const canvasPosition = getRelativePosition(event, chartRef.current);
+
+        const chartArea = chartRef.current.chartArea;
+
+        let x = chartArea.left + canvasPosition.x;
+        let y = chartArea.top + canvasPosition.y;
+
+        const tooltipWidth = 150;
+        const tooltipHeight = 70;
+
+        if (x - tooltipWidth / 2 < chartArea.left) {
+          x = chartArea.left + tooltipWidth / 2;
+        } else if (x + tooltipWidth / 2 > chartArea.right) {
+          x = chartArea.right - tooltipWidth / 2;
+        }
+
+        if (y - tooltipHeight < chartArea.top) {
+          y = chartArea.top + tooltipHeight;
+        }
+
+        setTooltipPosition({ x, y });
+      } else {
+        setActiveTooltipIndex(null);
+      }
+    },
+  };
+
   return (
     <Container>
       <div>
@@ -389,8 +355,15 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
             value={title}
             className="border-0 bg-transparent title-input"
             onChange={(e) => setTitle(e.target.value)}
-            style={{color: '#9AA4B2'}}
-            onFocus={() => setTitle('')}
+            style={{ color: '#9AA4B2' }}
+            onFocus={() =>
+              title === '포트폴리오 제목을 입력해주세요' && setTitle('')
+            }
+            onBlur={() => {
+              if (title.trim() === '') {
+                setTitle('포트폴리오 제목을 입력해주세요');
+              }
+            }}
           />
         </div>
         <Row className="justify-content-center">
@@ -464,10 +437,6 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
               </div>
             </div>
 
-            {/* <div className="text-center mb-2">
-                  총 비율: {percentages.reduce((sum, p) => sum + p, 0)}%
-                </div> */}
-
             <div className="text-center mb-3">
               <Button onClick={distributeEqually} className="distribute-button">
                 비율 균등 분배
@@ -480,7 +449,10 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
                   <div
                     className="stock-color"
                     style={{
-                      backgroundColor: colors[index],
+                      backgroundColor:
+                        index < colorPalette.length
+                          ? colorPalette[index]
+                          : generatePastelColor(),
                       borderRadius: '1rem',
                     }}
                   ></div>
@@ -511,20 +483,6 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
                     onClick={() => deleteStock(index)}
                   >
                     x
-                    {/* <div
-                      style={{
-                        width: '20px',
-                        height: '20px',
-                        borderRadius: '1rem',
-                        backgroundColor: '#c4c4c4',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'white',
-                      }}
-                    >
-                      <Dash />
-                    </div> */}
                   </Button>
                 </div>
               ))}
@@ -563,26 +521,24 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
         onClick={handleInvestClick}
         disabled={!isTotalPercentage100}
       />
-
-      <InvestModal
+      <Modal
         isOpen={modalOpen}
         onClose={handleModalClose}
-        message={"정말 투자하시겠습니까?"}
-        onConfirm={handleInvestComfirm}
+        onConfirm={handleInvestConfirm}
+        message={MESSAGES.INVEST_CONFIRM}
       />
 
-      <AlertModal
+      <Modal
         isOpen={alertModalOpen}
         onClose={handleAlertClose}
-        message={alertMessage}/>
+        message={alertMessage}
+      />
 
-      {/* 투자 완료 알림 모달 */}
-      <InvestAlertModal
+      <Modal
         isOpen={investAlertModalOpen}
         onClose={handleInvestAlertClose}
         message={investAlertMessage}
       />
-
     </Container>
   );
 }

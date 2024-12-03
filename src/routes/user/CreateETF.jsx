@@ -1,12 +1,9 @@
 import Chart from '~/components/myPocket/Chart';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStockContext } from '~/components/context/StockProvider';
 
-
 export default function ETFPocket() {
-
-
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -25,7 +22,12 @@ export default function ETFPocket() {
 
   return (
     <div>
-      <Chart stocks={selectedStocks} addStock={addStock} setStocks={setSelectedStocks} />
+      <Chart
+        stocks={selectedStocks}
+        addStock={addStock}
+        setStocks={setSelectedStocks}
+        isForCopy={location.state?.isForCopy || false}
+      />
     </div>
   );
 }
