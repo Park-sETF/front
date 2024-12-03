@@ -39,6 +39,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
 
   const [percentages, setPercentages] = useState(stocks.map(() => 3));
   const initialInvestmentAmount = 5000000;
+  const DEFAULT_TITLE = '포트폴리오 제목을 입력해주세요';
 
   const [totalBalance, setTotalBalance] = useState(0);
   const [investmentAmount, setInvestmentAmount] = useState(
@@ -47,7 +48,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
   const [activeTooltipIndex, setActiveTooltipIndex] = useState(null);
   const [isTotalPercentage100, setIsTotalPercentage100] = useState(false);
   const [initialTotalBalance, setInitialTotalBalance] = useState(0);
-  const [title, setTitle] = useState('포트폴리오 제목을 입력해주세요');
+  const [title, setTitle] = useState(DEFAULT_TITLE);
 
   const inputRef = useRef(null);
   const chartRef = useRef(null);
@@ -64,6 +65,10 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
 
   //투자하기 버튼을 눌렀을 때 선택되는 함수 
   const handleInvestClick = () => {
+    if(title === DEFAULT_TITLE) {
+      setAlertMessage('제목을 수정해주세요.');
+      setAlertModalOpen(true); // 알림 모달창 열기
+    }
     if (title.length === 0) {
       setAlertMessage('제목을 입력해주세요.');
       setAlertModalOpen(true); // 알림 모달창 열기
@@ -93,8 +98,8 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
    const handleInvestAlertClose = () => {
     setInvestAlertModalOpen(false); // 투자 완료 알림 모달창 닫기
     
-    navigate('/'); // 투자가 완료되면 홈으로 이동! 
-
+    // navigate('/'); // 투자가 완료되면 홈으로 이동! 
+    navigate('/user?activeTab=나의+ETF');
   };
 
   //실제로 투자가 완료 버튼을 눌렀을 때 
@@ -110,6 +115,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
       const requestData = {
         etfList,
         title: title,
+        investmentAmount : investmentAmount,
       };
 
       const response = await api.post(`/etf/buy/${id}`, requestData);
@@ -575,7 +581,6 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
         onClose={handleInvestAlertClose}
         message={investAlertMessage}
       />
-
 
     </Container>
   );

@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import List from './List';
 import ETFButtonList from './ETFButtonList';
 import MyReport from './MyReport';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export default function Tab({ ETFList, SubscriberList }) {
-  const [activeTab, setActiveTab] = useState('분석 리포트');
-  const navigate = useNavigate();
+  const params = useParams();
+
+  console.log("params" + JSON.stringify(params));
+  const [activeTab, setActiveTab] = useState(params.activeTab || '분석 리포트');
 
   // 구독 항목 클릭 시 실행되는 함수
   const handleUserClick = (userId) => {

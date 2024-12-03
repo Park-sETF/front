@@ -13,6 +13,16 @@ export default function UserInfo() {
   const [modalOpen, setModalOpen] = useState(false); // 모달창 상태
   const id = localStorage.getItem("id");
 
+  const images = [
+    "/images/profile/doremi.png",
+    "/images/profile/lay.png",
+    "/images/profile/pli.png",
+    "/images/profile/moli.png",
+    "/images/profile/sol.png",
+    "/images/profile/shoo.png",
+    "/images/profile/rino.png",
+    "images/ink.png",
+  ];
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -80,7 +90,7 @@ export default function UserInfo() {
           </div>
         </div>
         <img
-          src="/images/ink.png"
+          src={images[id % 6]}
           alt="Profile"
           className="rounded-circle"
           style={{ width: '60px', height: '60px', objectFit: 'cover' }}
