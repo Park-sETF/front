@@ -3,13 +3,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import List from './List';
 import ETFButtonList from './ETFButtonList';
 import MyReport from './MyReport';
-import { useParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function Tab({ ETFList, SubscriberList }) {
-  const params = useParams();
-
-  console.log("params" + JSON.stringify(params));
-  const [activeTab, setActiveTab] = useState(params.activeTab || '분석 리포트');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get('activeTab')|| '분석 리포트');
+  const navigate = useNavigate();
 
   // 구독 항목 클릭 시 실행되는 함수
   const handleUserClick = (userId) => {
