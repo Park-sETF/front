@@ -5,6 +5,7 @@ import PercentageModal from './PercentageModal';
 import { useNavigate } from 'react-router-dom';
 import api from '~/lib/apis/auth';
 import InvestAlertModal from './InvestAlertModal';
+import BigButton from '../buttons/BigButton';
 
 export default function ETFButtonList({ items }) {
   const navigate = useNavigate();
@@ -94,6 +95,20 @@ export default function ETFButtonList({ items }) {
     }
   };
 
+  // 데이터가 없는 경우
+  if (!items || items.length === 0) {
+    return (
+      <div className="container mt-4" style={{ margin: '23px' }}>
+        <h1 className="fw-bold" style={{ fontSize: '18.5px', lineHeight: '1.5', marginBottom: 0 }}>
+          ETF가 없습니다
+        </h1>
+        <p style={{ fontSize: '13px', color: '#8E8E93', marginTop: '6px' }}>
+          나만의 ETF를 만들어 보세요!
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
@@ -132,10 +147,8 @@ export default function ETFButtonList({ items }) {
                 minWidth: '100px',
                 maxWidth: '100px',
                 overflow: 'hidden',
-                // whiteSpace: 'nowrap',
                 textAlign: 'left',
                 flexShrink: 0,
-                // textOverflow: 'ellipsis', // "..." 처리
               }}
             >
               {item.name}
