@@ -82,7 +82,7 @@ function Signup() {
         setSuccess(true); // 성공 상태 업데이트
         setTimeout(() => {
           navigate('/login'); // 메시지 후 로그인 화면 이동
-        }, 5000); // 5초 후 이동
+        }, 2000); // 2초 후 이동
       }
     } catch (err) {
       console.error('회원가입 실패:', err);

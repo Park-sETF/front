@@ -15,6 +15,7 @@ export default function Footer() {
         maxWidth: "430px",
         margin: "0 auto",
         height: "60px",
+        marginBottom: '4px'
       }}
     >
       <div className="d-flex justify-content-between px-4">

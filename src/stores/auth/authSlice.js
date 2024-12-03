@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '~/lib/apis/auth';
-import Cookies from 'js-cookie';
 
 // 초기 상태
 const initialState = {

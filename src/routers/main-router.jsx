@@ -130,10 +130,18 @@ export const mainRoutes = [
 
           // 누구나 접근 가능한 라우트
           { element: <Membership />, path: 'membership' },
-          { element: <Ranking />, path: 'ranking' },
-          { element: <RankingDetail />, path: 'ranking-detail/:userId' },
-          { element: <ETFDetail />, path: 'etf/detail/:portfolioId' },
-          { element: <Grade />, path: 'grade' },
+          { element: <Ranking />, path: 'ranking', protected: true },
+          {
+            element: <RankingDetail />,
+            path: 'ranking-detail/:userId',
+            protected: true,
+          },
+          {
+            element: <ETFDetail />,
+            path: 'etf/detail/:portfolioId',
+            protected: true,
+          },
+          { element: <Grade />, path: 'grade', protected: true },
           { element: <Search />, path: 'search' },
         ],
       },

@@ -4,17 +4,14 @@ import { useStockContext } from '~/components/context/StockProvider';
 export default function Chart({ stocks }) {
   console.log('Received stocks:', stocks);
 
-  // console.log("%%%%%%stock/chart.jsx: "+ JSON.stringify(stocks));
-  // console.log("%%%%%%stock/chart.jsx: "+ typeof stocks.reduce((ele, idx) => {console.log(ele.change)}));
-
-
-  //주식 종목 저장 변수 context에서 가져오기 
-  const {selectedStocks, setSelectedStocks} = useStockContext();
-
+  // 주식 종목 저장 변수 context에서 가져오기
+  const { selectedStocks, setSelectedStocks } = useStockContext();
 
   // 주식 선택/해제 처리
   const handleButtonClick = (stock) => {
-    const isSelected = selectedStocks.some((s) => s.stockCode === stock.stockCode);
+    const isSelected = selectedStocks.some(
+      (s) => s.stockCode === stock.stockCode
+    );
 
     const updatedSelection = isSelected
       ? selectedStocks.filter((s) => s.stockCode !== stock.stockCode) // 빼기
@@ -24,7 +21,8 @@ export default function Chart({ stocks }) {
   };
 
   // stocks와 StockLogo를 매핑
-  const defaultLogo = 'https://static.toss.im/png-icons/securities/icn-sec-fill-900340.png';
+  const defaultLogo =
+    'https://static.toss.im/png-icons/securities/icn-sec-fill-900340.png';
 
   const updatedStocks = stocks.map((stock) => {
     const matchedLogo = StockLogo.find(
@@ -34,10 +32,7 @@ export default function Chart({ stocks }) {
       ...stock,
       logo: matchedLogo ? matchedLogo.logoImageUrl : defaultLogo, // 기본 로고 설정
     };
-
-    
   });
-
 
   // 숫자 포맷 함수
   const formatPrice = (price) => {
@@ -49,12 +44,14 @@ export default function Chart({ stocks }) {
     <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
       <div className="container mt-4" style={{ margin: '14px' }}>
         {updatedStocks.map((stock, index) => {
-          const isSaved = selectedStocks.some((s) => s.stockCode === stock.stockCode);
+          const isSaved = selectedStocks.some(
+            (s) => s.stockCode === stock.stockCode
+          );
           const change = stock.change || '0%'; // change가 없으면 기본값 '0%' 설정
-
+          console.log(stock);
           return (
             <div
-              key={stock.id || index} // 안전한 key 설정
+              key={stock.stockCode || index} // 안전한 key 설정
               className="d-flex align-items-center justify-content-between mb-2 p-2 bg-white"
             >
               <div className="d-flex align-items-center gap-3">
@@ -73,10 +70,10 @@ export default function Chart({ stocks }) {
                 />
                 <div style={{ maxWidth: '120px', overflow: 'hidden' }}>
                   <div
-                    className="fw"
                     style={{
                       fontSize: '1rem',
-                      whiteSpace: 'nowrap', // 텍스트 줄바꿈 방지
+                      width: '100px',
+                      whiteSpace: 'wrap', // 텍스트 줄바꿈 방지
                       overflow: 'hidden', // 넘치는 텍스트 숨김
                       textOverflow: 'ellipsis', // "..." 처리
                     }}
@@ -87,20 +84,16 @@ export default function Chart({ stocks }) {
                     className="d-flex align-items-center gap-2"
                     style={{ fontSize: '0.83rem' }}
                   >
-                    <span className="fw">{formatPrice(stock.purchasePrice)}</span>
+                    <span className="fw">
+                      {formatPrice(stock.purchasePrice)}
+                    </span>
                     <span
-
-                      className={change.includes('-') ? 'text-primary' : 'text-danger'}
+                      className={
+                        change.includes('-') ? 'text-primary' : 'text-danger'
+                      }
                     >
+                      {change > 0 ? '+' : ''}
                       {change}%
-
-                      {/* 충돌 수정 */}
-                      {/* className={
-                        stock.change && stock.change.includes('-') ? 'text-primary' : 'text-danger'
-                      } */}
-                    
-                      {/* {stock.change ? stock.change : 0}% */}
-
                     </span>
                   </div>
                 </div>

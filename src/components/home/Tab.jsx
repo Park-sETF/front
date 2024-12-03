@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import List from './List';
 import ETFButtonList from './ETFButtonList';
 import MyReport from './MyReport';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function Tab({ ETFList, SubscriberList }) {
-  const [activeTab, setActiveTab] = useState('분석 리포트');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get('activeTab')|| '분석 리포트');
   const navigate = useNavigate();
 
   // 구독 항목 클릭 시 실행되는 함수
@@ -27,7 +28,7 @@ export default function Tab({ ETFList, SubscriberList }) {
             fontSize: '17px',
             fontWeight: activeTab === '분석 리포트' ? '600' : '400',
             flexGrow: 1,
-            whiteSpace: 'nowrap',
+            whiteSpace: 'wrap',
           }}
         >
           분석 리포트
