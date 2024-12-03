@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Bell, BellOff } from 'lucide-react';
 import PercentageModal from './PercentageModal';
 import { useNavigate } from 'react-router-dom';
@@ -17,9 +17,22 @@ export default function ETFButtonList({ items }) {
     stopLoss: -20,
   });
 
-  // 손절점, 익절점 모달창에서 완료됐을 경우 띄는 모달창 
+  // 손절점, 익절점 모달창에서 완료됐을 경우 띄는 모달창
   const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
   const [investAlertMessage, setInvestAlertMessage] = useState('');
+
+  // 알림 상태를 로컬 스토리지에서 복원
+  useEffect(() => {
+    const savedActiveItems = JSON.parse(localStorage.getItem('activeItems'));
+    if (savedActiveItems) {
+      setActiveItems(savedActiveItems);
+    }
+  }, []);
+
+  // 알림 상태가 변경될 때 로컬 스토리지에 저장
+  useEffect(() => {
+    localStorage.setItem('activeItems', JSON.stringify(activeItems));
+  }, [activeItems]);
 
   const handleToggle = (index, event) => {
     event.stopPropagation();
@@ -34,10 +47,10 @@ export default function ETFButtonList({ items }) {
 
     try {
       const requestBody = {
-        userId: localStorage.getItem('id'), 
-        portfolioId: selectedItem.portfolioId, 
-        profitSpot: modalValues.takeProfit, 
-        lossSpot: modalValues.stopLoss, 
+        userId: localStorage.getItem('id'),
+        portfolioId: selectedItem.portfolioId,
+        profitSpot: modalValues.takeProfit,
+        lossSpot: modalValues.stopLoss,
       };
 
       await api.post('/notifications/subscribe/portfolio', requestBody);
@@ -47,14 +60,12 @@ export default function ETFButtonList({ items }) {
         [currentIndex]: true,
       }));
 
-      setInvestAlertMessage("알림 설정이 완료되었습니다!");
+      setInvestAlertMessage('알림 설정이 완료되었습니다!');
       setInvestAlertModalOpen(true);
-
     } catch (error) {
       console.error('알림 설정 오류:', error);
-      setInvestAlertMessage("알림 설정시 오류 발생하였습니다!");
+      setInvestAlertMessage('알림 설정시 오류 발생하였습니다!');
       setInvestAlertModalOpen(true);
-
     } finally {
       setShowModal(false);
     }
@@ -71,7 +82,7 @@ export default function ETFButtonList({ items }) {
     try {
       const requestBody = {
         userId: localStorage.getItem('id'),
-        portfolioId: selectedItem.portfolioId, 
+        portfolioId: selectedItem.portfolioId,
       };
 
       await api.delete('/notifications/subscribe/portfolio', { data: requestBody });
@@ -81,14 +92,13 @@ export default function ETFButtonList({ items }) {
         [currentIndex]: false,
       }));
 
-      setInvestAlertMessage("알림이 해제되었습니다.");
+      setInvestAlertMessage('알림이 해제되었습니다.');
       setInvestAlertModalOpen(true);
     } catch (error) {
       console.error('알림 해제 오류:', error);
 
-      setInvestAlertMessage("설정된 알림이 없습니다.");
+      setInvestAlertMessage('설정된 알림이 없습니다.');
       setInvestAlertModalOpen(true);
-
     } finally {
       setShowModal(false);
     }

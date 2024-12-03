@@ -89,7 +89,7 @@ export default function UserInfo() {
       </div>
       <div className="mt-3" style={{ margin: '24px', marginBottom: 0 }}>
         <div className='d-flex justify-content-between align-items-center'>
-          <div className="text-secondary mb-1" style={{ fontSize: '14px' }}>총 투자금액</div>
+          <div className="text-secondary mb-1" style={{ fontSize: '14px' }}>총 자산</div>
           {/* 로그아웃 버튼 추가 */}
           <button
               className="btn btn-link "
