@@ -82,7 +82,7 @@ export default function Init() {
           </Button> */}
         </div>
       )}
-      <InstallPWA className="fixed-bottom mt-3" />
+      {/* <InstallPWA className="fixed-bottom mt-3" /> */}
     </div>
   );
 }
