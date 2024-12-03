@@ -13,8 +13,22 @@ export default function MyReport() {
   useEffect(() => {
     const fetchReportData = async () => {
       try {
-        const response = await api.get(`/userinfo/myreport/${id}`);
-        setReportData(response.data);
+        // const response = await api.get(`/userinfo/myreport/${id}`);
+        // setReportData(response.data);
+
+        // 더미 데이터 설정
+        const dummyData = {
+          nickName: "테스트 사용자",
+          portfolioTitle: "테스트 포트폴리오",
+          portfolioRevenue: 12.34,
+          stockPerformances: [
+            { stockName: "삼성전자자자자자자", weightedYield: 8.9 },
+            { stockName: "카카오", weightedYield: -3.4 },
+            { stockName: "LG화학", weightedYield: 15.2 },
+            { stockName: "현대차", weightedYield: -5.6 },
+          ],
+        };
+        setReportData(dummyData);
       } catch {
         setError(true); // 에러 발생 시 에러 상태를 true로 설정
       } finally {
@@ -104,11 +118,12 @@ export default function MyReport() {
                 <div key={index} className="d-flex align-items-center mb-3">
                   <div
                     style={{
-                      width: '70px',
+                      width: '90px',
                       paddingRight: '20px',
-                      whiteSpace: 'nowrap',
+                      whiteSpace: 'normal',
                       overflow: 'hidden',
                       flexShrink: 0,
+                      lineHeight: '1.2'
                     }}
                   >
                     <span className="fw-bold" style={{ fontSize: '14px' }}>
