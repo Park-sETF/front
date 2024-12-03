@@ -67,7 +67,7 @@ export default function RankingUserInfo({ userId }) {
                 fontSize: "14px",
               }}
             >
-              수익률 {profitRate > 0 ? "+" : "-"}
+              수익률 {profitRate > 0 ? "+" : ""}
               {profitRate}%
             </span>
           </div>

@@ -4,6 +4,7 @@ import { Bell, BellOff } from 'lucide-react';
 import PercentageModal from './PercentageModal';
 import { useNavigate } from 'react-router-dom';
 import api from '~/lib/apis/auth';
+import InvestAlertModal from './InvestAlertModal';
 
 export default function ETFButtonList({ items }) {
   const navigate = useNavigate();
@@ -15,6 +16,10 @@ export default function ETFButtonList({ items }) {
     takeProfit: 80,
     stopLoss: -20,
   });
+
+  // 손절점, 익절점 모달창에서 완료됐을 경우 띄는 모달창 
+  const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
+  const [investAlertMessage, setInvestAlertMessage] = useState('');
 
   const handleToggle = (index, event) => {
     event.stopPropagation();
@@ -42,10 +47,14 @@ export default function ETFButtonList({ items }) {
         [currentIndex]: true,
       }));
 
-      alert('알림 설정이 완료되었습니다!');
+      setInvestAlertMessage("알림 설정이 완료되었습니다!");
+      setInvestAlertModalOpen(true);
+
     } catch (error) {
       console.error('알림 설정 오류:', error);
-      alert('알림 설정 중 오류가 발생했습니다.');
+      setInvestAlertMessage("알림 설정시 오류 발생하였습니다!");
+      setInvestAlertModalOpen(true);
+
     } finally {
       setShowModal(false);
     }
@@ -72,10 +81,14 @@ export default function ETFButtonList({ items }) {
         [currentIndex]: false,
       }));
 
-      alert('알림이 해제되었습니다.');
+      setInvestAlertMessage("알림이 해제되었습니다.");
+      setInvestAlertModalOpen(true);
     } catch (error) {
       console.error('알림 해제 오류:', error);
-      alert('알림 해제 중 오류가 발생했습니다.');
+
+      setInvestAlertMessage("설정된 알림이 없습니다.");
+      setInvestAlertModalOpen(true);
+
     } finally {
       setShowModal(false);
     }
@@ -114,15 +127,15 @@ export default function ETFButtonList({ items }) {
           >
             {/* ETF 이름 */}
             <span
-              className="fw-medium"
               style={{
                 fontSize: '16px',
                 minWidth: '100px',
                 maxWidth: '100px',
                 overflow: 'hidden',
-                whiteSpace: 'nowrap',
+                // whiteSpace: 'nowrap',
                 textAlign: 'left',
                 flexShrink: 0,
+                // textOverflow: 'ellipsis', // "..." 처리
               }}
             >
               {item.name}
@@ -189,6 +202,12 @@ export default function ETFButtonList({ items }) {
         onSave={handleModalSave} // 알림 켜기
         values={modalValues}
         setValues={setModalValues}
+      />
+
+      <InvestAlertModal
+        isOpen={investAlertModalOpen}
+        onClose={() => setInvestAlertModalOpen(false)} // 확인 버튼 클릭 시 모달 닫기
+        message={investAlertMessage}
       />
 
       <style>{`

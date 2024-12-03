@@ -3,13 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import api from '~/lib/apis/auth';
 import { logout } from '~/stores/auth/authSlice';
 import { useDispatch } from 'react-redux';
+import LogoutModal from './LogoutModal';
 
 
 export default function UserInfo() {
   const [userData, setUserData] = useState(null); // 사용자 데이터 상태 관리
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
+  const [modalOpen, setModalOpen] = useState(false); // 모달창 상태
   const id = localStorage.getItem("id");
+
+  const images = [
+    "/images/profile/doremi.png",
+    "/images/profile/lay.png",
+    "/images/profile/pli.png",
+    "/images/profile/moli.png",
+    "/images/profile/sol.png",
+    "/images/profile/shoo.png",
+    "/images/profile/rino.png",
+    "images/ink.png",
+  ];
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,10 +31,18 @@ export default function UserInfo() {
     navigate(`/membership`);
 
   };
-  const handleLogout = () => {
+  const handleLogoutConfirm = () => {
     dispatch(logout()); // 로그아웃 Thunk 호출
     navigate('/'); // 로그아웃 후 /로 리디렉션
   };
+
+  const handleLogoutClick = () => {
+    setModalOpen(true); // 모달창 열기 
+  }
+
+  const handleModalClose = () => {
+    setModalOpen(false); //모달창 닫기 
+  }
 
   useEffect(() => {
     // 비동기 함수 정의
@@ -69,7 +90,7 @@ export default function UserInfo() {
           </div>
         </div>
         <img
-          src="/images/ink.png"
+          src={images[id % 6]}
           alt="Profile"
           className="rounded-circle"
           style={{ width: '60px', height: '60px', objectFit: 'cover' }}
@@ -89,7 +110,7 @@ export default function UserInfo() {
                 marginRight: '9px',
                 marginBottom: '2px'
               }}
-              onClick={handleLogout}
+              onClick={handleLogoutClick}
             >
               로그아웃
             </button>
@@ -100,7 +121,6 @@ export default function UserInfo() {
             {(userData.asset ?? 0).toLocaleString()}원
           </span>
           <span
-            className="fw-medium"
             style={{
               color: userData.revenue >= 0 ? '#ff3b3b' : '#0051c7', // 수익률 양수면 빨간색, 음수면 파란색
               fontSize: '14px',
@@ -111,6 +131,12 @@ export default function UserInfo() {
           </span>
         </div>
       </div>
+      <LogoutModal
+        isOpen={modalOpen}
+        onClose={handleModalClose}
+        message={"정말 로그아웃 하시겠습니까?"}
+        onConfirm={handleLogoutConfirm}
+      />
     </div>
   );
 }

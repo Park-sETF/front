@@ -5,7 +5,16 @@ export default function Chart({ stocks }) {
   console.log('Received stocks:', stocks);
 
   // 주식 종목 저장 변수 context에서 가져오기
+<<<<<<< HEAD
   const { selectedStocks, setSelectedStocks } = useStockContext();
+=======
+  // console.log("%%%%%%stock/chart.jsx: "+ JSON.stringify(stocks));
+  // console.log("%%%%%%stock/chart.jsx: "+ typeof stocks.reduce((ele, idx) => {console.log(ele.change)}));
+
+
+  //주식 종목 저장 변수 context에서 가져오기 
+  const {selectedStocks, setSelectedStocks} = useStockContext();
+>>>>>>> 8bb11af30b13df1ecdd4804d1e4e9450c60e7cd8
 
   // 주식 선택/해제 처리
   const handleButtonClick = (stock) => {
@@ -68,10 +77,9 @@ export default function Chart({ stocks }) {
                 />
                 <div style={{ maxWidth: '120px', overflow: 'hidden' }}>
                   <div
-                    className="fw"
                     style={{
                       fontSize: '1rem',
-                      whiteSpace: 'nowrap', // 텍스트 줄바꿈 방지
+                      whiteSpace: 'wrap', // 텍스트 줄바꿈 방지
                       overflow: 'hidden', // 넘치는 텍스트 숨김
                       textOverflow: 'ellipsis', // "..." 처리
                     }}
@@ -84,9 +92,17 @@ export default function Chart({ stocks }) {
                   >
                     <span className="fw">{formatPrice(stock.purchasePrice)}</span>
                     <span
+<<<<<<< HEAD
                       className={change.includes('-') ? 'text-primary' : 'text-danger'}
                     >
                       {change}
+=======
+                      className={
+                        stock.change && stock.change.includes('-') ? 'text-primary' : 'text-danger'
+                      }
+                    >
+                      {stock.change ? stock.change : 0}%
+>>>>>>> 8bb11af30b13df1ecdd4804d1e4e9450c60e7cd8
                     </span>
                   </div>
                 </div>

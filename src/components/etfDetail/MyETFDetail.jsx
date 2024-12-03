@@ -9,21 +9,12 @@ import { Container, Row, Col, FormControl } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '~/components/myPocket/Chart.css';
 import BigButton from '../buttons/BigButton';
+import InvestAlertModal from '../home/InvestAlertModal';
 
 import api from '~/lib/apis/auth';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const sellMyETF = async () => {
-  await api
-    .delete(`/etf/sell/${portfolioId}`)
-    .then(() => {
-      console.log('포트폴리오 삭제가 완료되었습니다.');
-    })
-    .catch(() => {
-      console.log('포트폴리오 삭제 실패.');
-    });
-};
 
 export default function Component() {
   const [stocks, setLocalStocks] = useState([]); // 로컬 stocks 상태
@@ -45,13 +36,23 @@ export default function Component() {
     return `rgb(${r}, ${g}, ${b})`;
   };
 
+  const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
+  const [investAlertMessage, setInvestAlertMessage] = useState('');
+
+
+
   const sellMyETF = async () => {
     await api
       .delete(`/etf/sell/${portfolioId}`)
       .then(() => {
+        setInvestAlertMessage('매도가 완료되었습니다.');
+        setInvestAlertModalOpen(true); // 알림 모달창 열기
         console.log('포트폴리오 삭제가 완료되었습니다.');
+
       })
       .catch(() => {
+        setInvestAlertMessage('매도 실패');
+        setInvestAlertModalOpen(true); // 알림 모달창 열기
         console.log('포트폴리오 삭제 실패.');
       });
   };
@@ -206,7 +207,7 @@ export default function Component() {
           <Col md={8}>
             <div className="text-center mb-2">
               <span className={responseData.revenue.toString().includes('-') ? 'text-primary' : 'text-danger'}>
-                수익률: {responseData.revenue}%
+                수익률: {responseData.revenue.toFixed(2)}%
               </span>
             </div>
 
@@ -285,6 +286,15 @@ export default function Component() {
 
       <BigButton text={'매도하기'} onClick={() => sellMyETF(responseData.portfolioId)}>
       </BigButton>
+
+      <InvestAlertModal
+        isOpen={investAlertModalOpen} // 상태로 모달 표시 여부 제어
+        onClose={() => {setInvestAlertModalOpen(false); 
+          navigate('/');} // 모달 닫기 후 홈으로 이동
+        }
+         // 확인 버튼 클릭 시 모달 닫기
+        message={investAlertMessage} // 동적으로 설정된 메시지 전달
+      />
     </Container>
   );
 }
