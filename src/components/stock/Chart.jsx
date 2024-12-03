@@ -46,10 +46,10 @@ export default function Chart({ stocks }) {
         {updatedStocks.map((stock, index) => {
           const isSaved = selectedStocks.some((s) => s.stockCode === stock.stockCode);
           const change = stock.change || '0%'; // change가 없으면 기본값 '0%' 설정
-
+          console.log(stock)
           return (
-            <div
-              key={stock.id || index} // 안전한 key 설정
+            <div 
+              key={stock.stockCode || index} // 안전한 key 설정
               className="d-flex align-items-center justify-content-between mb-2 p-2 bg-white"
             >
               <div className="d-flex align-items-center gap-3">
