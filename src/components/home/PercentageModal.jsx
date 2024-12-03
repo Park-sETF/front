@@ -2,19 +2,16 @@ import { useState, useEffect } from 'react';
 import { Modal, Button, Form, InputGroup } from 'react-bootstrap';
 import GuidelineModal from './GuideLine';
 
-export default function PercentageModal({ show, onHide, onSave }) {
+export default function PercentageModal({ show, onHide, onSave}) {
   const [values, setValues] = useState({
     takeProfit: 80,
-    stopLoss: -20,
+    stopLoss: -20
   });
   const [showTooltip, setShowTooltip] = useState(false);
   const [showGuidelines, setShowGuidelines] = useState(false);
 
   useEffect(() => {
     if (show) {
-      // 모달이 열릴 때마다 초기값 설정
-      setValues({ takeProfit: 80, stopLoss: -20 });
-
       setShowTooltip(true);
       const timer = setTimeout(() => {
         setShowTooltip(false);
@@ -23,7 +20,7 @@ export default function PercentageModal({ show, onHide, onSave }) {
     }
   }, [show]);
 
-  // 값 변경 처리
+  // 퍼센트 변경 시
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValues((prev) => ({
@@ -32,15 +29,20 @@ export default function PercentageModal({ show, onHide, onSave }) {
     }));
   };
 
-  // "알림 켜기" 버튼 클릭 시 부모 컴포넌트로 값 전달
   const handleSave = (e) => {
     e.preventDefault();
-    onSave(values); // 입력된 값을 부모 컴포넌트로 전달
+    onSave(values); // 현재 `values`를 부모 컴포넌트로 전달
   };
+  
 
   return (
     <>
-      <Modal show={show} onHide={onHide} centered contentClassName="rounded-4">
+      <Modal
+        show={show}
+        onHide={onHide}
+        centered
+        contentClassName="rounded-4"
+      >
         <div className="position-relative">
           {showTooltip && (
             <div
@@ -49,7 +51,7 @@ export default function PercentageModal({ show, onHide, onSave }) {
                 right: '20px',
                 top: '60px',
                 zIndex: 1000,
-                animation: 'fadeIn 0.5s',
+                animation: 'fadeIn 0.5s'
               }}
             >
               <button
@@ -59,10 +61,10 @@ export default function PercentageModal({ show, onHide, onSave }) {
                   position: 'relative',
                   fontSize: '14px',
                   cursor: 'pointer',
-                  transition: 'transform 0.2s',
+                  transition: 'transform 0.2s'
                 }}
-                onMouseOver={(e) => (e.target.style.transform = 'scale(1.05)')}
-                onMouseOut={(e) => (e.target.style.transform = 'scale(1)')}
+                onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
+                onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
               >
                 정하기 어려우신가요?
                 <div
@@ -75,7 +77,7 @@ export default function PercentageModal({ show, onHide, onSave }) {
                     height: 0,
                     borderTop: '6px solid transparent',
                     borderBottom: '6px solid transparent',
-                    borderRight: '6px solid #212529',
+                    borderRight: '6px solid #212529'
                   }}
                 />
               </button>
@@ -83,10 +85,7 @@ export default function PercentageModal({ show, onHide, onSave }) {
           )}
 
           <Modal.Header className="border-0 pb-0">
-            <Modal.Title
-              className="w-100 text-center fw-bold"
-              style={{ fontSize: '18px' }}
-            >
+            <Modal.Title className="w-100 text-center fw-bold" style={{ fontSize: '18px' }}>
               손절점 / 익절점 알림 조정
             </Modal.Title>
           </Modal.Header>
@@ -162,9 +161,9 @@ export default function PercentageModal({ show, onHide, onSave }) {
         </style>
       </Modal>
 
-      <GuidelineModal
-        show={showGuidelines}
-        onHide={() => setShowGuidelines(false)}
+      <GuidelineModal 
+        show={showGuidelines} 
+        onHide={() => setShowGuidelines(false)} 
       />
     </>
   );

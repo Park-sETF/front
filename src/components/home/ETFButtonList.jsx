@@ -18,11 +18,9 @@ export default function ETFButtonList({ items }) {
     stopLoss: -20,
   });
 
-  // 손절점, 익절점 모달창에서 완료됐을 경우 띄는 모달창
   const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
   const [investAlertMessage, setInvestAlertMessage] = useState('');
 
-  // 알림 상태를 로컬 스토리지에서 복원
   useEffect(() => {
     const savedActiveItems = JSON.parse(localStorage.getItem('activeItems'));
     if (savedActiveItems) {
@@ -30,7 +28,6 @@ export default function ETFButtonList({ items }) {
     }
   }, []);
 
-  // 알림 상태가 변경될 때 로컬 스토리지에 저장
   useEffect(() => {
     localStorage.setItem('activeItems', JSON.stringify(activeItems));
   }, [activeItems]);
@@ -41,37 +38,40 @@ export default function ETFButtonList({ items }) {
     setShowModal(true);
   };
 
-  const handleModalSave = async () => {
+  const handleModalSave = async (updatedValues) => {
     if (currentIndex === null || !items[currentIndex]) return;
-
+  
     const selectedItem = items[currentIndex];
-
+  
     try {
       const requestBody = {
         userId: localStorage.getItem('id'),
         portfolioId: selectedItem.portfolioId,
-        profitSpot: modalValues.takeProfit,
-        lossSpot: modalValues.stopLoss,
+        profitSpot: parseFloat(updatedValues.takeProfit), 
+        lossSpot: parseFloat(updatedValues.stopLoss),
       };
-
+  
+      console.log('Request Body:', requestBody); 
+  
       await api.post('/notifications/subscribe/portfolio', requestBody);
-
+  
       setActiveItems((prev) => ({
         ...prev,
         [currentIndex]: true,
       }));
-
+  
       setInvestAlertMessage('알림 설정이 완료되었습니다!');
       setInvestAlertModalOpen(true);
     } catch (error) {
       console.error('알림 설정 오류:', error);
-      setInvestAlertMessage('알림 설정시 오류 발생하였습니다!');
+  
+      setInvestAlertMessage('알림 설정 중 오류가 발생했습니다!');
       setInvestAlertModalOpen(true);
     } finally {
       setShowModal(false);
     }
   };
-
+  
   const handleModalCancel = async () => {
     if (currentIndex === null || !items[currentIndex]) {
       setShowModal(false);
@@ -105,7 +105,6 @@ export default function ETFButtonList({ items }) {
     }
   };
 
-  // 데이터가 없는 경우
   if (!items || items.length === 0) {
     return (
       <div className="container mt-4" style={{ margin: '23px' }}>
@@ -229,7 +228,7 @@ export default function ETFButtonList({ items }) {
 
       <InvestAlertModal
         isOpen={investAlertModalOpen}
-        onClose={() => setInvestAlertModalOpen(false)} // 확인 버튼 클릭 시 모달 닫기
+        onClose={() => setInvestAlertModalOpen(false)} 
         message={investAlertMessage}
       />
 
