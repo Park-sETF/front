@@ -2,6 +2,7 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '~/stores/auth/authSlice';
+import InstallPWA from '~/components/layouts/InstallPwa';
 
 export default function Init() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function Init() {
       style={{
         maxWidth: '430px',
         textAlign: 'center',
+        overflowX: 'hidden',
       }}
     >
       <h1
@@ -38,7 +40,7 @@ export default function Init() {
             width: '100%',
             height: 'auto',
             objectFit: 'contain',
-            marginRight: '28px'
+            marginRight: '28px',
           }}
         />
       </div>
@@ -57,13 +59,20 @@ export default function Init() {
           className="d-flex flex-column margin-auto mx-3"
           style={{ gap: '10px' }}
         >
-          <Button className="mt-3" onClick={() => navigate('/login')} style={{backgroundColor: '#3182F6'}}>
+          <Button
+            className="mt-3"
+            onClick={() => navigate('/login')}
+            style={{ backgroundColor: '#3182F6' }}
+          >
             로그인
           </Button>
-          <Button 
-            variant="link" 
+          <Button
+            variant="link"
             className="text-primary text-decoration-none"
-            style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)', color: '#3182F6'}}
+            style={{
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+              color: '#3182F6',
+            }}
             onClick={() => navigate('/signup')}
           >
             회원 가입 바로가기
@@ -73,6 +82,7 @@ export default function Init() {
           </Button> */}
         </div>
       )}
+      <InstallPWA className="fixed-bottom mt-3" />
     </div>
   );
 }
