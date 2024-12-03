@@ -8,9 +8,13 @@ import BigButton from '~/components/buttons/BigButton';
 import api from '~/lib/apis/auth';
 import debounce from 'lodash/debounce';
 import { Container, Row, Col, FormControl, Button } from 'react-bootstrap';
+import InvestModal from '../home/InvestModal';
+import AlertModal from '../home/AlertModal';
+import InvestAlertModal from '../home/InvestAlertModal';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Chart.css';
+import { Trophy } from 'lucide-react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -49,6 +53,80 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
   const chartRef = useRef(null);
   const percentagesRef = useRef(percentages);
 
+  const [modalOpen, setModalOpen] = useState(false); // 투자하기 모달창 상태
+  const [alertModalOpen, setAlertModalOpen] = useState(false); // 알림 모달창 상태 
+  const [alertMessage, setAlertMessage] = useState(''); // 알림 메시지 상태
+
+  const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
+  const [investAlertMessage, setInvestAlertMessage] = useState('');
+
+  //투자하기 버튼을 눌렀을 때 선택되는 함수 
+  const handleInvestClick = () => {
+    if (title.length === 0) {
+      setAlertMessage('제목을 입력해주세요.');
+      setAlertModalOpen(true); // 알림 모달창 열기
+      return;
+    }
+
+    if (!isTotalPercentage100) {
+      setAlertMessage('모든 주식의 비율 합이 100%가 되어야 합니다.');
+      setAlertModalOpen(true); // 알림 모달창 열기
+      return;
+    }
+
+    setModalOpen(true); // 모달창 열기 
+  }
+
+  // 알림 모달창에서 닫기 버튼 클릭 시 실행되는 함수
+  const handleAlertClose = () => {
+    setAlertModalOpen(false); // 알림 모달창 닫기
+  };
+
+  //모달창에서 취소 눌렀을 때 실행되는 함수 
+  const handleModalClose = () => {
+    setModalOpen(false); //모달창 닫기 
+  }
+
+  // 투자 완료 알림 모달 닫기
+   const handleInvestAlertClose = () => {
+    setInvestAlertModalOpen(false); // 투자 완료 알림 모달창 닫기
+    navigate('/'); // 투자가 완료되면 홈으로 이동! 
+
+  };
+
+  //실제로 투자가 완료 버튼을 눌렀을 때 
+  const handleInvestComfirm =  async() =>{
+    try{
+      const etfList = stocks.map((stock, index) => ({
+        stockCode: stock.stockCode,
+        stockName: stock.stockName,
+        price: stock.purchasePrice,
+        percentage: percentages[index] || 0,
+      }));
+
+      const requestData = {
+        etfList,
+        title: title,
+      };
+
+      const response = await api.post(`/etf/buy/${id}`, requestData);
+
+      console.log('ETF 투자 성공', response.data);
+      setInvestAlertMessage('투자 요청이 성공적으로 완료되었습니다!')
+      setInvestAlertModalOpen(true); // 투자 완료 알림 모달창 열기
+      localStorage.setItem("saveStocks", null);
+
+    }catch(error){
+      console.error('ETF 투자하기 오류', error);
+      setInvestAlertMessage('투자 요청 중 오류가 발생했습니다.')
+      setInvestAlertModalOpen(true); // 투자 완료 알림 모달창 열기
+    }finally {
+      setModalOpen(false); // 투자 모달창 닫기
+    }
+
+  }
+
+  
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -288,42 +366,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
     setPercentages(newPercentages);
   };
 
-  const addButtonClick = async () => {
-    try {
-      if(title.length == 0) {
-        alert('제목을 입력해주세요.');
-        return;
-      }
-
-      if(!isTotalPercentage100) {
-        alert('모든 주식의 비율 합이 100%가 되어야 합니다.');
-        return;
-      }
-
-      const etfList = stocks.map((stock, index) => ({
-        stockCode: stock.stockCode,
-        stockName: stock.stockName,
-        price: stock.purchasePrice,
-        percentage: percentages[index] || 0,
-      }));
-
-      const requestData = {
-        etfList,
-        title: title,
-      };
-
-      const response = await api.post(`/etf/buy/${id}`, requestData);
-
-      console.log('ETF 투자 성공', response.data);
-      alert('투자 요청이 성공적으로 완료되었습니다!');
-      localStorage.setItem("saveStocks", null);
-      navigate("/");
-    } catch (error) {
-      console.error('ETF 투자하기 오류', error);
-      alert('투자 요청 중 오류가 발생했습니다.');
-    }
-  };
-
+  
   return (
     <Container>
       <div>
@@ -504,9 +547,30 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
 
       <BigButton
         text={'투자하기'}
-        onClick={addButtonClick}
+        onClick={handleInvestClick}
         disabled={!isTotalPercentage100}
       />
+
+      <InvestModal
+        isOpen={modalOpen}
+        onClose={handleModalClose}
+        message={"정말 투자하시겠습니까?"}
+        onConfirm={handleInvestComfirm}
+      />
+
+      <AlertModal
+        isOpen={alertModalOpen}
+        onClose={handleAlertClose}
+        message={alertMessage}/>
+
+      {/* 투자 완료 알림 모달 */}
+      <InvestAlertModal
+        isOpen={investAlertModalOpen}
+        onClose={handleInvestAlertClose}
+        message={investAlertMessage}
+      />
+
+
     </Container>
   );
 }
