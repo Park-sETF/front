@@ -13,8 +13,8 @@ export default function ETFButtonList({ items }) {
   const [showModal, setShowModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [modalValues, setModalValues] = useState({
-    takeProfit: 80,
-    stopLoss: -20,
+    takeProfit: 10,
+    stopLoss: -10,
   });
 
   // 손절점, 익절점 모달창에서 완료됐을 경우 띄는 모달창 
@@ -39,6 +39,7 @@ export default function ETFButtonList({ items }) {
         profitSpot: modalValues.takeProfit, 
         lossSpot: modalValues.stopLoss, 
       };
+    
 
       await api.post('/notifications/subscribe/portfolio', requestBody);
 
@@ -48,6 +49,8 @@ export default function ETFButtonList({ items }) {
       }));
 
       setInvestAlertMessage("알림 설정이 완료되었습니다!");
+      console.log(requestBody);
+      console.log("알림추가요");
       setInvestAlertModalOpen(true);
 
     } catch (error) {
