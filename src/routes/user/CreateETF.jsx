@@ -17,7 +17,7 @@ export default function ETFPocket() {
     if (location.state && location.state.stocks) {
       setSelectedStocks([...location.state.stocks]);
     }
-  }, [location.state, setSelectedStocks]);
+  }, []);
 
   const addStock = () => {
     navigate('/select-stock'); // 추가하기 버튼 클릭시 종목 선택하기 페이지로 이동
