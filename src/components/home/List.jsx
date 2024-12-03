@@ -14,7 +14,7 @@ export default function List({ items, onItemClick }) {
       }}
     >
       <div
-        className="px-3"
+        className="px-4"
         style={{
           margin: "20px",
           marginTop: "3px",
@@ -31,8 +31,7 @@ export default function List({ items, onItemClick }) {
             }}
             onClick={() => onItemClick(item)} 
           >
-            <span style={{ fontSize: "16px", width: '100px',                 overflow: 'hidden',
- }}>
+            <span style={{ fontSize: "16px", width: '80px', overflow: 'hidden'}}>
               {item.name}
             </span>
             <div className="d-flex align-items-center gap-3">
@@ -40,7 +39,7 @@ export default function List({ items, onItemClick }) {
                 style={{
                   color: item.isPositive ? "#ff3b3b" : "#0051c7",
                   fontSize: "16px",
-                  width: '160px'
+                  width: '150px'
                 }}
               >
                 수익률{' '}

@@ -68,6 +68,7 @@ export default function ETFInvestmentChart({ stocks, addStock, setStocks }) {
     if(title === DEFAULT_TITLE) {
       setAlertMessage('제목을 수정해주세요.');
       setAlertModalOpen(true); // 알림 모달창 열기
+      return;
     }
     if (title.length === 0) {
       setAlertMessage('제목을 입력해주세요.');
