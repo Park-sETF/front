@@ -63,14 +63,6 @@
   color: #d9534f;
 }
 
-.profit-button:hover {
-  background-color: #cce5ff;
-}
-
-.loss-button:hover {
-  background-color: #ffcccc;
-}
-
 .small-button {
   padding: 4px 8px; 
   font-size: 11px; 
