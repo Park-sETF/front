@@ -40,6 +40,7 @@ export default function ETFInvestmentChart({
     ALERT_PERCENTAGE: '모든 주식의 비율 합이 100%가 되어야 합니다.',
     INVEST_SUCCESS: '투자 요청이 성공적으로 완료되었습니다!',
     INVEST_FAILURE: '투자 요청 중 오류가 발생했습니다.',
+    TITLE_LENGTH: '제목은 14자까지만 입력가능합니다.',
   };
 
   const [percentages, setPercentages] = useState([]);
@@ -67,24 +68,6 @@ export default function ETFInvestmentChart({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(stocks.length === 0);
-  }, [stocks.length]);
-
-  useEffect(() => {
-    if (!loading) {
-      const initialPercentages = stocks.map((stock) =>
-        isForCopy ? (stock.percentage != null ? stock.percentage : 0) : 3
-      );
-      setPercentages(initialPercentages);
-    }
-  }, [stocks, isForCopy, loading]);
-
-  useEffect(() => {
-    const total = percentages.reduce((sum, p) => sum + p, 0);
-    setIsTotalPercentage100(total === 100);
-  }, [percentages]);
-
-  useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const id = localStorage.getItem('id');
@@ -99,6 +82,24 @@ export default function ETFInvestmentChart({
 
     fetchUserInfo();
   }, []);
+
+  useEffect(() => {
+    setLoading(stocks.length === 0);
+  }, [stocks.length]);
+
+  useEffect(() => {
+    if (!loading) {
+      const initialPercentages = stocks.map((stock) =>
+        isForCopy ? (stock.percentage != null ? stock.percentage : 0) : 3
+      );
+      setPercentages(initialPercentages);
+    }
+  }, [isForCopy, loading]);
+
+  useEffect(() => {
+    const total = percentages.reduce((sum, p) => sum + p, 0);
+    setIsTotalPercentage100(total === 100);
+  }, [percentages]);
 
   useEffect(() => {
     setTotalBalance(initialTotalBalance - investmentAmount);
@@ -123,61 +124,69 @@ export default function ETFInvestmentChart({
     setInvestmentAmount(numberValue);
   };
 
-  const handlePercentageChange = useCallback(
-    debounce((index, value) => {
-      let newValue = parseInt(value, 10);
-      if (isNaN(newValue)) newValue = 0;
-      newValue = Math.min(100, Math.max(0, newValue));
+  const handlePercent = (index, value) => {
+    let newValue = parseInt(value, 10);
+    if (isNaN(newValue)) newValue = 0;
+    newValue = Math.min(100, Math.max(0, newValue));
 
-      let newPercentages = [...percentages];
-      const oldValue = newPercentages[index];
-      newPercentages[index] = newValue;
+    let newPercentages = [...percentages];
+    const oldValue = newPercentages[index];
+    newPercentages[index] = newValue;
 
-      let total = newPercentages.reduce((sum, p) => sum + p, 0);
-      let difference = total - 100;
+    let total = newPercentages.reduce((sum, p) => sum + p, 0);
+    let difference = total - 100;
 
-      if (difference !== 0) {
-        const otherIndices = newPercentages
-          .map((_, i) => i)
-          .filter((i) => i !== index);
+    if (difference !== 0) {
+      const otherIndices = newPercentages
+        .map((_, i) => i)
+        .filter((i) => i !== index);
 
-        let adjustableIndices = otherIndices.filter(
-          (i) => newPercentages[i] > 0
-        );
-        while (difference !== 0 && adjustableIndices.length > 0) {
-          for (let i of adjustableIndices) {
-            if (difference === 0) break;
+      let adjustableIndices = otherIndices.filter(
+        (i) => newPercentages[i] >= 0
+      );
+      while (difference !== 0 && adjustableIndices.length > 0) {
+        for (let i of adjustableIndices) {
+          if (difference === 0) break;
 
-            let maxAdjustable =
-              difference > 0 ? newPercentages[i] : 100 - newPercentages[i];
-            let adjustment = Math.min(maxAdjustable, Math.abs(difference), 1);
+          let maxAdjustable =
+            difference > 0 ? newPercentages[i] : 100 - newPercentages[i];
+          let adjustment = Math.min(maxAdjustable, Math.abs(difference), 1);
 
-            if (difference > 0) {
-              newPercentages[i] -= adjustment;
-              difference -= adjustment;
-            } else {
-              newPercentages[i] += adjustment;
-              difference += adjustment;
-            }
-
-            if (newPercentages[i] <= 0) {
-              newPercentages[i] = 0;
-            }
+          if (difference > 0) {
+            newPercentages[i] -= adjustment;
+            difference -= adjustment;
+          } else {
+            newPercentages[i] += adjustment;
+            difference += adjustment;
           }
-          adjustableIndices = otherIndices.filter((i) => newPercentages[i] > 0);
-        }
 
-        if (difference !== 0) {
-          newPercentages[index] = oldValue;
+          if (newPercentages[i] <= 0) {
+            newPercentages[i] = 0;
+          }
         }
+        adjustableIndices = otherIndices.filter((i) => newPercentages[i] > 0);
       }
 
-      setPercentages(newPercentages);
-    }, 30),
-    [percentages]
+      if (difference !== 0) {
+        newPercentages[index] = oldValue;
+      }
+    }
+
+    setPercentages(newPercentages);
+  }
+
+  const handlePercentageChange = (index,value) => useCallback(
+    handlePercent(index,value),
+    [index, value]
   );
 
   const handleInvestClick = () => {
+    if(title.length > 14) {
+      setAlertMessage(MESSAGES.TITLE_LENGTH);
+      setAlertModalOpen(true);
+      return; 
+    }
+
     if (title === '포트폴리오 제목을 입력해주세요') {
       setAlertMessage(MESSAGES.ALERT_TITLE_REQUIRED);
       setAlertModalOpen(true);

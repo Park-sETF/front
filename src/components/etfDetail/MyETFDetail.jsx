@@ -40,23 +40,19 @@ export default function Component() {
   const [investAlertMessage, setInvestAlertMessage] = useState('');
 
 
-
   const sellMyETF = async () => {
     await api
       .delete(`/etf/sell/${portfolioId}`)
       .then(() => {
         setInvestAlertMessage('매도가 완료되었습니다.');
         setInvestAlertModalOpen(true); // 알림 모달창 열기
-        console.log('포트폴리오 삭제가 완료되었습니다.');
 
       })
       .catch(() => {
         setInvestAlertMessage('매도 실패');
         setInvestAlertModalOpen(true); // 알림 모달창 열기
-        console.log('포트폴리오 삭제 실패.');
       });
 
-      navigate('/user?activeTab=나의+ETF');
   };
 
   const [colors, setColors] = useState(
@@ -292,7 +288,7 @@ export default function Component() {
       <InvestAlertModal
         isOpen={investAlertModalOpen} // 상태로 모달 표시 여부 제어
         onClose={() => {setInvestAlertModalOpen(false); 
-          navigate('/');} // 모달 닫기 후 홈으로 이동
+          navigate('/user?activeTab=나의+ETF');} // 모달 닫기 후 홈으로 이동
         }
          // 확인 버튼 클릭 시 모달 닫기
         message={investAlertMessage} // 동적으로 설정된 메시지 전달
