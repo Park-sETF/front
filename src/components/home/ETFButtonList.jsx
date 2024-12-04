@@ -5,17 +5,18 @@ import PercentageModal from './PercentageModal';
 import { useNavigate } from 'react-router-dom';
 import api from '~/lib/apis/auth';
 import InvestAlertModal from './InvestAlertModal';
+import AlarmAlertModal from './AlarmAlertModal';
 
 export default function ETFButtonList({ items }) {
   const navigate = useNavigate();
 
   const [activeItems, setActiveItems] = useState({});
   const [showModal, setShowModal] = useState(false);
-  //현재 선택한 포트폴리오 ID 저장 
   const [currentPortfolioId, setCurrentPortfolioId] = useState(null);
-
   const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
   const [investAlertMessage, setInvestAlertMessage] = useState('');
+  const [alarmAlertModalOpen, setAlarmAlertModalOpen] = useState(false);
+  const [alarmAlertMessage, setAlarmAlertMessage] = useState('');
 
   // 알림 상태를 localStorage에서 가져오기
   useEffect(() => {
@@ -28,14 +29,12 @@ export default function ETFButtonList({ items }) {
     localStorage.setItem('activeItems', JSON.stringify(activeItems));
   }, [activeItems]);
 
-  // 알림 버튼 클릭 처리 -> 현재 포트폴리오 ID 저장
   const handleToggle = (portfolioId, event) => {
     event.stopPropagation();
     setCurrentPortfolioId(portfolioId);
     setShowModal(true);
   };
 
-  // 모달 저장 처리
   const handleModalSave = async (updatedValues) => {
     if (!currentPortfolioId) return;
 
@@ -47,27 +46,24 @@ export default function ETFButtonList({ items }) {
         lossSpot: parseFloat(updatedValues.stopLoss),
       };
 
-      console.log('Request Body:', requestBody);
-
-      await api.post('/notifications/subscribe/portfolio', requestBody);
+      const response = await api.post('/notifications/subscribe/portfolio', requestBody);
 
       setActiveItems((prev) => ({
         ...prev,
         [currentPortfolioId]: true,
       }));
 
-      setInvestAlertMessage('알림 설정이 완료되었습니다!');
+      setInvestAlertMessage(response.data || '알림 설정이 완료되었습니다!');
       setInvestAlertModalOpen(true);
     } catch (error) {
-      console.error('알림 설정 오류:', error);
-      setInvestAlertMessage('알림 설정 중 오류가 발생했습니다!');
-      setInvestAlertModalOpen(true);
+      const errorMessage = error.response?.data || '알림 설정 중 오류가 발생했습니다!';
+      setAlarmAlertMessage(errorMessage);
+      setAlarmAlertModalOpen(true);
     } finally {
       setShowModal(false);
     }
   };
 
-  // 모달 취소 처리
   const handleModalCancel = async () => {
     if (!currentPortfolioId) {
       setShowModal(false);
@@ -80,37 +76,23 @@ export default function ETFButtonList({ items }) {
         portfolioId: currentPortfolioId,
       };
 
-      await api.delete('/notifications/subscribe/portfolio', { data: requestBody });
+      const response = await api.delete('/notifications/subscribe/portfolio', { data: requestBody });
 
       setActiveItems((prev) => ({
         ...prev,
         [currentPortfolioId]: false,
       }));
 
-      setInvestAlertMessage('알림이 해제되었습니다.');
+      setInvestAlertMessage(response.data || '알림이 해제되었습니다!');
       setInvestAlertModalOpen(true);
     } catch (error) {
-      console.error('알림 해제 오류:', error);
-      setInvestAlertMessage('설정된 알림이 없습니다.');
-      setInvestAlertModalOpen(true);
+      const errorMessage = error.response?.data || '알림 해제 중 오류가 발생했습니다!';
+      setAlarmAlertMessage(errorMessage);
+      setAlarmAlertModalOpen(true);
     } finally {
       setShowModal(false);
     }
   };
-
-  // 데이터가 없는 경우
-  if (!items || items.length === 0) {
-    return (
-      <div className="container mt-4" style={{ margin: '23px' }}>
-        <h1 className="fw-bold" style={{ fontSize: '18.5px', lineHeight: '1.5', marginBottom: 0 }}>
-          ETF가 없습니다
-        </h1>
-        <p style={{ fontSize: '13px', color: '#8E8E93', marginTop: '6px' }}>
-          나만의 ETF를 만들어 보세요!
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div
@@ -143,7 +125,6 @@ export default function ETFButtonList({ items }) {
               navigate(`/etf/my-detail/${item.portfolioId || 'unknown'}`)
             }
           >
-            {/* ETF 이름 */}
             <span
               style={{
                 fontSize: '16px',
@@ -156,8 +137,6 @@ export default function ETFButtonList({ items }) {
             >
               {item.name}
             </span>
-
-            {/* 수익률 */}
             <span
               style={{
                 color: item.revenue >= 0 ? '#ff3b3b' : '#0051c7',
@@ -172,8 +151,6 @@ export default function ETFButtonList({ items }) {
               수익률 {item.revenue >= 0 ? '+' : ''}
               {item.revenue.toFixed(2)}%
             </span>
-
-            {/* 알림 설정 버튼 */}
             <button
               onClick={(e) => handleToggle(item.portfolioId, e)}
               className={`btn btn-sm rounded-pill ${
@@ -211,17 +188,20 @@ export default function ETFButtonList({ items }) {
           </div>
         ))}
       </div>
-
       <PercentageModal
         show={showModal}
         onHide={handleModalCancel}
         onSave={handleModalSave}
       />
-
       <InvestAlertModal
         isOpen={investAlertModalOpen}
         onClose={() => setInvestAlertModalOpen(false)}
         message={investAlertMessage}
+      />
+      <AlarmAlertModal
+        isOpen={alarmAlertModalOpen}
+        onClose={() => setAlarmAlertModalOpen(false)}
+        message={alarmAlertMessage}
       />
     </div>
   );
