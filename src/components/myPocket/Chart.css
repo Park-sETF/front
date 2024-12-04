@@ -69,12 +69,12 @@
   font-size: 1rem;
   margin-right: 0.5rem;
   max-width: 70px;
-  overflow-x: hidden;
 }
 
 .stock-percentage {
   display: flex;
   align-items: center;
+  min-width: 135px;
 }
 
 .percentage-slider {
