@@ -1,17 +1,27 @@
 import { useState, useEffect } from 'react';
-
-// 임시 사용자 데이터
-const userData = {
-  currentGrade: 'SILVER',
-  commission: 5,
-  investmentAmount: 3000000, // 300만원
-  nextGradeTarget: 5000000,  // 500만원
-};
+import {useParams} from 'react-router-dom'
 
 const gradeOrder = ['BRONZE', 'SILVER', 'GOLD', 'VIP'];
 
+const gradeImages = [
+  "/images/grade/BRONZE.png",
+  "/images/grade/SILVER.png",
+  "/images/grade/GOLD.png",
+  "/images/grade/VIP.png",
+]
+
+// 임시 사용자 데이터
+
 export default function MyGrade() {
   const [progress, setProgress] = useState(0);
+  const { level } = useParams(); // URL에서 portfolioId를 가져옴
+
+  const userData = {
+    currentGrade: gradeOrder[level],
+    commission: 5,
+    investmentAmount: 3000000, // 300만원
+    nextGradeTarget: 5000000,  // 500만원
+  };
   
   useEffect(() => {
     // 다음 등급까지 진행률 계산
@@ -35,7 +45,7 @@ export default function MyGrade() {
         
         <div className="d-flex align-items-center mb-4">
           <img 
-            src={`/images/grade/${userData.currentGrade}.png`} // 경로 수정
+            src={gradeImages[level]} // 경로 수정
             alt={userData.currentGrade}
             style={{ width: '60px', height: '60px', marginRight: '20px' }}
           />

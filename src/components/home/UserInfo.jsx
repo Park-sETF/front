@@ -23,6 +23,13 @@ export default function UserInfo() {
     'images/ink.png',
   ];
 
+  const gradeImages = [
+    "/images/grade/BRONZE.png",
+    "/images/grade/SILVER.png",
+    "/images/grade/GOLD.png",
+    "/images/grade/VIP.png",
+  ]
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -81,6 +88,13 @@ export default function UserInfo() {
           <div className="d-flex align-items-center gap-2 mb-1">
             <span className="fw-bold" style={{ fontSize: '26px' }}>
               {userData.nickname}
+              <img
+                src={gradeImages[userData.level]}
+                alt="Profile"
+                className="rounded-circle"
+                style={{ width: "25px", height: "25px", objectFit: "cover", margin: '7px' }}
+                onClick={() => { navigate(`/grade?level=${userData.level}`) }}
+              />
             </span>
             <div>
               <span
@@ -106,7 +120,7 @@ export default function UserInfo() {
           </div>
         </div>
         <img
-          src={images[id % 6]}
+          src={images[id % images.length]}
           alt="Profile"
           className="rounded-circle"
           style={{ width: '60px', height: '60px', objectFit: 'cover' }}

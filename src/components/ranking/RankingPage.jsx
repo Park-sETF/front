@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styles from "./RankingContent.module.css"; // CSS 모듈을 임포트
 import api from "~/lib/apis/auth";
 
-
 const images = [
   "/images/profile/doremi.png",
   "/images/profile/lay.png",
@@ -35,7 +34,7 @@ const RankingContent = () => {
       const data = rankingsResponse.data.map((item,index) => ({
         userId: item.userId,
         name: item.nickname,
-        image: images[item.userId % images.length], // 순서대로 이미지를 배치
+        image: images[userId % images.length], // 순서대로 이미지를 배치
         totalRevenue: item.totalRevenue,
         revenuePercentage: item.revenuePercentage || 0, // 기본값 0 설정
         subscribed: subscriptions.includes(item.userId),
