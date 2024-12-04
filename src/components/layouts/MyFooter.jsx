@@ -64,7 +64,10 @@ export default function Footer() {
           {notifications.length > 0 && (
             <span
               className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-              style={{ fontSize: "10px" }}
+              style={{
+                fontSize: "13px",
+                transform: "translate(-50%, -50%)", // 위치를 왼쪽 아래로 이동
+              }}
             >
               {notifications.length}
             </span>

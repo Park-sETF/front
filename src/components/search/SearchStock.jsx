@@ -12,7 +12,7 @@ export default function SearchStock() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [recentSearches, setRecentSearches] = useState([]);
-  const [searchedStock, setSearchedStock] = useState(null);
+  const [searchedStocks, setSearchedStocks] = useState([]); // 검색 결과를 배열로 저장
   const [searching, setSearching] = useState(false);
 
   const userId = localStorage.getItem("id");
@@ -47,14 +47,16 @@ export default function SearchStock() {
         params: { userId, stockName: term },
       });
 
-      const stockData = response.data || {};
-      setSearchedStock({
-        stockCode: stockData.stockCode || "N/A",
-        stockName: stockData.stockName || "알 수 없음",
-        price: stockData.price || 0,
-        priceChangeRate: stockData.priceChangeRate || "0%",
-        logo: getStockLogo(stockData.stockCode),
-      });
+      const stocks = response.data || [];
+      const formattedStocks = stocks.map((stock) => ({
+        stockCode: stock.stockCode || "N/A",
+        stockName: stock.stockName || "알 수 없음",
+        price: stock.price || 0,
+        priceChangeRate: stock.priceChangeRate || "0%",
+        logo: getStockLogo(stock.stockCode),
+      }));
+
+      setSearchedStocks(formattedStocks);
       setSearching(true);
     } catch (error) {
       console.error("검색 실패:", error);
@@ -78,41 +80,43 @@ export default function SearchStock() {
 
   const handlePocketClick = () => navigate("/etf-pocket");
 
-  const renderSearchResult = () => {
-    if (!searchedStock) return null;
+  const renderSearchResults = () => {
+    if (!searchedStocks.length) return null;
 
     return (
-      <div className="search-result">
-        <div className="search-result-item">
-          <div className="d-flex align-items-center gap-3">
-            <img
-              src={searchedStock.logo}
-              alt={searchedStock.stockName}
-              className="rounded stock-logo"
-            />
-            <div>
-              <div className="stock-name">{searchedStock.stockName}</div>
-              <div className="d-flex align-items-center gap-2 stock-info">
-                <span>{searchedStock.price?.toLocaleString()}원</span>
-                <span
-                  className={
-                    searchedStock.priceChangeRate.includes("+")
-                      ? "text-danger"
-                      : "text-primary"
-                  }
-                >
-                  {searchedStock.priceChangeRate}%
-                </span>
+      <div className="search-results">
+        {searchedStocks.map((stock, index) => (
+          <div key={index} className="search-result-item">
+            <div className="d-flex align-items-center gap-3">
+              <img
+                src={stock.logo}
+                alt={stock.stockName}
+                className="rounded stock-logo"
+              />
+              <div>
+                <div className="stock-name">{stock.stockName}</div>
+                <div className="d-flex align-items-center gap-2 stock-info">
+                  <span>{stock.price?.toLocaleString()}원</span>
+                  <span
+                    className={
+                      stock.priceChangeRate.includes("+")
+                        ? "text-danger"
+                        : "text-primary"
+                    }
+                  >
+                    {stock.priceChangeRate}%
+                  </span>
+                </div>
               </div>
             </div>
+            <button
+              className="btn btn-primary add-button"
+              onClick={() => handleAddToBasket(stock)}
+            >
+              담기
+            </button>
           </div>
-          <button
-            className="btn btn-primary add-button"
-            onClick={() => handleAddToBasket(searchedStock)}
-          >
-            담기
-          </button>
-        </div>
+        ))}
       </div>
     );
   };
@@ -150,7 +154,7 @@ export default function SearchStock() {
         </button>
       </div>
       {/* 검색 결과 */}
-      {searching && renderSearchResult()}
+      {searching && renderSearchResults()}
       {/* 최근 검색어 */}
       {!searching && (
         <div className="recent-container">
