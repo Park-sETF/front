@@ -111,6 +111,11 @@ const authSlice = createSlice({
         state.loading = false; // 로딩 상태 초기화
         state.error = null; // 오류 상태 초기화
       })
+      .addCase(logout.rejected, state=>{
+        state.user = null; // 사용자 정보 초기화
+        state.loading = false; // 로딩 상태 초기화
+        state.error = action.payload.message;
+      })
 
       // 회원가입 처리
       .addCase(signup.pending, (state) => {
