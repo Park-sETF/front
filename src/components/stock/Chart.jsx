@@ -42,7 +42,7 @@ export default function Chart({ stocks }) {
 
   return (
     <div style={{ width: '100%', maxWidth: '430px', margin: '0 auto' }}>
-      <div className="container mt-4" style={{ margin: '14px' }}>
+      <div className="container mt-3" style={{ margin: '14px' }}>
         {updatedStocks.map((stock, index) => {
           const isSaved = selectedStocks.some(
             (s) => s.stockCode === stock.stockCode
