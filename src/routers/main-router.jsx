@@ -1,8 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
-import Layout from '~/components/layouts/Layout';
 
+import Layout from '~/components/layouts/Layout';
 const Init = lazy(() => import('~/routes/init/page'));
 const User = lazy(() => import('~/routes/user/User'));
 const Membership = lazy(() => import('~/routes/membership/page'));
@@ -19,9 +19,8 @@ const ETFDetail = lazy(() => import('~/components/etfDetail/ETFDetail'));
 const MyETFDetail = lazy(() => import('~/components/etfDetail/MyETFDetail'));
 const Notification = lazy(() => import('~/routes/notification/page'));
 const Search = lazy(() => import('~/routes/search/page'));
-
-import GuestRoute from '~/routes/auth/GuestRoute';
-import ProtectedRoute from '~/routes/auth/ProtectedRoute';
+const GuestRoute = lazy(() => import('~/routes/auth/GuestRoute'));
+const ProtectedRoute = lazy(() => import('~/routes/auth/ProtectedRoute'));
 
 function wrapRoutes(routes) {
   return routes.map((route) => {
