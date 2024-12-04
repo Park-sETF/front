@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '~/components/myPocket/Chart.css';
+import '~/components/myPocket/Detail.css';
 import BigButton from '../buttons/BigButton';
 
 import api from '~/lib/apis/auth';
