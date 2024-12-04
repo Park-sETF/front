@@ -14,8 +14,8 @@ const layoutMapper = (pathname) => {
       break;
 
     case '/user':
-      headerComponent = HomeHeader;
-      headerProps = { Quantity: '4' }; 
+      headerComponent = MobileHeader;
+      headerProps = { text: '홈' }; 
       break;
 
     case '/membership': 
@@ -24,7 +24,7 @@ const layoutMapper = (pathname) => {
 
     case '/ranking': 
       headerComponent = MobileHeader;
-      headerProps = { text: '오늘의 랭킹', notifications: 5 };
+      headerProps = { text: '오늘의 랭킹'};
       break;
 
     case '/mypocket': // 개발 예정
@@ -65,8 +65,8 @@ const layoutMapper = (pathname) => {
     default:
       headerComponent = null;
       if (pathname.includes('/ranking-detail')){
-        headerComponent = RankingHeader;
-        headerProps = { text: '유저 랭킹 상세보기', notifications: 5 }; 
+        headerComponent = MobileHeader;
+        headerProps = { text: '유저 랭킹 상세보기'}; 
       }
 
       if(pathname.includes('/my-detail')) {
