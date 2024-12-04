@@ -15,7 +15,7 @@ export default function MyReport() {
       try {
         const response = await api.get(`/userinfo/myreport/${id}`);
         setReportData(response.data);
-
+  
       } catch {
         setError(true); // 에러 발생 시 에러 상태를 true로 설정
       } finally {
@@ -122,6 +122,7 @@ export default function MyReport() {
                     style={{ height: '25px' }}
                   >
                     <div
+                      className={`growBar-${index}`}
                       style={{
                         position: 'absolute',
                         top: '3px',
@@ -130,8 +131,21 @@ export default function MyReport() {
                         height: '70%',
                         backgroundColor: normalizedYield > 0 ? '#FF6B6B' : '#4A7DFF',
                         borderRadius: '4px',
+                        animation: `growBar-${index} 1s ease-out forwards`,
                       }}
                     />
+                    <style>
+                      {`
+                        @keyframes growBar-${index} {
+                          from {
+                            width: 0;
+                          }
+                          to {
+                            width: ${Math.abs(normalizedYield) * 0.6}%;
+                          }
+                        }
+                      `}
+                    </style>
                   </div>
                 </div>
               );
