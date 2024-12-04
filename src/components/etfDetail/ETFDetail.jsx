@@ -245,9 +245,9 @@ export default function Component() {
               </div>
             </div>
 
-            <div className="stock-list px-3">
+            <div className="stock-list px-3 w-100">
               {stocks.map((stock, index) => (
-                <div key={index} className="stock-item">
+                <div key={index} className="stock-item w-100">
                   <div
                     className="stock-color"
                     style={{
