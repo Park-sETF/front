@@ -8,11 +8,11 @@ export default function StockTab({
   fluctuationList,
   marketcapList,
 }) {
-  const [activeTab, setActiveTab] = useState('거래대금');
+  const [activeTab, setActiveTab] = useState('거래량');
 
   // 컴포넌트가 처음 로드될 때 기본 활성화 탭 설정
   useEffect(() => {
-    setActiveTab('거래대금'); // 초기 탭을 명시적으로 설정
+    setActiveTab('거래량'); // 초기 탭을 명시적으로 설정
   }, []);
 
   return (
@@ -20,34 +20,7 @@ export default function StockTab({
       {/* 탭 버튼 */}
       <div
         className="d-flex justify-content-between border-bottom"
-        style={{ margin: '23px', marginTop: 0, marginBottom: 0 }}
       >
-        {/* 거래대금 버튼 */}
-        <button
-          className={`btn btn-link text-decoration-none px-3 py-2 position-relative ${
-            activeTab === '거래대금' ? 'active' : ''
-          }`}
-          onClick={() => setActiveTab('거래대금')}
-          style={{
-            color: '#666',
-            fontSize: '16px',
-            fontWeight: activeTab === '거래대금' ? '600' : '400',
-            flexGrow: 1,
-            whiteSpace: 'nowrap',
-          }}
-        >
-          거래대금
-          {activeTab === '거래대금' && (
-            <div
-              className="position-absolute bottom-0 start-0 w-100"
-              style={{
-                height: '2px',
-                backgroundColor: '#000',
-              }}
-            />
-          )}
-        </button>
-
         {/* 거래량 버튼 */}
         <button
           className={`btn btn-link text-decoration-none px-3 py-2 position-relative ${
@@ -74,22 +47,22 @@ export default function StockTab({
           )}
         </button>
 
-        {/* 급상승 버튼 */}
+        {/* 수익자산 버튼 */}
         <button
           className={`btn btn-link text-decoration-none px-3 py-2 position-relative ${
-            activeTab === '급상승' ? 'active' : ''
+            activeTab === '수익자산' ? 'active' : ''
           }`}
-          onClick={() => setActiveTab('급상승')}
+          onClick={() => setActiveTab('수익자산')}
           style={{
             color: '#666',
             fontSize: '16px',
-            fontWeight: activeTab === '급상승' ? '600' : '400',
+            fontWeight: activeTab === '수익자산' ? '600' : '400',
             flexGrow: 1,
             whiteSpace: 'nowrap',
           }}
         >
-          급상승
-          {activeTab === '급상승' && (
+          수익자산
+          {activeTab === '수익자산' && (
             <div
               className="position-absolute bottom-0 start-0 w-100"
               style={{
@@ -100,22 +73,48 @@ export default function StockTab({
           )}
         </button>
 
-        {/* 급하락 버튼 */}
+        {/* 등락률 버튼 */}
         <button
           className={`btn btn-link text-decoration-none px-3 py-2 position-relative ${
-            activeTab === '급하락' ? 'active' : ''
+            activeTab === '등락률' ? 'active' : ''
           }`}
-          onClick={() => setActiveTab('급하락')}
+          onClick={() => setActiveTab('등락률')}
           style={{
             color: '#666',
             fontSize: '16px',
-            fontWeight: activeTab === '급하락' ? '600' : '400',
+            fontWeight: activeTab === '등락률' ? '600' : '400',
             flexGrow: 1,
             whiteSpace: 'nowrap',
           }}
         >
-          급하락
-          {activeTab === '급하락' && (
+          등락률
+          {activeTab === '등락률' && (
+            <div
+              className="position-absolute bottom-0 start-0 w-100"
+              style={{
+                height: '2px',
+                backgroundColor: '#000',
+              }}
+            />
+          )}
+        </button>
+
+        {/* 시가총액 버튼 */}
+        <button
+          className={`btn btn-link text-decoration-none px-3 py-2 position-relative ${
+            activeTab === '시가총액' ? 'active' : ''
+          }`}
+          onClick={() => setActiveTab('시가총액')}
+          style={{
+            color: '#666',
+            fontSize: '16px',
+            fontWeight: activeTab === '시가총액' ? '600' : '400',
+            flexGrow: 1,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          시가총액
+          {activeTab === '시가총액' && (
             <div
               className="position-absolute bottom-0 start-0 w-100"
               style={{
@@ -128,10 +127,10 @@ export default function StockTab({
       </div>
 
       <div>
-        {activeTab === '거래대금' && <Chart stocks={volumeList} />}
-        {activeTab === '거래량' && <Chart stocks={profitList} />}
-        {activeTab === '급상승' && <Chart stocks={fluctuationList} />}
-        {activeTab === '급하락' && <Chart stocks={marketcapList} />}
+        {activeTab === '거래량' && <Chart stocks={volumeList} />}
+        {activeTab === '수익자산' && <Chart stocks={profitList} />}
+        {activeTab === '등락률' && <Chart stocks={fluctuationList} />}
+        {activeTab === '시가총액' && <Chart stocks={marketcapList} />}
       </div>
 
       <style>{`
