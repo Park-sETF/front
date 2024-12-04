@@ -84,10 +84,10 @@ export default function MyReport() {
               style={{
                 backgroundColor: reportData.portfolioRevenue > 0 ? '#FFC5C5' : '#CDE1FD',
                 color: reportData.portfolioRevenue > 0 ? '#ff3b3b' : '#0051c7',
-                padding: '4px 8px',
+                padding: '3px 6px',
                 fontWeight: 'bold',
-                fontSize: '11px',
-                borderRadius: '5px'
+                fontSize: '9px',
+                borderRadius: '10px',
               }}
             >
               수익률 {(reportData.portfolioRevenue || 0).toFixed(2)}%

@@ -89,7 +89,8 @@ export default function UserInfo() {
                   backgroundColor: '#e8f3ff',
                   color: '#0051c7',
                   fontSize: '12px',
-                  padding: '4px 8px',
+                  padding: '3px 6px',
+                  borderRadius: '10px'
                 }}
                 onClick={handleMembership}
               >

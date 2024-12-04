@@ -26,11 +26,10 @@
   .badge {
     position: absolute;
     top: 5px;
-    start: 100%;
-    transform: translate(-50%, -50%);
-    font-size: 12px;
     background-color: #dc3545;
+    transform: translate(-50%, -50%);
     color: white;
+    font-size: 12px;
     padding: 3px 6px;
     border-radius: 50%;
   }
