@@ -7,7 +7,7 @@ import {useNavigate} from 'react-router-dom'
 
 import { Container, Row, Col, FormControl } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '~/components/myPocket/Chart.css';
+import '~/components/myPocket/Detail.css';
 import BigButton from '../buttons/BigButton';
 import InvestAlertModal from '../home/InvestAlertModal';
 
@@ -260,9 +260,9 @@ export default function Component() {
               </div>
             </div>
 
-            <div className="stock-list px-3">
+            <div className="stock-list px-3 w-100">
               {stocks.map((stock, index) => (
-                <div key={index} className="stock-item">
+                <div key={index} className="stock-item w-100">
                   <div
                     className="stock-color"
                     style={{

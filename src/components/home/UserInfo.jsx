@@ -23,6 +23,13 @@ export default function UserInfo() {
     'images/ink.png',
   ];
 
+  const gradeImages = [
+    '/images/grade/BRONZE.png',
+    '/images/grade/SILVER.png',
+    '/images/grade/GOLD.png',
+    '/images/grade/VIP.png',
+  ];
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -81,22 +88,37 @@ export default function UserInfo() {
           <div className="d-flex align-items-center gap-2 mb-1">
             <span className="fw-bold" style={{ fontSize: '26px' }}>
               {userData.nickname}
+              <img
+                src={gradeImages[userData.level - 1]}
+                alt="Profile"
+                className="rounded-circle"
+                style={{
+                  width: '25px',
+                  height: '25px',
+                  objectFit: 'cover',
+                  margin: '7px',
+                }}
+                onClick={() => {
+                  navigate(`/grade?level=${userData.level}`);
+                }}
+              />
             </span>
             <div>
               <span
-                className="badge"
                 style={{
+                  position: 'static',
                   backgroundColor: '#e8f3ff',
                   color: '#0051c7',
                   fontSize: '12px',
-                  padding: '4px 8px',
+                  padding: '3px 6px',
+                  borderRadius: '10px',
                 }}
                 onClick={handleMembership}
               >
                 {userData.member ? '쏠 회원' : '비회원'}
               </span>
               <span
-                className="badge rounded-pill"
+                className="rounded-pill"
                 style={{ color: '#333', fontSize: '10px', padding: '4px 8px' }}
               >
                 구독자 {userData.subscriberCount}
@@ -105,16 +127,17 @@ export default function UserInfo() {
           </div>
         </div>
         <img
-          src={images[id % 6]}
+          src={images[id % images.length]}
           alt="Profile"
           className="rounded-circle"
           style={{ width: '60px', height: '60px', objectFit: 'cover' }}
         />
       </div>
       <div className="mt-3" style={{ margin: '24px', marginBottom: 0 }}>
-
-        <div className='d-flex justify-content-between align-items-center'>
-          <div className="text-secondary mb-1" style={{ fontSize: '14px' }}>투자 가능 금액</div>
+        <div className="d-flex justify-content-between align-items-center">
+          <div className="text-secondary mb-1" style={{ fontSize: '14px' }}>
+            투자 가능 금액
+          </div>
 
           {/* 로그아웃 버튼 추가 */}
           <button
