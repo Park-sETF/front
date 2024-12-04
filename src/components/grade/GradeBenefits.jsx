@@ -28,14 +28,19 @@ const gradeData = {
 };
 
 export default function GradeBenefits() {
-  const [selectedGrade, setSelectedGrade] = useState('SILVER');
+  const [selectedGrade, setSelectedGrade] = useState('BRONZE');
 
   return (
     <div style={{ minWidth: '375px', maxWidth: '430px', margin: '0 auto' }}>
       <div className="px-4 py-3">
-        <h2 className="mb-4" style={{ fontSize: '20px', fontWeight: '600' }}>등급별 혜택</h2>
-        
-        <div className="d-flex justify-content-between mb-4" style={{ height: '150px' }}>
+        <h2 className="mb-4" style={{ fontSize: '20px', fontWeight: '600' }}>
+          등급별 혜택
+        </h2>
+
+        <div
+          className="d-flex justify-content-between mb-4"
+          style={{ height: '150px' }}
+        >
           {Object.keys(gradeData).map((grade) => (
             <div
               key={grade}
@@ -50,7 +55,8 @@ export default function GradeBenefits() {
                 style={{
                   width: '100%',
                   height: gradeData[grade].height, // Using the height from gradeData
-                  backgroundColor: grade === selectedGrade ? '#C2E2FF' : '#E9ECEF',
+                  backgroundColor:
+                    grade === selectedGrade ? '#C2E2FF' : '#E9ECEF',
                   borderRadius: '8px',
                   transition: 'all 0.3s ease',
                   position: 'relative',
@@ -86,13 +92,17 @@ export default function GradeBenefits() {
 
         <div className="p-4 rounded-3" style={{ backgroundColor: '#F8F9FA' }}>
           <div className="mb-4">
-            <h3 className="mb-2" style={{ fontSize: '16px', color: '#666' }}>혜택</h3>
+            <h3 className="mb-2" style={{ fontSize: '16px', color: '#666' }}>
+              혜택
+            </h3>
             <p className="mb-0" style={{ fontSize: '16px', fontWeight: '500' }}>
               {gradeData[selectedGrade].benefits}
             </p>
           </div>
           <div>
-            <h3 className="mb-2" style={{ fontSize: '16px', color: '#666' }}>기준</h3>
+            <h3 className="mb-2" style={{ fontSize: '16px', color: '#666' }}>
+              기준
+            </h3>
             <p className="mb-0" style={{ fontSize: '16px', fontWeight: '500' }}>
               {gradeData[selectedGrade].criteria}
             </p>
@@ -102,4 +112,3 @@ export default function GradeBenefits() {
     </div>
   );
 }
-
