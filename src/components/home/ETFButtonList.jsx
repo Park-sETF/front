@@ -6,98 +6,91 @@ import { useNavigate } from 'react-router-dom';
 import api from '~/lib/apis/auth';
 import InvestAlertModal from './InvestAlertModal';
 
-
 export default function ETFButtonList({ items }) {
   const navigate = useNavigate();
 
   const [activeItems, setActiveItems] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(null);
-  const [modalValues, setModalValues] = useState({
-    takeProfit: 80,
-    stopLoss: -20,
-  });
+  //현재 선택한 포트폴리오 ID 저장 
+  const [currentPortfolioId, setCurrentPortfolioId] = useState(null);
 
   const [investAlertModalOpen, setInvestAlertModalOpen] = useState(false);
   const [investAlertMessage, setInvestAlertMessage] = useState('');
 
+  // 알림 상태를 localStorage에서 가져오기
   useEffect(() => {
-    const savedActiveItems = JSON.parse(localStorage.getItem('activeItems'));
-    if (savedActiveItems) {
-      setActiveItems(savedActiveItems);
-    }
+    const savedActiveItems = JSON.parse(localStorage.getItem('activeItems')) || {};
+    setActiveItems(savedActiveItems);
   }, []);
 
+  // 알림 상태를 localStorage에 저장하기
   useEffect(() => {
     localStorage.setItem('activeItems', JSON.stringify(activeItems));
   }, [activeItems]);
 
-  const handleToggle = (index, event) => {
+  // 알림 버튼 클릭 처리 -> 현재 포트폴리오 ID 저장
+  const handleToggle = (portfolioId, event) => {
     event.stopPropagation();
-    setCurrentIndex(index);
+    setCurrentPortfolioId(portfolioId);
     setShowModal(true);
   };
 
+  // 모달 저장 처리
   const handleModalSave = async (updatedValues) => {
-    if (currentIndex === null || !items[currentIndex]) return;
-  
-    const selectedItem = items[currentIndex];
-  
+    if (!currentPortfolioId) return;
+
     try {
       const requestBody = {
         userId: localStorage.getItem('id'),
-        portfolioId: selectedItem.portfolioId,
-        profitSpot: parseFloat(updatedValues.takeProfit), 
+        portfolioId: currentPortfolioId,
+        profitSpot: parseFloat(updatedValues.takeProfit),
         lossSpot: parseFloat(updatedValues.stopLoss),
       };
-  
-      console.log('Request Body:', requestBody); 
-  
+
+      console.log('Request Body:', requestBody);
+
       await api.post('/notifications/subscribe/portfolio', requestBody);
-  
+
       setActiveItems((prev) => ({
         ...prev,
-        [currentIndex]: true,
+        [currentPortfolioId]: true,
       }));
-  
+
       setInvestAlertMessage('알림 설정이 완료되었습니다!');
       setInvestAlertModalOpen(true);
     } catch (error) {
       console.error('알림 설정 오류:', error);
-  
       setInvestAlertMessage('알림 설정 중 오류가 발생했습니다!');
       setInvestAlertModalOpen(true);
     } finally {
       setShowModal(false);
     }
   };
-  
+
+  // 모달 취소 처리
   const handleModalCancel = async () => {
-    if (currentIndex === null || !items[currentIndex]) {
+    if (!currentPortfolioId) {
       setShowModal(false);
       return;
     }
 
-    const selectedItem = items[currentIndex];
-
     try {
       const requestBody = {
         userId: localStorage.getItem('id'),
-        portfolioId: selectedItem.portfolioId,
+        portfolioId: currentPortfolioId,
       };
 
       await api.delete('/notifications/subscribe/portfolio', { data: requestBody });
 
       setActiveItems((prev) => ({
         ...prev,
-        [currentIndex]: false,
+        [currentPortfolioId]: false,
       }));
 
       setInvestAlertMessage('알림이 해제되었습니다.');
       setInvestAlertModalOpen(true);
     } catch (error) {
       console.error('알림 해제 오류:', error);
-
       setInvestAlertMessage('설정된 알림이 없습니다.');
       setInvestAlertModalOpen(true);
     } finally {
@@ -105,6 +98,7 @@ export default function ETFButtonList({ items }) {
     }
   };
 
+  // 데이터가 없는 경우
   if (!items || items.length === 0) {
     return (
       <div className="container mt-4" style={{ margin: '23px' }}>
@@ -136,9 +130,9 @@ export default function ETFButtonList({ items }) {
           marginTop: '3px',
         }}
       >
-        {items.map((item, index) => (
+        {items.map((item) => (
           <div
-            key={index}
+            key={item.portfolioId}
             className="d-flex justify-content-between align-items-center"
             style={{
               paddingTop: '1.1rem',
@@ -181,9 +175,9 @@ export default function ETFButtonList({ items }) {
 
             {/* 알림 설정 버튼 */}
             <button
-              onClick={(e) => handleToggle(index, e)}
+              onClick={(e) => handleToggle(item.portfolioId, e)}
               className={`btn btn-sm rounded-pill ${
-                activeItems[index] ? 'btn-primary' : 'btn-secondary'
+                activeItems[item.portfolioId] ? 'btn-primary' : 'btn-secondary'
               }`}
               style={{
                 width: '48px',
@@ -203,11 +197,11 @@ export default function ETFButtonList({ items }) {
                   top: '0.9px',
                   transition: 'transform 0.3s',
                   transform: `translateX(${
-                    activeItems[index] ? '24px' : '2px'
+                    activeItems[item.portfolioId] ? '24px' : '2px'
                   })`,
                 }}
               >
-                {activeItems[index] ? (
+                {activeItems[item.portfolioId] ? (
                   <Bell size={12} color="#007bff" />
                 ) : (
                   <BellOff size={12} color="#BBBBBB" />
@@ -220,33 +214,15 @@ export default function ETFButtonList({ items }) {
 
       <PercentageModal
         show={showModal}
-        onHide={handleModalCancel} // 알림 끄기
-        onSave={handleModalSave} // 알림 켜기
-        values={modalValues}
-        setValues={setModalValues}
+        onHide={handleModalCancel}
+        onSave={handleModalSave}
       />
 
       <InvestAlertModal
         isOpen={investAlertModalOpen}
-        onClose={() => setInvestAlertModalOpen(false)} 
+        onClose={() => setInvestAlertModalOpen(false)}
         message={investAlertMessage}
       />
-
-      <style>{`
-        div::-webkit-scrollbar {
-          width: 6px;
-        }
-        div::-webkit-scrollbar-track {
-          background: #f1f1f1;
-        }
-        div::-webkit-scrollbar-thumb {
-          background: #888;
-          border-radius: 3px;
-        }
-        div::-webkit-scrollbar-thumb:hover {
-          background: #555;
-        }
-      `}</style>
     </div>
   );
 }
