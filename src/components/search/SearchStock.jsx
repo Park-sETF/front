@@ -12,7 +12,7 @@ export default function SearchStock() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [recentSearches, setRecentSearches] = useState([]);
-  const [searchedStocks, setSearchedStocks] = useState([]); // 검색 결과를 배열로 저장
+  const [searchedStocks, setSearchedStocks] = useState([]); 
   const [searching, setSearching] = useState(false);
 
   const userId = localStorage.getItem("id");
@@ -75,7 +75,6 @@ export default function SearchStock() {
     if (!selectedStocks.some((s) => s.stockCode === formattedStock.stockCode)) {
       setSelectedStocks((prev) => [...prev, formattedStock]);
     }
-    alert(`${stock.stockName}가 장바구니에 담겼습니다.`);
   };
 
   const handlePocketClick = () => navigate("/etf-pocket");
