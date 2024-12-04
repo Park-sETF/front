@@ -84,8 +84,8 @@ export default function UserInfo() {
             </span>
             <div>
               <span
-                className="badge"
                 style={{
+                  position: 'static',
                   backgroundColor: '#e8f3ff',
                   color: '#0051c7',
                   fontSize: '12px',
@@ -96,7 +96,7 @@ export default function UserInfo() {
                 {userData.member ? '쏠 회원' : '비회원'}
               </span>
               <span
-                className="badge rounded-pill"
+                className="rounded-pill"
                 style={{ color: '#333', fontSize: '10px', padding: '4px 8px' }}
               >
                 구독자 {userData.subscriberCount}
