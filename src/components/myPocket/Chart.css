@@ -68,6 +68,8 @@
   flex: 1;
   font-size: 1rem;
   margin-right: 0.5rem;
+  max-width: 70px;
+  overflow-x: hidden;
 }
 
 .stock-percentage {
@@ -137,7 +139,6 @@
 /* Slider track */
 .custom-slider {
   -webkit-appearance: none;
-  width: 60%;
   height: 5px;
   border-radius: 5px;
   outline: none;
