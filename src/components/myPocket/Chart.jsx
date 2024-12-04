@@ -6,7 +6,6 @@ import { Plus } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import BigButton from '~/components/buttons/BigButton';
 import api from '~/lib/apis/auth';
-import debounce from 'lodash/debounce';
 import { Container, Row, Col, FormControl, Button } from 'react-bootstrap';
 import { useStockContext } from '~/components/context/StockProvider';
 import Modal from '~/components/modal/CustomModal';
@@ -16,7 +15,6 @@ import './Chart.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const colorPalette = ['#62B2FD', '#9BDFC4', '#9F97F7', '#F99BAB', '#FFB44F'];
 
 export default function ETFInvestmentChart({
   stocks,
@@ -26,6 +24,7 @@ export default function ETFInvestmentChart({
 }) {
   const id = localStorage.getItem('id');
   const navigate = useNavigate();
+  const colorPalette = ['#62B2FD', '#9BDFC4', '#9F97F7', '#F99BAB', '#FFB44F'];
 
   const generatePastelColor = () => {
     const r = Math.floor(Math.random() * 127 + 128);
@@ -66,6 +65,22 @@ export default function ETFInvestmentChart({
 
   const { setSelectedStocks } = useStockContext();
   const [loading, setLoading] = useState(true);
+
+  const [colors, setColors] = useState(() => {
+    return stocks.map((_, index) =>
+      index < colorPalette.length ? colorPalette[index] : generatePastelColor()
+    );
+  });
+  
+  useEffect(() => {
+    setColors((prevColors) => {
+      const newColors = stocks.map((_, index) =>
+        prevColors[index] || (index < colorPalette.length ? colorPalette[index] : generatePastelColor())
+      );
+      return newColors;
+    });
+  }, [stocks]);
+  
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -176,21 +191,21 @@ export default function ETFInvestmentChart({
   }
 
   const handlePercentageChange = (index,value) => useCallback(
-    handlePercent(index,value),
+    handlePercent(index, value),
     [index, value]
   );
 
   const handleInvestClick = () => {
-    if(title.length > 14) {
-      setAlertMessage(MESSAGES.TITLE_LENGTH);
-      setAlertModalOpen(true);
-      return; 
-    }
-
     if (title === '포트폴리오 제목을 입력해주세요') {
       setAlertMessage(MESSAGES.ALERT_TITLE_REQUIRED);
       setAlertModalOpen(true);
       return;
+    }
+
+    if(title.length > 14) {
+      setAlertMessage(MESSAGES.TITLE_LENGTH);
+      setAlertModalOpen(true);
+      return; 
     }
 
     if (!isTotalPercentage100) {
@@ -250,11 +265,13 @@ export default function ETFInvestmentChart({
   const addStockWithColor = () => {
     addStock();
     setPercentages((prevPercentages) => [...prevPercentages, 0]);
+    setColors((preColors) => [...preColors, generatePastelColor()])
   };
 
   const deleteStock = (index) => {
     setStocks(stocks.filter((_, i) => i !== index));
     setPercentages(percentages.filter((_, i) => i !== index));
+    setColors(colors.filter((_, i) => i !== index));
   };
 
   const distributeEqually = () => {
@@ -276,8 +293,7 @@ export default function ETFInvestmentChart({
     stockName: stock.stockName,
     purchasePrice: stock.purchasePrice,
     percentage: percentages[index],
-    color:
-      index < colorPalette.length ? colorPalette[index] : generatePastelColor(),
+    color: colors[index],
     stockIndex: index,
   }));
 
@@ -458,11 +474,8 @@ export default function ETFInvestmentChart({
                   <div
                     className="stock-color"
                     style={{
-                      backgroundColor:
-                        index < colorPalette.length
-                          ? colorPalette[index]
-                          : generatePastelColor(),
-                      borderRadius: '1rem',
+                      backgroundColor: colors[index],
+                      borderRadius: '1rem'
                     }}
                   ></div>
                   <span className="stock-name">{stock.stockName}</span>

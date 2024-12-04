@@ -33,6 +33,7 @@ export default function Layout() {
         className="flex-grow-1 overflow-hidden"
         style={{
           paddingBottom: '200px', // BigButton의 높이만큼 여백 추가
+          position: 'relative'
         }}
       >
         <Outlet />
