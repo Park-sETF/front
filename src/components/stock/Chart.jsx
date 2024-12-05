@@ -30,7 +30,7 @@ export default function Chart({ stocks }) {
     );
     return {
       ...stock,
-      logo: matchedLogo ? matchedLogo.logoImageUrl : defaultLogo, // 기본 로고 설정
+      logo: `https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`, // 기본 로고 설정
     };
   });
 
