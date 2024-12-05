@@ -96,7 +96,7 @@ export default function UserInfo() {
                   width: '25px',
                   height: '25px',
                   objectFit: 'cover',
-                  margin: '7px',
+                  margin: '10px',
                 }}
                 onClick={() => {
                   navigate(`/grade?level=${userData.level}`);
