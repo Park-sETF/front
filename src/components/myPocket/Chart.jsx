@@ -22,7 +22,7 @@ export default function ETFInvestmentChart({
   setStocks,
   isForCopy = false,
 }) {
-  if (!items || items.length === 0) {
+  if (!stocks || stocks.length === 0) {
     return (
       <div className="container mt-4" style={{ margin: "23px" }}>
         <h1
