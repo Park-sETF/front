@@ -11,7 +11,7 @@ export default function MyGrade() {
 
   const userData = {
     currentGrade: gradeOrder[level - 1],
-    commission: 5,
+    commission: 2,
     investmentAmount: 3000000, // 300만원
     nextGradeTarget: 5000000, // 500만원
   };
@@ -66,7 +66,9 @@ export default function MyGrade() {
               className="progress-bar"
               role="progressbar"
               style={{
-                width: `${progress}%`,
+                // width: `${progress}%`,
+                width: '2%',
+
                 backgroundColor: '#4B7BF5',
                 borderRadius: '4px',
               }}
@@ -92,7 +94,7 @@ export default function MyGrade() {
           className="text-center mb-0"
           style={{ fontSize: '14px', color: '#666' }}
         >
-          {remainingAmount.toLocaleString()}원만 투자하면 {nextGrade} 달성
+          수익률 10% 이상, 구독자수 100명 이상이면 <br/> SILVER 달성
         </p>
       </div>
     </div>

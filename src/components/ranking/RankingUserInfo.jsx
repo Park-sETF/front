@@ -8,7 +8,6 @@ export default function RankingUserInfo({ userId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const id = localStorage.getItem('id');
   const navigate = useNavigate();
 
   const images = [
@@ -85,7 +84,7 @@ export default function RankingUserInfo({ userId }) {
                     width: '25px',
                     height: '25px',
                     objectFit: 'cover',
-                    margin: '7px',
+                    margin: '10px',
                   }}
                   onClick={() => {
                     navigate(`/grade?level=${userData.level}`);
@@ -114,7 +113,7 @@ export default function RankingUserInfo({ userId }) {
             </div>
 
             <img
-              src={images[id % images.length]}
+              src={images[userId % images.length]}
               alt="Profile"
               className="rounded-circle"
               style={{ width: '60px', height: '60px', objectFit: 'cover' }}
