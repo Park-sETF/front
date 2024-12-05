@@ -22,6 +22,32 @@ export default function ETFInvestmentChart({
   setStocks,
   isForCopy = false,
 }) {
+  if (!items || items.length === 0) {
+    return (
+      <div className="container mt-4" style={{ margin: "23px" }}>
+        <h1
+          className="fw-bold"
+          style={{
+            fontSize: "18.5px",
+            lineHeight: "1.5",
+            marginBottom: 0,
+          }}
+        >
+          담은 주식이 없습니다.
+        </h1>
+        <p
+          style={{
+            fontSize: "13px",
+            color: "#8E8E93",
+            marginTop: "6px",
+          }}
+        >
+          주식 선택을 해서 주식을 담아보세요!
+        </p>
+      </div>
+    );
+  }
+  
   const id = localStorage.getItem('id');
   const navigate = useNavigate();
   const colorPalette = ['#62B2FD', '#9BDFC4', '#9F97F7', '#F99BAB', '#FFB44F'];
