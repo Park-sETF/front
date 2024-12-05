@@ -2,16 +2,19 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '~/stores/auth/authSlice';
-import InstallPWA from '~/components/layouts/InstallPwa';
 
 export default function Init() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
-  const handleLogout = () => {
-    dispatch(logout()); // 로그아웃 Thunk 호출
-    navigate('/'); // 로그아웃 후 /로 리디렉션
+  const handleLogout = async () => {
+    try {
+      await dispatch(logout()).unwrap(); // Thunk 결과 처리
+      navigate('/'); // 로그아웃 후 리디렉션
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
   };
 
   return (
@@ -82,7 +85,6 @@ export default function Init() {
           </Button> */}
         </div>
       )}
-      {/* <InstallPWA className="fixed-bottom mt-3" /> */}
     </div>
   );
 }

@@ -36,10 +36,15 @@ export default function UserInfo() {
   const handleMembership = () => {
     navigate(`/membership`);
   };
-  const handleLogoutConfirm = () => {
-    dispatch(logout()); // 로그아웃 Thunk 호출
-    navigate('/'); // 로그아웃 후 /로 리디렉션
+  const handleLogoutConfirm = async () => {
+    try {
+      await dispatch(logout()).unwrap(); // Thunk 결과 처리
+      navigate('/'); // 로그아웃 후 리디렉션
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
   };
+  
 
   const handleLogoutClick = () => {
     setModalOpen(true); // 모달창 열기
@@ -96,7 +101,8 @@ export default function UserInfo() {
                   width: '25px',
                   height: '25px',
                   objectFit: 'cover',
-                  margin: '10px',
+                  marginLeft: '5px',
+                  marginBottom: '3px'
                 }}
                 onClick={() => {
                   navigate(`/grade?level=${userData.level}`);

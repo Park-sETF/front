@@ -84,8 +84,8 @@ export default function RankingUserInfo({ userId }) {
                     width: '25px',
                     height: '25px',
                     objectFit: 'cover',
-                    margin: '10px',
-                  }}
+                    marginLeft: '5px',
+                    marginBottom: '3px'                  }}
                   onClick={() => {
                     navigate(`/grade?level=${userData.level}`);
                   }}

@@ -45,6 +45,8 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     // 서버에 로그아웃 요청 (Refresh Token 무효화)
     await api.post('/auth/logout', {}, { withCredentials: true });
     localStorage.removeItem('id');
+    localStorage.removeItem('nickname');
+    localStorage.removeItem('savedStocks');
 
     // 클라이언트에서 접근 못하므로 주석처리
     // 클라이언트 쪽 상태 초기화 (API 호출 없음)
@@ -111,10 +113,9 @@ const authSlice = createSlice({
         state.loading = false; // 로딩 상태 초기화
         state.error = null; // 오류 상태 초기화
       })
-      .addCase(logout.rejected, state=>{
+      .addCase(logout.rejected, (state, action) =>{
         state.user = null; // 사용자 정보 초기화
         state.loading = false; // 로딩 상태 초기화
-        state.error = action.payload.message;
       })
 
       // 회원가입 처리

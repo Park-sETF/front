@@ -20,32 +20,25 @@ api.interceptors.request.use(
 
 // 토큰 만료와 리프레쉬 토큰 처리
 api.interceptors.response.use(
-  (response) => response, // 응답 성공
+  (response) => response, 
   async (error) => {
     const originalRequest = error.config;
 
-    // Access Token 만료 처리
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // 무한 루프 방지
+    if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/auth/logout')) {
+      originalRequest._retry = true; 
       try {
-        // Refresh API 요청
-        await axios.post(
-          `/api/auth/refresh`,
-          {},
-          { withCredentials: true }
-        );
-
-        // 원래 요청을 다시 실행
-        return api(originalRequest);
+        await axios.post(`/api/auth/refresh`, {}, { withCredentials: true });
+        return api(originalRequest); 
       } catch (refreshError) {
-        // Refresh Token 갱신 실패 시
         console.error('Refresh Token 갱신 실패:', refreshError);
-        window.location.href = '/login'; // 로그인 페이지로 리디렉션
+        dispatch(logout()); // 상태 초기화
+        window.location.href = '/login'; 
       }
     }
 
-    return Promise.reject(error); // 다른 에러 처리
+    return Promise.reject(error);
   }
 );
+
 
 export default api;
