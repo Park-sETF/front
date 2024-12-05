@@ -30,7 +30,7 @@ export default function Chart({ stocks }) {
     );
     return {
       ...stock,
-      logo: `https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`, // 기본 로고 설정
+      logo: `https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`, // 로고 설정
     };
   });
 
@@ -67,6 +67,10 @@ export default function Chart({ stocks }) {
                   className="rounded"
                   width="48"
                   height="48"
+                  onError={(e) => {
+                    e.target.onerror = null; // 무한 루프 방지
+                    e.target.src = defaultLogo; // 기본 로고 설정
+                  }}
                 />
                 <div style={{ maxWidth: '120px', overflow: 'hidden' }}>
                   <div
