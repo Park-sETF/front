@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "~/components/context/NotificationContext"; // 알림 데이터 가져오기
 import { House, Clipboard, Bell } from "react-bootstrap-icons";
@@ -7,6 +7,20 @@ export default function Footer() {
   const [activeTab, setActiveTab] = useState("홈");
   const { notifications } = useNotifications(); // 알림 데이터
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
+
+  // 로그인 상태 확인
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const id = localStorage.getItem("id");
+      setIsLoggedIn(!!id); // id가 있으면 true, 없으면 false
+    };
+
+    checkLoginStatus(); // 초기 확인
+    const interval = setInterval(checkLoginStatus, 1000); // 1초마다 확인
+
+    return () => clearInterval(interval); // 컴포넌트 언마운트 시 정리
+  }, []);
 
   return (
     <div
@@ -15,7 +29,7 @@ export default function Footer() {
         maxWidth: "430px",
         margin: "0 auto",
         height: "60px",
-        marginBottom: '4px'
+        marginBottom: "4px",
       }}
     >
       <div className="d-flex justify-content-between px-4">
@@ -49,6 +63,7 @@ export default function Footer() {
           <span style={{ fontSize: "12px", marginTop: "4px" }}>포트폴리오</span>
         </button>
 
+        {/* 알림 아이콘 */}
         <button
           onClick={() => {
             setActiveTab("알림");
@@ -61,12 +76,13 @@ export default function Footer() {
           }}
         >
           <Bell size={24} />
-          {notifications.length > 0 && (
+          {/* 알림 갯수 배지 */}
+          {isLoggedIn && notifications.length > 0 && (
             <span
               className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
               style={{
                 fontSize: "13px",
-                transform: "translate(-50%, -50%)", // 위치를 왼쪽 아래로 이동
+                transform: "translate(-50%, -50%)",
               }}
             >
               {notifications.length}
