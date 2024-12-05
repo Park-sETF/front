@@ -2,26 +2,26 @@ import { useState } from 'react';
 
 const gradeData = {
   BRONZE: {
-    benefits: '기본 수수료에서 5% 할인',
-    criteria: '투자금액 100만원 미만',
+    benefits: '기본 수수료에서 2% 할인',
+    criteria: '수익률 5% 이상, 구독자수 50명 이상 ~ 수익률 10%미만, 구독자 수 100명 미만',
     color: '#CD7F32',
     height: '35%', // Changed to fixed steps
   },
   SILVER: {
-    benefits: '기본 수수료에서 10% 할인',
-    criteria: '투자금액 100만원 이상 500만원 미만',
+    benefits: '기본 수수료에서 5% 할인',
+    criteria: '수익률 10% 이상, 구독자수 100명 이상 ~ 수익률 15%미만, 구독자 수 500명 미만',
     color: '#C0C0C0',
     height: '50%', // Changed to fixed steps
   },
   GOLD: {
-    benefits: '기본 수수료에서 15% 할인',
-    criteria: '투자금액 500만원 이상 1000만원 미만',
+    benefits: '기본 수수료에서 10% 할인',
+    criteria: '수익률 20% 이상, 구독자수 1,000명 이상 ~ 수익률 25%미만, 구독자 수 10,000명 미만',
     color: '#FFD700',
     height: '70%', // Changed to fixed steps
   },
   VIP: {
     benefits: '기본 수수료에서 20% 할인',
-    criteria: '투자금액 1000만원 이상',
+    criteria: '수익률 25%이상, 구독자 수 10,000명 이상',
     color: '#B9F2FF',
     height: '100%', // Changed to fixed steps
   },
